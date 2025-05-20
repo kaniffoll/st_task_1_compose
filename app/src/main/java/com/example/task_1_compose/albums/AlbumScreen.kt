@@ -25,15 +25,16 @@ import com.example.task_1_compose.data.albumsList
 fun AlbumScreen(
     index: Int,
     navController: NavController
-){
+) {
     var showFullScreen by remember { mutableStateOf(false) }
     var currentIndex by remember { mutableIntStateOf(0) }
 
-    if(showFullScreen){
+    if (showFullScreen) {
+        // TODO: такую вьюшку лучше открывать отдельным экраном
         ImagePager(
             albumIndex = index,
             initialImage = currentIndex,
-            onClose = {showFullScreen = false}
+            onClose = { showFullScreen = false }
         )
     }
 
@@ -54,11 +55,16 @@ fun AlbumScreen(
             modifier = Modifier.padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(25.dp)
         ) {
-            items(albumsList[index].photos.size){ id ->
-                PhotoCard(modifier = Modifier, index = id, albumIndex = index, onClick = { value ->
-                    currentIndex = value
-                    showFullScreen = true
-                })
+            items(albumsList[index].photos.size) { id ->
+                PhotoCard(
+                    modifier = Modifier,
+                    index = id,
+                    albumIndex = index,
+                    onClick = { value ->
+                        currentIndex = value
+                        showFullScreen = true
+                    }
+                )
             }
         }
     }

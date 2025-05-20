@@ -41,10 +41,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.BottomNavBar
+import com.example.task_1_compose.components.comments.CommentsSection
+import com.example.task_1_compose.data.DisplayItem
 import com.example.task_1_compose.data.usersList
 import kotlin.jvm.internal.Intrinsics.Kotlin
 import kotlin.random.Random
 
+// TODO: код экрана достаточно большой - можно разделить его на компоненты
+// например хедер, комментраии и тд
 @Composable
 fun UserScreen(
     index: Int,
@@ -111,64 +115,7 @@ fun UserScreen(
                 text = user.name,
                 fontSize = 40.sp,
             )
-
-            var count by remember { mutableIntStateOf(user.comments.size) }
-            var canLoadMore by remember { mutableStateOf(2 < user.comments.size) }
-
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                item{
-                    Text(
-                        text = "Комментарии:",
-                        modifier = Modifier.padding(start = 10.dp).fillMaxWidth(),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                if (canLoadMore){
-                    count = 2
-                }
-                items(count){ index ->
-                    Column(
-                        modifier = Modifier
-                            .padding(start = 10.dp, end = 10.dp)
-                            .fillMaxWidth()
-                            .border(BorderStroke(2.dp, color = Color.Black))
-                        ,
-                        verticalArrangement = Arrangement.spacedBy(15.dp)
-                    ) {
-                        Text(
-                            text = user.name,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(start = 10.dp, top = 15.dp)
-                        )
-                        Text(
-                            text = user.comments[index],
-                            fontSize = 25.sp,
-                            modifier = Modifier.padding(start = 10.dp, bottom = 15.dp)
-                        )
-                    }
-                }
-                item {
-                    if(canLoadMore){
-                        Text(
-                            text = "Показать больше",
-                            modifier = Modifier
-                                .padding(end = 10.dp)
-                                .fillMaxWidth()
-                                .clickable {
-                                    canLoadMore = !canLoadMore
-                                    count = user.comments.size
-                                },
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-            }
+            CommentsSection(DisplayItem.UserItem(user))
         }
     }
 }

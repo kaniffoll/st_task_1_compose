@@ -36,6 +36,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.BottomNavBar
 
+// TODO: код экрана достаточно большой - можно разделить его на компоненты
+// например вынести карточку в отдельный компонент
 @Composable
 fun TodosList(
     navController: NavController
@@ -101,6 +103,8 @@ fun TodosList(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.BottomEnd
             ) {
+                // TODO: лучше использовать другой компонент
+                // https://developer.android.com/develop/ui/compose/components/fab
                 Box(
                     modifier = Modifier
                         .padding(bottom = 20.dp, end = 20.dp)

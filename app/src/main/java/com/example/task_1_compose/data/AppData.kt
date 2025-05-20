@@ -3,12 +3,12 @@ package com.example.task_1_compose.data
 import com.example.task_1_compose.R
 
 val postsList: List<Post> = listOf(
-    Post(name = "User 1", title = "Title", description = "Description"),
-    Post(name = "User 2", title = "Title", description = "Description"),
-    Post(name = "User 3", title = "Title", description = "Description"),
-    Post(name = "User 4", title = "Title", description = "Description"),
+    Post(username = "User 1", title = "Title", description = "Description"),
+    Post(username = "User 2", title = "Title", description = "Description"),
+    Post(username = "User 3", title = "Title", description = "Description"),
+    Post(username = "User 4", title = "Title", description = "Description"),
     Post(
-        name = "User 5",
+        username = "User 5",
         title = "Title",
         description = "Description",
         comments = mutableListOf(

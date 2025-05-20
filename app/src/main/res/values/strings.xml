@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">task_1_compose</string>
+    <string name="comments">Комментарии:</string>
+    <string name="show_more">Показать больше</string>
 </resources>

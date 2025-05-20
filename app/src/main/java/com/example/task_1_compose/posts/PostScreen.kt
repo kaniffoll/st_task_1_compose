@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,8 +40,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.BottomNavBar
+import com.example.task_1_compose.R
+import com.example.task_1_compose.components.comments.CommentsSection
+import com.example.task_1_compose.data.DisplayItem
 import com.example.task_1_compose.data.postsList
 
+// TODO: код экрана достаточно большой - можно разделить его на компоненты
+// например вынести апп бар в отдельный компонент, а так же вынести секцию с комментариями
 @Composable
 fun PostScreen(
     index: Int,
@@ -52,11 +58,15 @@ fun PostScreen(
         containerColor = Color.White,
         topBar = {
             Box(
-                modifier = Modifier.height(100.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .height(100.dp)
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.BottomEnd
             ){
                 Icon(
-                    if(isLikeClicked){
+                    // TODO: по код стайлу if стейтменты должны быть в другом формате формате
+                    // (формат в PostCard.kt)
+                    if (isLikeClicked) {
                         Icons.Rounded.Favorite
                     }
                     else{
@@ -100,19 +110,22 @@ fun PostScreen(
                     Box(
                         modifier = Modifier
                             .size(45.dp)
-                            .background(color = Color(0xFFd5d5d5), shape = RoundedCornerShape(50.dp))
+                            .background(
+                                color = Color(0xFFd5d5d5),
+                                shape = RoundedCornerShape(50.dp)
+                            )
                             .border(2.dp, Color.Black, shape = RoundedCornerShape(50.dp))
                     ) {
                         Text(
                             modifier = Modifier.align(Alignment.Center),
-                            text = post.name[0].toString() + (if (post.name.trimEnd()
+                            text = post.username[0].toString() + (if (post.username.trimEnd()
                                     .indexOf(' ') != -1
-                            ) post.name[post.name.indexOf(' ') + 1] else ""),
+                            ) post.username[post.username.indexOf(' ') + 1] else ""),
                             fontSize = 20.sp
                         )
                     }
                     Text(
-                        text = post.name,
+                        text = post.username,
                         fontSize = 25.sp
                     )
                 }
@@ -126,63 +139,7 @@ fun PostScreen(
                     modifier = Modifier.padding(start = 10.dp, bottom = 10.dp),
                     fontSize = 25.sp
                 )
-                var count by remember { mutableIntStateOf(post.comments.size) }
-                var canLoadMore by remember { mutableStateOf(2 < post.comments.size) }
-
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    item{
-                        Text(
-                            text = "Комментарии:",
-                            modifier = Modifier.padding(start = 10.dp),
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    if (canLoadMore){
-                        count = 2
-                    }
-                    items(count){ index ->
-                        Column(
-                            modifier = Modifier
-                                .padding(start = 10.dp, end = 10.dp)
-                                .fillMaxWidth()
-                                .border(BorderStroke(2.dp, color = Color.Black))
-                            ,
-                            verticalArrangement = Arrangement.spacedBy(15.dp)
-                        ) {
-                            Text(
-                                text = post.comments[index].first,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(start = 10.dp, top = 15.dp)
-                            )
-                            Text(
-                                text = post.comments[index].second,
-                                fontSize = 25.sp,
-                                modifier = Modifier.padding(start = 10.dp, bottom = 15.dp)
-                            )
-                        }
-                    }
-                    item {
-                        if(canLoadMore){
-                            Text(
-                                text = "Показать больше",
-                                modifier = Modifier
-                                    .padding(end = 10.dp)
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        canLoadMore = !canLoadMore
-                                        count = post.comments.size
-                                    },
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
+                CommentsSection(DisplayItem.PostItem(post))
             }
         }
     }

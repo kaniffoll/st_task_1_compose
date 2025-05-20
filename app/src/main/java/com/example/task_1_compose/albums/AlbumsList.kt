@@ -42,14 +42,16 @@ fun AlbumsList(navController: NavController) {
             modifier = Modifier.padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(albumsList.size){ index->
+            // TODO: тут тоже самое - нужно не забывать про пробелы
+            items(albumsList.size) { index ->
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 15.dp)
                         .fillMaxWidth()
                         .border(BorderStroke(2.dp, color = Color.Black))
-                        .clickable { navController.navigate(Screen.AlbumScreen.name +"/$index") }
-                ){
+                        .clickable { navController.navigate(Screen.AlbumScreen.name + "/$index") }
+                    // TODO: тут тоже самое - нужно не забывать про пробелы
+                ) {
                     Text(
                         text = albumsList[index].name,
                         fontSize = 20.sp,

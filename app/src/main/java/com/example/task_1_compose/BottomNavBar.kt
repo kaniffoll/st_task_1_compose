@@ -21,6 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
+// TODO: можно вынести в отдельный компонент ячейку нав бара
+// Сами пути ячейки можно хранить в енаме и использовать его тут чтобы создать список ячеек и
+// вывести типовой компонент NavBarItem
 @Composable
 fun BottomNavBar(navController: NavController){
     BottomAppBar(

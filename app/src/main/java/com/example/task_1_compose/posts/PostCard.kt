@@ -36,16 +36,19 @@ import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.Screen
 import com.example.task_1_compose.data.postsList
 
+// TODO: код карточки достаточно большой - можно разделить его на компоненты
 @Composable
 fun PostCard(
     index: Int,
     modifier: Modifier,
     navController: NavController
-){
-    var isClicked by remember { mutableStateOf(false) }
+) {
+    var isLiked by remember { mutableStateOf(false) }
     val post = postsList[index]
     OutlinedCard(
-        onClick = {navController.navigate(Screen.PostScreen.name + "/$index" + "/$isClicked")},
+        // TODO такие параметры лучше передавать объектом
+        // можно сделать класс PostScreenInput и настроить навигацию на объект а не просто url
+        onClick = { navController.navigate(Screen.PostScreen.name + "/$index" + "/$isLiked") },
         modifier = modifier
             .padding(start = 15.dp, end = 15.dp)
             .fillMaxWidth(),
@@ -56,7 +59,7 @@ fun PostCard(
             containerColor = Color.White,
             disabledContentColor = Color.Black,
             disabledContainerColor = Color.White,
-            )
+        )
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(25.dp),
@@ -68,6 +71,9 @@ fun PostCard(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
+                // TODO: такую вьюшку лучше вынести в компоненты чтобы можно было
+                // переиспользовать по проекту - можно создать папку components и туда добавлять
+                // такие файлы
                 Box(
                     modifier = Modifier
                         .size(45.dp)
@@ -76,14 +82,14 @@ fun PostCard(
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
-                        text = post.name[0].toString() + (if (post.name.trimEnd()
+                        text = post.username[0].toString() + (if (post.username.trimEnd()
                                 .indexOf(' ') != -1
-                        ) post.name[post.name.indexOf(' ') + 1] else ""),
+                        ) post.username[post.username.indexOf(' ') + 1] else ""),
                         fontSize = 20.sp
                     )
                 }
                 Text(
-                    text = post.name,
+                    text = post.username,
                     fontSize = 25.sp
                 )
             }
@@ -92,27 +98,26 @@ fun PostCard(
                 modifier = Modifier.padding(start = 10.dp),
                 fontSize = 25.sp
             )
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
+            ) {
                 Text(
                     text = post.description,
                     modifier = Modifier.padding(start = 10.dp),
                     fontSize = 25.sp
                 )
                 Icon(
-                    if(isClicked){
+                    if (isLiked) {
                         Icons.Rounded.Favorite
-                    }
-                    else{
+                    } else {
                         Icons.Rounded.FavoriteBorder
                     },
                     contentDescription = null,
                     modifier = Modifier
                         .padding(end = 10.dp, bottom = 2.dp)
                         .size(62.dp)
-                        .clickable { isClicked = !isClicked },
+                        .clickable { isLiked = !isLiked },
                 )
             }
         }
@@ -121,7 +126,7 @@ fun PostCard(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewPostCard(){
+fun PreviewPostCard() {
     PostCard(0, navController = rememberNavController(), modifier = Modifier)
 }
 

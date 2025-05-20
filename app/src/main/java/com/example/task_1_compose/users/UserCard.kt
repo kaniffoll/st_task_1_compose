@@ -61,6 +61,9 @@ fun UserCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                // TODO: такую вьюшку лучше вынести в компоненты чтобы можно было
+                // переиспользовать по проекту - можно создать папку components и туда добавлять
+                // такие файлы
                 Box(
                     modifier = Modifier
                         .size(45.dp)
@@ -81,6 +84,8 @@ fun UserCard(
                 }
             }
             Text(
+                // TODO: Тут тоже нужно вынести строчки в отдельный файл
+                // https://developer.android.com/guide/topics/resources/string-resource#formatting-strings
                 text = "Адрес: ${user.address}",
                 modifier = Modifier.padding(start = 10.dp),
                 fontWeight = FontWeight.Bold

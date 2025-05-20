@@ -27,13 +27,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.data.albumsList
 
+// TODO: код карточки достаточно большой - можно разделить его на компоненты
+// например - вынести отдельно Column как PhotoCardContent - верхнюю часть
+// с аватаркой и тд вынести как PhotoCardTopContent - так будет читаемее
 @Composable
 fun PhotoCard(
     modifier: Modifier,
     index: Int,
     albumIndex: Int,
+    // TODO: клик на карточку лучше вынести в место где карточка используется
+    // а не передавать параметром, там как раз будет доступен и индекс
+    // чтобы обработать нажатие, плюс лучше сделать всю карточку кликабельной
     onClick: (Int) -> Unit
 ) {
+    // TODO: тут пропущена пустая строчка = тоже мелочь, но все таки
     val photo = albumsList[albumIndex].photos[index]
     OutlinedCard(
         onClick = {},
@@ -59,6 +66,9 @@ fun PhotoCard(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
+                // TODO: такую вьюшку лучше вынести в компоненты чтобы можно было
+                // переиспользовать по проекту - можно создать папку components и туда добавлять
+                // такие файлы
                 Box(
                     modifier = Modifier
                         .size(45.dp)
