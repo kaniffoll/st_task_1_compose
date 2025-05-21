@@ -1,6 +1,7 @@
 package com.example.task_1_compose.components.comments
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.example.task_1_compose.data.DisplayItem
 
 @Composable
@@ -13,7 +14,7 @@ fun CommentsSection(
         }
 
         is DisplayItem.UserItem -> {
-            UserComments(displayItem.user)
+            UserComments(displayItem.user, Modifier)
         }
     }
 }

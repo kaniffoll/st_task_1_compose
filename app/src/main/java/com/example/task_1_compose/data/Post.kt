@@ -4,5 +4,5 @@ data class Post(
     val username: String,
     val title: String,
     val description: String,
-    val comments: MutableList<Pair<String, String>> = mutableListOf()
+    val comments: MutableList<Pair<String, String>> = mutableListOf(),
 )

@@ -10,32 +10,42 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.BottomNavBar
+import com.example.task_1_compose.R
 import com.example.task_1_compose.data.postsList
 
 @Composable
-fun PostList(navController: NavController){
+fun PostList(navController: NavController) {
     Scaffold(
         contentColor = Color.White,
         containerColor = Color.White,
         topBar = {
-            Box(modifier = Modifier.height(100.dp))
+            Box(modifier = Modifier.height(dimensionResource(R.dimen.top_appbar_height)))
         },
         bottomBar = {
             BottomNavBar(navController)
             HorizontalDivider(
                 color = Color.Black,
-                thickness = 3.dp
+                thickness = dimensionResource(R.dimen.border_stroke_3)
             )
         }
     ) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding).background(color = Color.White)) {
-            items(postsList.size){ index ->
-                PostCard(index, modifier = Modifier.padding(bottom = 12.dp), navController)
+        LazyColumn(modifier = Modifier
+            .padding(innerPadding)
+            .background(color = Color.White)) {
+            items(postsList.size) { index ->
+                PostCard(
+                    index,
+                    modifier = Modifier
+                        .padding(
+                            bottom = dimensionResource(R.dimen.padding_small_2)
+                        ),
+                    navController
+                )
             }
         }
     }
@@ -43,6 +53,6 @@ fun PostList(navController: NavController){
 
 @Preview(showBackground = true)
 @Composable
-fun PostListPreview(){
+fun PostListPreview() {
     PostList(navController = rememberNavController())
 }

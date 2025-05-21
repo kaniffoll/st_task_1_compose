@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Padding-->
+    <dimen name="padding_large_2">30dp</dimen>
+    <dimen name="padding_large">25dp</dimen>
+    <dimen name="padding_medium_2">20dp</dimen>
+    <dimen name="padding_medium">15dp</dimen>
+    <dimen name="padding_small_2">12dp</dimen>
+    <dimen name="padding_small">10dp</dimen>
+    <dimen name="padding_mini">2dp</dimen>
+    <!--Stroke-->
+    <dimen name="border_stroke_3">3dp</dimen>
+    <dimen name="border_stroke_2">2dp</dimen>
+
+    <!--Size-->
+    <dimen name="back_icon_size">45dp</dimen>
+    <dimen name="avatar_small">45dp</dimen>
+    <dimen name="heart_size">60dp</dimen>
+    <dimen name="fab_size">70dp</dimen>
+    <dimen name="check_size">40dp</dimen>
+
+    <!--Font size-->
+    <dimen name="text_small">20sp</dimen>
+    <dimen name="text_standard">25sp</dimen>
+    <dimen name="text_comment">18sp</dimen>
+    <dimen name="text_large">40dp</dimen>
+    <!--Height-->
+    <dimen name="top_appbar_height">100dp</dimen>
+</resources>
