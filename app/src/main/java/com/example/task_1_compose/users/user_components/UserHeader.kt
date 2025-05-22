@@ -1,4 +1,4 @@
-package com.example.task_1_compose.components.userscreen
+package com.example.task_1_compose.users.user_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,11 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.R
 import com.example.task_1_compose.data.User
+import com.example.task_1_compose.data.usersList
 import kotlin.random.Random
 
 @Composable
@@ -59,7 +62,7 @@ fun UserHeader(user: User){
                         shape = CircleShape
                         translationY = 75.dp.toPx()
                     }
-                    .background(Color(0xFFd5d5d5))
+                    .background(color = colorResource(R.color.light_gray))
                     .border(
                         dimensionResource(R.dimen.border_stroke_2),
                         Color.Black,
@@ -82,4 +85,12 @@ fun UserHeader(user: User){
             fontSize = 40.sp,
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun UserHeaderPreview(){
+    UserHeader(
+        user = usersList[0]
+    )
 }

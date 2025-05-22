@@ -23,16 +23,16 @@ import com.example.task_1_compose.BottomNavBar
 import com.example.task_1_compose.R
 import com.example.task_1_compose.components.UserImageAndName
 import com.example.task_1_compose.components.comments.CommentsSection
-import com.example.task_1_compose.components.PostAppBar
 import com.example.task_1_compose.data.DisplayItem
+import com.example.task_1_compose.data.Post
 import com.example.task_1_compose.data.postsList
+import com.example.task_1_compose.posts.posts_components.PostAppBar
 
 @Composable
 fun PostScreen(
-    index: Int,
+    post: Post,
     navController: NavController
 ) {
-    val post = postsList[index]
     Scaffold(
         containerColor = Color.White,
         topBar = {
@@ -101,5 +101,5 @@ fun PostScreen(
 @Preview(showBackground = true)
 @Composable
 fun PostScreenPreview() {
-    PostScreen(index = 4, navController = rememberNavController())
+    PostScreen(post = postsList[0], navController = rememberNavController())
 }

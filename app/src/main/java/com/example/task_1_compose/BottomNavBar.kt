@@ -17,97 +17,49 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.task_1_compose.components.NavBarItem
+import com.example.task_1_compose.data.AlbumsListRoute
+import com.example.task_1_compose.data.PostListRoute
+import com.example.task_1_compose.data.TodosListRoute
+import com.example.task_1_compose.data.UsersListRoute
+import com.example.task_1_compose.posts.PostList
 
-// TODO: можно вынести в отдельный компонент ячейку нав бара
-// Сами пути ячейки можно хранить в енаме и использовать его тут чтобы создать список ячеек и
-// вывести типовой компонент NavBarItem
 @Composable
-fun BottomNavBar(navController: NavController){
+fun BottomNavBar(navController: NavController) {
     BottomAppBar(
         containerColor = Color.White,
         modifier = Modifier.height(120.dp)
-    ){
+    ) {
         Row(
             modifier = Modifier
                 .padding(start = 30.dp, end = 30.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
-        ){
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .size(42.dp)
-                        .background(
-                            color = Color(color = 0xFF00a3f9),
-                            shape = RoundedCornerShape(100)
-                        )
-                        .clickable {
-                            navController.navigate(Screen.PostList.name)
-                        }
-                )
-                Text(
-                    text = "Posts",
-                    fontSize = 17.sp
-                )
-            }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .size(42.dp)
-                        .background(
-                            color = Color(color = 0xFFffae36),
-                            shape = RoundedCornerShape(100)
-                        )
-                        .clickable {
-                            navController.navigate(Screen.AlbumsList.name)
-                        }
-                )
-                Text(
-                    text = "Photos",
-                    fontSize = 17.sp
-                )
-            }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .size(42.dp)
-                        .background(
-                            color = Color(color = 0xFFff241a),
-                            shape = RoundedCornerShape(100)
-                        )
-                        .clickable {
-                            navController.navigate(Screen.TodosList.name)
-                        }
-                )
-                Text(
-                    text = "Todos",
-                    fontSize = 17.sp
-                )
-            }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier
-                        .padding(bottom = 5.dp)
-                        .size(42.dp)
-                        .background(
-                            color = Color(color = 0xFF00ab90),
-                            shape = RoundedCornerShape(100)
-                        )
-                        .clickable {
-                            navController.navigate(Screen.UsersList.name)
-                        }
-                )
-                Text(
-                    text = "Users",
-                    fontSize = 17.sp
-                )
-            }
+        ) {
+            NavBarItem(
+                navController = navController,
+                appRoute = PostListRoute,
+                title = stringResource(R.string.posts)
+            )
+            NavBarItem(
+                navController = navController,
+                appRoute = AlbumsListRoute,
+                title = stringResource(R.string.photos)
+            )
+            NavBarItem(
+                navController = navController,
+                appRoute = TodosListRoute,
+                title = stringResource(R.string.todos)
+            )
+            NavBarItem(
+                navController = navController,
+                appRoute = UsersListRoute,
+                title = stringResource(R.string.users)
+            )
         }
     }
 }

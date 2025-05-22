@@ -63,7 +63,7 @@ fun PostComments(post: Post) {
                     .spacedBy(dimensionResource(R.dimen.padding_medium))
             ) {
                 Text(
-                    text = post.comments[index].first,
+                    text = post.comments[index].author,
                     fontSize = dimensionResource(R.dimen.text_comment).value.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -73,7 +73,7 @@ fun PostComments(post: Post) {
                         )
                 )
                 Text(
-                    text = post.comments[index].second,
+                    text = post.comments[index].message,
                     fontSize = dimensionResource(R.dimen.text_standard).value.sp,
                     modifier = Modifier
                         .padding(

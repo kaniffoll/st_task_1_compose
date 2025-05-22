@@ -1,4 +1,4 @@
-package com.example.task_1_compose.albums
+package com.example.task_1_compose.albums.album_components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -17,16 +17,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.task_1_compose.R
 import com.example.task_1_compose.components.UserImageAndName
+import com.example.task_1_compose.data.Album
 import com.example.task_1_compose.data.albumsList
 
 @Composable
 fun PhotoCard(
     modifier: Modifier,
     index: Int,
-    albumIndex: Int,
+    album: Album,
     onClick: () -> Unit
 ) {
-    val photo = albumsList[albumIndex].photos[index]
+    val photo = album.photos[index]
     OutlinedCard(
         onClick = onClick,
         modifier = modifier
@@ -74,7 +75,7 @@ fun PhotoCard(
 fun PhotoPreview() {
     PhotoCard(
         modifier = Modifier,
-        albumIndex = 0,
+        album = albumsList[0],
         index = 0
     ) {}
 }

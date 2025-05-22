@@ -19,8 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.R
-import com.example.task_1_compose.components.userscreen.UserCommentCard
-import com.example.task_1_compose.components.userscreen.UserHeader
+import com.example.task_1_compose.users.user_components.UserCommentCard
+import com.example.task_1_compose.users.user_components.UserHeader
 import com.example.task_1_compose.data.User
 
 @Composable

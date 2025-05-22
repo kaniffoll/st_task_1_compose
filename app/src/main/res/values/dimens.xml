@@ -7,6 +7,7 @@
     <dimen name="padding_medium">15dp</dimen>
     <dimen name="padding_small_2">12dp</dimen>
     <dimen name="padding_small">10dp</dimen>
+    <dimen name="padding_mini_2">5dp</dimen>
     <dimen name="padding_mini">2dp</dimen>
     <!--Stroke-->
     <dimen name="border_stroke_3">3dp</dimen>
@@ -18,8 +19,10 @@
     <dimen name="heart_size">60dp</dimen>
     <dimen name="fab_size">70dp</dimen>
     <dimen name="check_size">40dp</dimen>
+    <dimen name="navbar_item">42dp</dimen>
 
     <!--Font size-->
+    <dimen name="text_small_2">17sp</dimen>
     <dimen name="text_small">20sp</dimen>
     <dimen name="text_standard">25sp</dimen>
     <dimen name="text_comment">18sp</dimen>

@@ -3,4 +3,11 @@
     <string name="comments">Комментарии:</string>
     <string name="show_more">Показать больше</string>
     <string name="show_less">Скрыть</string>
+    <string name="photos">Photos</string>
+    <string name="posts">Posts</string>
+    <string name="todos">Todos</string>
+    <string name="users">Users</string>
+    <string name="plus">+</string>
+    <string name="address">Адрес:</string>
+    <string name="number">Номер:</string>
 </resources>

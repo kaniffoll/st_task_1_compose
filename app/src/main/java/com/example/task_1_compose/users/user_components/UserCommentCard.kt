@@ -1,4 +1,4 @@
-package com.example.task_1_compose.components.userscreen
+package com.example.task_1_compose.users.user_components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border

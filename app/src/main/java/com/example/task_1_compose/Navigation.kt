@@ -1,98 +1,69 @@
 package com.example.task_1_compose
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.example.task_1_compose.albums.AlbumScreen
 import com.example.task_1_compose.albums.AlbumsList
 import com.example.task_1_compose.albums.ImagePager
+import com.example.task_1_compose.data.AlbumScreenRoute
+import com.example.task_1_compose.data.AlbumsListRoute
+import com.example.task_1_compose.data.ImagePagerRoute
+import com.example.task_1_compose.data.PostListRoute
+import com.example.task_1_compose.data.PostScreenRoute
+import com.example.task_1_compose.data.TodosListRoute
+import com.example.task_1_compose.data.UserScreenRoute
+import com.example.task_1_compose.data.UsersListRoute
 import com.example.task_1_compose.posts.PostList
 import com.example.task_1_compose.posts.PostScreen
 import com.example.task_1_compose.todos.TodosList
 import com.example.task_1_compose.users.UserScreen
 import com.example.task_1_compose.users.UsersList
 
-enum class Screen {
-    PostList,
-    PostScreen,
-    AlbumsList,
-    AlbumScreen,
-    ImagePager,
-    TodosList,
-    UsersList,
-    UserScreen
-}
-
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.PostList.name) {
-        composable(route = Screen.PostList.name) {
+    NavHost(navController = navController, startDestination = PostListRoute) {
+        composable<PostListRoute> {
             PostList(navController)
         }
-        composable(
-            route = Screen.PostScreen.name + "/{index}",
-            arguments = listOf(
-                navArgument("index") {
-                    type = NavType.IntType
-                    defaultValue = 0
-                }
-            )
-        ) {
-            PostScreen(navController = navController, index = it.arguments?.getInt("index") ?: 0)
+
+        composable<PostScreenRoute> {
+            val args = it.toRoute<PostScreenRoute>()
+            PostScreen(post = args.post, navController)
         }
-        composable(route = Screen.AlbumsList.name) {
+
+        composable<AlbumsListRoute> {
             AlbumsList(navController)
         }
-        composable(
-            route = Screen.AlbumScreen.name + "/{index}",
-            arguments = listOf(
-                navArgument("index") {
-                    type = NavType.IntType
-                    defaultValue = 0
-                }
-            )
-        ) {
-            AlbumScreen(navController = navController, index = it.arguments?.getInt("index") ?: 0)
+
+        composable<AlbumScreenRoute> {
+            val args = it.toRoute<AlbumScreenRoute>()
+            AlbumScreen(album = args.album, navController)
         }
-        composable(
-            route = Screen.ImagePager.name + "/{albumIndex}/{initialImage}",
-            arguments = listOf(
-                navArgument("albumIndex") {
-                    type = NavType.IntType
-                    defaultValue = 0
-                },
-                navArgument("initialImage") {
-                    type = NavType.IntType
-                    defaultValue = 0
-                }
-            )
-        ) {
+
+        composable<ImagePagerRoute> {
+            val args = it.toRoute<ImagePagerRoute>()
             ImagePager(
-                albumIndex = it.arguments?.getInt("albumIndex") ?: 0,
-                initialImage = it.arguments?.getInt("initialImage") ?: 0,
-                navController = navController
+                album = args.album,
+                initialImage = args.initialImage,
+                navController
             )
         }
-        composable(route = Screen.TodosList.name) {
+
+        composable<TodosListRoute> {
             TodosList(navController)
         }
-        composable(
-            route = Screen.UserScreen.name + "/{index}",
-            arguments = listOf(
-                navArgument("index") {
-                    type = NavType.IntType
-                    defaultValue = 0
-                }
-            )
-        ) {
-            UserScreen(index = it.arguments?.getInt("index") ?: 0, navController)
-        }
-        composable(route = Screen.UsersList.name) {
+
+        composable<UsersListRoute> {
             UsersList(navController)
+        }
+
+        composable<UserScreenRoute> {
+            val args = it.toRoute<UserScreenRoute>()
+            UserScreen(user = args.user, navController)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.task_1_compose.todos
+package com.example.task_1_compose.todos.todos_components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border

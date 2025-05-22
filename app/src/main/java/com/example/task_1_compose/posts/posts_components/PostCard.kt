@@ -1,4 +1,4 @@
-package com.example.task_1_compose.posts
+package com.example.task_1_compose.posts.posts_components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -26,26 +26,18 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.R
-import com.example.task_1_compose.Screen
 import com.example.task_1_compose.components.UserImageAndName
+import com.example.task_1_compose.data.Post
 import com.example.task_1_compose.data.postsList
 
-// TODO: код карточки достаточно большой - можно разделить его на компоненты
 @Composable
 fun PostCard(
-    index: Int,
-    modifier: Modifier,
-    navController: NavController
+    post: Post, modifier: Modifier, onClick: () -> Unit
 ) {
     var isLiked by remember { mutableStateOf(false) }
-    val post = postsList[index]
     OutlinedCard(
-        // TODO такие параметры лучше передавать объектом
-        // можно сделать класс PostScreenInput и настроить навигацию на объект а не просто url
-        onClick = { navController.navigate(Screen.PostScreen.name + "/$index") },
+        onClick = onClick,
         modifier = modifier
             .padding(horizontal = dimensionResource(R.dimen.padding_medium))
             .fillMaxWidth(),
@@ -60,8 +52,7 @@ fun PostCard(
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_large)),
-            modifier = Modifier
-                .padding(
+            modifier = Modifier.padding(
                     start = dimensionResource(R.dimen.padding_small),
                     top = dimensionResource(R.dimen.padding_small)
                 )
@@ -73,8 +64,7 @@ fun PostCard(
                 fontSize = dimensionResource(R.dimen.text_standard).value.sp
             )
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = post.description,
@@ -104,6 +94,6 @@ fun PostCard(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPostCard() {
-    PostCard(0, navController = rememberNavController(), modifier = Modifier)
+    PostCard(postsList[0], modifier = Modifier) {}
 }
 

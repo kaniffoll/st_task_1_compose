@@ -12,11 +12,11 @@ val postsList: List<Post> = listOf(
         title = "Title",
         description = "Description",
         comments = mutableListOf(
-            Pair("User 1", "blabla"),
-            Pair("User 2", "blabla"),
-            Pair("User 3", "blblbbl"),
-            Pair("User 4", "blblblb"),
-            Pair("User 5", "blablalb")
+            Comment("User 1", "blabla"),
+            Comment("User 2", "blabla"),
+            Comment("User 3", "blblbbl"),
+            Comment("User 4", "blblblb"),
+            Comment("User 5", "blablalb")
         )
     )
 )

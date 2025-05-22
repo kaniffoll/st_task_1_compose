@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -16,8 +17,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.BottomNavBar
 import com.example.task_1_compose.R
-import com.example.task_1_compose.Screen
-import com.example.task_1_compose.components.AlbumCard
+import com.example.task_1_compose.albums.album_components.AlbumCard
+import com.example.task_1_compose.data.AlbumScreenRoute
 import com.example.task_1_compose.data.albumsList
 
 @Composable
@@ -47,11 +48,11 @@ fun AlbumsList(navController: NavController) {
                     dimensionResource(R.dimen.padding_small)
                 )
         ) {
-            items(albumsList.size) { index ->
+            items(albumsList) {
                 AlbumCard(
-                    index = index
+                    album = it
                 ) {
-                    navController.navigate(Screen.AlbumScreen.name + "/$index")
+                    navController.navigate(AlbumScreenRoute(album = it))
                 }
             }
         }

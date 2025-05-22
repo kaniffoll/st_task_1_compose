@@ -27,15 +27,15 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.R
+import com.example.task_1_compose.data.Album
 import com.example.task_1_compose.data.albumsList
 
 @Composable
 fun ImagePager(
-    albumIndex: Int,
+    album: Album,
     initialImage: Int,
     navController: NavController
 ) {
-    val album = albumsList[albumIndex]
     val pageState = rememberPagerState(initialPage = initialImage) { album.photos.size }
 
     BackHandler {
@@ -91,7 +91,7 @@ fun ImagePager(
 @Composable
 fun PagerPreview() {
     ImagePager(
-        albumIndex = 0,
+        album = albumsList[0],
         initialImage = 0,
         navController = rememberNavController()
     )

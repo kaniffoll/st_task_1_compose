@@ -1,4 +1,4 @@
-package com.example.task_1_compose.components
+package com.example.task_1_compose.posts.posts_components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

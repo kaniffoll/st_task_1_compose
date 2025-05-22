@@ -1,4 +1,4 @@
-package com.example.task_1_compose.todos
+package com.example.task_1_compose.todos.todos_components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.R
 
@@ -37,7 +38,7 @@ fun TodosFab(
 
         ) {
             Text(
-                text = "+",
+                text = stringResource(R.string.plus),
                 fontSize = dimensionResource(R.dimen.text_large).value.sp,
                 color = Color.White
             )

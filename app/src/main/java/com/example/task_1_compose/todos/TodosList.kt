@@ -21,6 +21,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.BottomNavBar
 import com.example.task_1_compose.R
+import com.example.task_1_compose.todos.todos_components.TodosCard
+import com.example.task_1_compose.todos.todos_components.TodosFab
 
 @Composable
 fun TodosList(

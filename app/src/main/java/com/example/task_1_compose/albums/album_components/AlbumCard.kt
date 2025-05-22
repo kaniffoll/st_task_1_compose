@@ -1,4 +1,4 @@
-package com.example.task_1_compose.components
+package com.example.task_1_compose.albums.album_components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -13,11 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.R
-import com.example.task_1_compose.data.albumsList
+import com.example.task_1_compose.data.Album
 
 @Composable
 fun AlbumCard(
-    index: Int,
+    album: Album,
     onClick: () -> Unit
 ) {
     Box(
@@ -35,7 +35,7 @@ fun AlbumCard(
             .clickable{ onClick() }
     ) {
         Text(
-            text = albumsList[index].name,
+            text = album.name,
             fontSize = dimensionResource(R.dimen.text_small).value.sp,
             modifier = Modifier.padding(
                 dimensionResource(R.dimen.padding_medium)

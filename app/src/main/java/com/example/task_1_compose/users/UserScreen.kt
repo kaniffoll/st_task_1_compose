@@ -14,15 +14,14 @@ import com.example.task_1_compose.BottomNavBar
 import com.example.task_1_compose.R
 import com.example.task_1_compose.components.TopBar
 import com.example.task_1_compose.components.comments.UserComments
+import com.example.task_1_compose.data.User
 import com.example.task_1_compose.data.usersList
 
 @Composable
 fun UserScreen(
-    index: Int,
+    user: User,
     navController: NavController
 ) {
-    val user = usersList[index]
-
     Scaffold(
         containerColor = Color.White,
         topBar = {
@@ -44,7 +43,7 @@ fun UserScreen(
 @Composable
 fun UserPreview() {
     UserScreen(
-        index = 1,
+        user = usersList[1],
         navController = rememberNavController()
     )
 }
