@@ -8,4 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_gray">#FFD5D5D5</color>
+    <color name="blue_for_posts">#FF00A3F9</color>
+    <color name="orange_for_photos">#FFFFAE36</color>
+    <color name="red_for_todos">#FFFF241A</color>
+    <color name="cyan_for_users">#FF00AB90</color>
 </resources>

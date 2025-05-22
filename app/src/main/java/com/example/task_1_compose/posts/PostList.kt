@@ -15,7 +15,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.task_1_compose.BottomNavBar
+import com.example.task_1_compose.components.BottomNavBar
 import com.example.task_1_compose.R
 import com.example.task_1_compose.data.PostScreenRoute
 import com.example.task_1_compose.data.postsList
@@ -24,7 +24,6 @@ import com.example.task_1_compose.posts.posts_components.PostCard
 @Composable
 fun PostList(navController: NavController) {
     Scaffold(
-        contentColor = Color.White,
         containerColor = Color.White,
         topBar = {
             Box(modifier = Modifier.height(dimensionResource(R.dimen.top_appbar_height)))

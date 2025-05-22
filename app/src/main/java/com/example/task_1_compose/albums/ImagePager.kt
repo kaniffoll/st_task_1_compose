@@ -1,7 +1,6 @@
 package com.example.task_1_compose.albums
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +26,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.R
+import com.example.task_1_compose.albums.album_components.ImageItem
 import com.example.task_1_compose.data.Album
 import com.example.task_1_compose.data.albumsList
 
@@ -72,16 +72,10 @@ fun ImagePager(
                             .clickable { navController.popBackStack() },
                     )
                 }
-                Box(
-                    modifier = Modifier.weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        modifier = Modifier.fillMaxSize(),
-                        painter = painterResource(album.photos[index].second.photo),
-                        contentDescription = "$index"
-                    )
-                }
+                ImageItem(
+                    painter = painterResource(album.photos[index].second.photo),
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
     }

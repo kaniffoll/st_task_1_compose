@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,12 +30,14 @@ import com.example.task_1_compose.data.usersList
 import kotlin.random.Random
 
 @Composable
-fun UserHeader(user: User){
-    val randomColor = Color(
-        red = Random.nextInt(0, 255),
-        green = Random.nextInt(0, 255),
-        blue = Random.nextInt(0, 255)
-    )
+fun UserHeader(user: User) {
+    val randomColor = remember {
+        Color(
+            red = Random.nextInt(0, 255),
+            green = Random.nextInt(0, 255),
+            blue = Random.nextInt(0, 255)
+        )
+    }
     Column(
         modifier = Modifier
             .padding(horizontal = dimensionResource(R.dimen.padding_medium))
@@ -89,7 +92,7 @@ fun UserHeader(user: User){
 
 @Preview(showBackground = true)
 @Composable
-fun UserHeaderPreview(){
+fun UserHeaderPreview() {
     UserHeader(
         user = usersList[0]
     )

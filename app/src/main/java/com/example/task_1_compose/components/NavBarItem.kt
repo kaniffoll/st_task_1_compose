@@ -23,7 +23,8 @@ import com.example.task_1_compose.data.AppRoute
 fun NavBarItem(
     navController: NavController,
     appRoute: AppRoute,
-    title: String
+    title: String,
+    color: Color
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
@@ -31,7 +32,7 @@ fun NavBarItem(
                 .padding(bottom = dimensionResource(R.dimen.padding_mini_2))
                 .size(dimensionResource(R.dimen.navbar_item))
                 .background(
-                    color = Color(color = 0xFF00a3f9),
+                    color = color,
                     shape = CircleShape
                 )
                 .clickable {
