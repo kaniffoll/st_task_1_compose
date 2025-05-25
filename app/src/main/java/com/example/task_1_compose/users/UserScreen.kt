@@ -1,41 +1,69 @@
 package com.example.task_1_compose.users
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.task_1_compose.components.BottomNavBar
+import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.R
-import com.example.task_1_compose.components.TopBar
-import com.example.task_1_compose.components.comments.UserComments
-import com.example.task_1_compose.data.User
+import com.example.task_1_compose.components.cards.CommentCard
+import com.example.task_1_compose.components.buttons.TextButton
+import com.example.task_1_compose.data.dataclasses.User
 import com.example.task_1_compose.data.usersList
+import com.example.task_1_compose.components.headers_and_appbars.UserHeader
 
 @Composable
 fun UserScreen(
-    user: User,
-    navController: NavController
+    user: User
 ) {
-    Scaffold(
-        containerColor = Color.White,
-        topBar = {
-            TopBar(navController)
-        },
-        bottomBar = {
-            BottomNavBar(navController)
-            HorizontalDivider(
-                color = Color.Black,
-                thickness = dimensionResource(R.dimen.border_stroke_3)
+    var count by remember { mutableIntStateOf(user.comments.size) }
+    var canLoadMore by remember { mutableStateOf(2 < user.comments.size) }
+
+    LazyColumn(
+        verticalArrangement = Arrangement
+            .spacedBy(dimensionResource(R.dimen.padding_small))
+    ) {
+        item {
+            UserHeader(user)
+        }
+        item {
+            Text(
+                text = stringResource(R.string.comments),
+                modifier = Modifier
+                    .padding(
+                        start = dimensionResource(R.dimen.padding_medium)
+                    )
+                    .fillMaxWidth(),
+                fontSize = dimensionResource(R.dimen.text_comment).value.sp,
+                fontWeight = FontWeight.Bold
             )
         }
-    ) { innerPadding ->
-        UserComments(user,Modifier.padding(innerPadding))
+        if (canLoadMore) {
+            count = 2
+        }
+        items(count) { index ->
+            CommentCard(user.username, user.comments[index])
+        }
+        item {
+            if (2 < user.comments.size) {
+                TextButton(canLoadMore) {
+                    canLoadMore = !canLoadMore
+                    count = if (!canLoadMore) user.comments.size else 2
+                }
+            }
+        }
     }
 }
 
@@ -43,7 +71,6 @@ fun UserScreen(
 @Composable
 fun UserPreview() {
     UserScreen(
-        user = usersList[1],
-        navController = rememberNavController()
+        user = usersList[1]
     )
 }

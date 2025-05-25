@@ -1,6 +1,16 @@
 package com.example.task_1_compose.data
 
 import com.example.task_1_compose.R
+import com.example.task_1_compose.data.dataclasses.Album
+import com.example.task_1_compose.data.dataclasses.Comment
+import com.example.task_1_compose.data.dataclasses.DrawRes
+import com.example.task_1_compose.data.dataclasses.NavBarItem
+import com.example.task_1_compose.data.dataclasses.Post
+import com.example.task_1_compose.data.dataclasses.User
+import com.example.task_1_compose.navigation.AlbumsListRoute
+import com.example.task_1_compose.navigation.PostListRoute
+import com.example.task_1_compose.navigation.TodosListRoute
+import com.example.task_1_compose.navigation.UsersListRoute
 
 val postsList: List<Post> = listOf(
     Post(username = "User 1", title = "Title", description = "Description"),
@@ -22,22 +32,28 @@ val postsList: List<Post> = listOf(
 )
 
 val albumsList: List<Album> = listOf(
-    Album(name = "Album 1", photos = listOf(
-        Pair("User 1", DrawRes(R.drawable.img_1)),
-        Pair("User 3", DrawRes(R.drawable.img_2)),
-        Pair("User 2", DrawRes(R.drawable.img_3)),
-    )),
-    Album(name = "Album 2", photos = listOf(
-        Pair("User 1", DrawRes(R.drawable.img_4)),
-        Pair("User 1", DrawRes(R.drawable.img_5)),
-        Pair("User 4", DrawRes(R.drawable.img_6)),
-    )),
-    Album(name = "Album 3", photos = listOf(
-        Pair("User 10", DrawRes(R.drawable.img_7)),
-        Pair("User 11", DrawRes(R.drawable.img_8)),
-        Pair("User 7", DrawRes(R.drawable.img_9)),
-        Pair("User 9", DrawRes(R.drawable.img_10)),
-    ))
+    Album(
+        name = "Album 1", photos = listOf(
+            Pair("User 1", DrawRes(R.drawable.img_1)),
+            Pair("User 3", DrawRes(R.drawable.img_2)),
+            Pair("User 2", DrawRes(R.drawable.img_3)),
+        )
+    ),
+    Album(
+        name = "Album 2", photos = listOf(
+            Pair("User 1", DrawRes(R.drawable.img_4)),
+            Pair("User 1", DrawRes(R.drawable.img_5)),
+            Pair("User 4", DrawRes(R.drawable.img_6)),
+        )
+    ),
+    Album(
+        name = "Album 3", photos = listOf(
+            Pair("User 10", DrawRes(R.drawable.img_7)),
+            Pair("User 11", DrawRes(R.drawable.img_8)),
+            Pair("User 7", DrawRes(R.drawable.img_9)),
+            Pair("User 9", DrawRes(R.drawable.img_10)),
+        )
+    )
 )
 
 const val address = "Воронеж, улица Мира 105"
@@ -80,4 +96,34 @@ val usersList: List<User> = listOf(
         address = address,
         phone = phone
     )
+)
+
+val navBarItems = listOf(
+    NavBarItem(
+        title = R.string.posts,
+        color = R.color.blue_for_posts,
+        appRoute = PostListRoute
+    ),
+    NavBarItem(
+        title = R.string.photos,
+        color = R.color.orange_for_photos,
+        appRoute = AlbumsListRoute
+    ),
+    NavBarItem(
+        title = R.string.todos,
+        color = R.color.red_for_todos,
+        appRoute = TodosListRoute
+    ),
+    NavBarItem(
+        title = R.string.users,
+        color = R.color.cyan_for_users,
+        appRoute = UsersListRoute
+    )
+)
+
+val EmptyTopBars = listOf(
+    PostListRoute::class.simpleName.toString(),
+    AlbumsListRoute::class.simpleName.toString(),
+    TodosListRoute::class.simpleName.toString(),
+    UsersListRoute::class.simpleName.toString()
 )
