@@ -1,5 +1,6 @@
 package com.example.task_1_compose.data
 
+import androidx.compose.runtime.mutableStateListOf
 import com.example.task_1_compose.R
 import com.example.task_1_compose.data.dataclasses.Album
 import com.example.task_1_compose.data.dataclasses.Comment
@@ -12,7 +13,7 @@ import com.example.task_1_compose.navigation.PostListRoute
 import com.example.task_1_compose.navigation.TodosListRoute
 import com.example.task_1_compose.navigation.UsersListRoute
 
-val postsList: List<Post> = listOf(
+val postsList = mutableStateListOf(
     Post(username = "User 1", title = "Title", description = "Description"),
     Post(username = "User 2", title = "Title", description = "Description"),
     Post(username = "User 3", title = "Title", description = "Description"),

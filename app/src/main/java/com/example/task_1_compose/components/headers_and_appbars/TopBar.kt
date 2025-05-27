@@ -19,15 +19,29 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.task_1_compose.R
 import com.example.task_1_compose.data.EmptyTopBars
+import com.example.task_1_compose.data.dataclasses.Post
+import com.example.task_1_compose.data.dataclasses.User
+import com.example.task_1_compose.data.postsList
+import com.example.task_1_compose.data.usersList
 import com.example.task_1_compose.navigation.ImagePagerRoute
 import com.example.task_1_compose.navigation.PostScreenRoute
+import com.example.task_1_compose.navigation.UserScreenRoute
+import kotlinx.serialization.json.Json
+import java.net.URLDecoder
 
 @Composable
 fun TopBar(navController: NavController) {
-    val currentRoute = navController.currentBackStackEntryAsState().value?.destination.toString()
+    val backStackEntry = navController.currentBackStackEntryAsState().value
+    val currentRoute = backStackEntry?.destination.toString()
     when {
         currentRoute.contains(PostScreenRoute::class.simpleName.toString()) -> {
-            PostAppBar(navController)
+            val encodedPost = backStackEntry?.arguments?.getString("post")
+            val tmpPost = encodedPost?.let {
+                Json.decodeFromString<Post>(URLDecoder.decode(it, "UTF-8"))
+            } ?: throw (RuntimeException("Post = null"))
+            val post = postsList.find { it.username == tmpPost.username }
+                ?: throw (RuntimeException("Post = null"))
+            PostAppBar(navController, post)
         }
 
         EmptyTopBars.any { item -> currentRoute.contains(item) } -> {
@@ -55,6 +69,7 @@ fun TopBar(navController: NavController) {
                 )
             }
         }
+
 
         else -> {
             Box(

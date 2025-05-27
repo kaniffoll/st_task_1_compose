@@ -8,4 +8,4 @@ data class NavBarItem(
     @StringRes val title: Int,
     @ColorRes val color: Int,
     val appRoute: AppRoute
-    )
+)

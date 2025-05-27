@@ -29,7 +29,6 @@ import com.example.task_1_compose.data.postsList
 fun PostCard(
     post: Post, modifier: Modifier, onClick: () -> Unit
 ) {
-    var isLiked by remember { mutableStateOf(false) }
     OutlinedCustomCard(onClick = onClick, modifier = modifier) {
         UserImageAndName(post.username)
         Text(
@@ -46,7 +45,7 @@ fun PostCard(
                 fontSize = dimensionResource(R.dimen.text_standard).value.sp
             )
             Icon(
-                if (isLiked) {
+                if (post.likedState) {
                     Icons.Rounded.Favorite
                 } else {
                     Icons.Rounded.FavoriteBorder
@@ -58,7 +57,7 @@ fun PostCard(
                         bottom = dimensionResource(R.dimen.padding_mini)
                     )
                     .size(dimensionResource(R.dimen.heart_size))
-                    .clickable { isLiked = !isLiked },
+                    .clickable { post.likedState = !post.likedState },
             )
         }
     }

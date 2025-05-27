@@ -13,19 +13,18 @@ import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavController
 import com.example.task_1_compose.R
+import com.example.task_1_compose.data.dataclasses.Post
 
 @Composable
-fun PostAppBar(navController: NavController) {
-    var isLikeClicked by remember { mutableStateOf(false) }
+fun PostAppBar(
+    navController: NavController,
+    post: Post
+) {
     Row(
         modifier = Modifier
             .height(dimensionResource(R.dimen.top_appbar_height))
@@ -45,7 +44,7 @@ fun PostAppBar(navController: NavController) {
                 .clickable { navController.popBackStack() }
         )
         Icon(
-            if (isLikeClicked) {
+            if (post.likedState) {
                 Icons.Rounded.Favorite
             } else {
                 Icons.Rounded.FavoriteBorder
@@ -57,7 +56,7 @@ fun PostAppBar(navController: NavController) {
                     bottom = dimensionResource(R.dimen.padding_mini)
                 )
                 .size(dimensionResource(R.dimen.heart_size))
-                .clickable { isLikeClicked = !isLikeClicked }
+                .clickable { post.likedState = !post.likedState }
         )
     }
 }
