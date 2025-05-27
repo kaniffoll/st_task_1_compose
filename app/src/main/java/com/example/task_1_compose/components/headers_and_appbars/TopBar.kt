@@ -20,12 +20,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.task_1_compose.R
 import com.example.task_1_compose.data.EmptyTopBars
 import com.example.task_1_compose.data.dataclasses.Post
-import com.example.task_1_compose.data.dataclasses.User
 import com.example.task_1_compose.data.postsList
-import com.example.task_1_compose.data.usersList
 import com.example.task_1_compose.navigation.ImagePagerRoute
 import com.example.task_1_compose.navigation.PostScreenRoute
-import com.example.task_1_compose.navigation.UserScreenRoute
 import kotlinx.serialization.json.Json
 import java.net.URLDecoder
 
