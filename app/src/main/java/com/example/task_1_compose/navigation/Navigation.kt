@@ -15,6 +15,7 @@ import com.example.task_1_compose.data.dataclasses.Post
 import com.example.task_1_compose.data.dataclasses.User
 import com.example.task_1_compose.posts.PostList
 import com.example.task_1_compose.posts.PostScreen
+import com.example.task_1_compose.splash_screen.SplashScreen
 import com.example.task_1_compose.todos.TodosList
 import com.example.task_1_compose.users.UserScreen
 import com.example.task_1_compose.users.UsersList
@@ -27,9 +28,13 @@ fun Navigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = PostListRoute,
+        startDestination = SplashScreenRoute,
         modifier = modifier
     ) {
+        composable<SplashScreenRoute> {
+            SplashScreen(navController)
+        }
+
         composable<PostListRoute> {
             PostList(navController)
         }

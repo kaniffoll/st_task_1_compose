@@ -9,7 +9,9 @@ import com.example.task_1_compose.data.dataclasses.NavBarItem
 import com.example.task_1_compose.data.dataclasses.Post
 import com.example.task_1_compose.data.dataclasses.User
 import com.example.task_1_compose.navigation.AlbumsListRoute
+import com.example.task_1_compose.navigation.ImagePagerRoute
 import com.example.task_1_compose.navigation.PostListRoute
+import com.example.task_1_compose.navigation.SplashScreenRoute
 import com.example.task_1_compose.navigation.TodosListRoute
 import com.example.task_1_compose.navigation.UsersListRoute
 
@@ -126,5 +128,10 @@ val EmptyTopBars = listOf(
     PostListRoute::class.simpleName.toString(),
     AlbumsListRoute::class.simpleName.toString(),
     TodosListRoute::class.simpleName.toString(),
-    UsersListRoute::class.simpleName.toString()
+    UsersListRoute::class.simpleName.toString(),
+)
+
+val EmptyBottomBars = listOf(
+    ImagePagerRoute::class.simpleName.toString(),
+    SplashScreenRoute::class.simpleName.toString()
 )

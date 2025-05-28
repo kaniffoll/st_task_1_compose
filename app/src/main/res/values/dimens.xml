@@ -13,6 +13,7 @@
     <!--Stroke-->
     <dimen name="border_stroke_3">3dp</dimen>
     <dimen name="border_stroke_2">2dp</dimen>
+    <dimen name="border_stroke_splash_box">6dp</dimen>
 
     <!--Size-->
     <dimen name="back_icon_size">45dp</dimen>
@@ -24,6 +25,10 @@
     <dimen name="navbar_item">42dp</dimen>
     <dimen name="color_header_height">230dp</dimen>
     <dimen name="spacer_header_height">75dp</dimen>
+    <dimen name="splash_box_width">320dp</dimen>
+    <dimen name="splash_box_height">250dp</dimen>
+    <dimen name="splash_box_shape">40dp</dimen>
+    <dimen name="splash_box_offset">50dp</dimen>
 
     <!--Font size-->
     <dimen name="text_small_2">17sp</dimen>

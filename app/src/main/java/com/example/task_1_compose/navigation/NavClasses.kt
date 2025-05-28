@@ -9,6 +9,9 @@ import kotlinx.serialization.Serializable
 sealed interface AppRoute
 
 @Serializable
+data object SplashScreenRoute : AppRoute
+
+@Serializable
 data object PostListRoute : AppRoute
 
 @Serializable

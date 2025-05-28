@@ -23,6 +23,7 @@ import com.example.task_1_compose.data.dataclasses.Post
 import com.example.task_1_compose.data.postsList
 import com.example.task_1_compose.navigation.ImagePagerRoute
 import com.example.task_1_compose.navigation.PostScreenRoute
+import com.example.task_1_compose.navigation.SplashScreenRoute
 import kotlinx.serialization.json.Json
 import java.net.URLDecoder
 
@@ -44,6 +45,8 @@ fun TopBar(navController: NavController) {
         EmptyTopBars.any { item -> currentRoute.contains(item) } -> {
             Box(modifier = Modifier.height(dimensionResource(R.dimen.top_appbar_height)))
         }
+
+        currentRoute.contains(SplashScreenRoute::class.simpleName.toString()) -> {}
 
         currentRoute.contains(ImagePagerRoute::class.simpleName.toString()) -> {
             Box(

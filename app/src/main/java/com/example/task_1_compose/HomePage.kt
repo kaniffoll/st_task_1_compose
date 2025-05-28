@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.components.general.BottomNavBar
 import com.example.task_1_compose.components.headers_and_appbars.TopBar
+import com.example.task_1_compose.data.EmptyBottomBars
 import com.example.task_1_compose.navigation.ImagePagerRoute
 import com.example.task_1_compose.navigation.Navigation
 
@@ -29,7 +30,8 @@ fun HomePage() {
             TopBar(navController)
         },
         bottomBar = {
-            if (!currentRoute.contains(ImagePagerRoute::class.simpleName.toString())) {
+            //!currentRoute.contains(ImagePagerRoute::class.simpleName.toString())
+            if (EmptyBottomBars.none{currentRoute.contains(it)}) {
                 BottomNavBar(navController)
                 HorizontalDivider(
                     color = Color.Black,
