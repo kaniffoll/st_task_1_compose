@@ -1,5 +1,8 @@
 package com.example.task_1_compose.components.headers_and_appbars
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,16 +21,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.R
 import com.example.task_1_compose.components.general.Avatar
 import com.example.task_1_compose.data.dataclasses.User
-import com.example.task_1_compose.data.usersList
 import kotlin.random.Random
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun UserHeader(user: User) {
+fun UserHeader(
+    user: User,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope
+) {
     val randomColor = remember {
         Color(
             red = Random.nextInt(0, 255),
@@ -55,31 +61,36 @@ fun UserHeader(user: User) {
                     .border(dimensionResource(R.dimen.border_stroke_2), Color.Black)
                     .background(color = randomColor)
             )
-            Avatar(
-                username = user.name,
-                size = dimensionResource(R.dimen.avatar_large),
-                modifier = Modifier
-                    .graphicsLayer {
-                        clip = true
-                        shape = CircleShape
-                        translationY = spacerHeight.toPx()
-                    },
-                fontSize = dimensionResource(R.dimen.text_large_2).value.sp
-            )
+            with(sharedTransitionScope) {
+                Avatar(
+                    username = user.name,
+                    size = dimensionResource(R.dimen.avatar_large),
+                    modifier = Modifier
+                        .sharedElement(
+                            rememberSharedContentState(key = "image${user.username}"),
+                            animatedVisibilityScope = animatedContentScope
+                        )
+                        .graphicsLayer {
+                            clip = true
+                            shape = CircleShape
+                            translationY = spacerHeight.toPx()
+                        },
+                    fontSize = dimensionResource(R.dimen.text_large_2).value.sp
+                )
+            }
+
         }
 
         Spacer(Modifier.height(spacerHeight))
-        Text(
-            text = user.name,
-            fontSize = dimensionResource(R.dimen.text_large).value.sp,
-        )
+        with(sharedTransitionScope) {
+            Text(
+                text = user.name,
+                fontSize = dimensionResource(R.dimen.text_large).value.sp,
+                modifier = Modifier.sharedElement(
+                    rememberSharedContentState(key = "text${user.username}"),
+                    animatedVisibilityScope = animatedContentScope
+                )
+            )
+        }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun UserHeaderPreview() {
-    UserHeader(
-        user = usersList[0]
-    )
 }

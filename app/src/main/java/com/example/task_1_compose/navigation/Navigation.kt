@@ -1,5 +1,7 @@
 package com.example.task_1_compose.navigation
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -21,75 +23,93 @@ import com.example.task_1_compose.users.UserScreen
 import com.example.task_1_compose.users.UsersList
 import kotlin.reflect.typeOf
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun Navigation(
     navController: NavHostController,
     modifier: Modifier
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = SplashScreenRoute,
-        modifier = modifier
-    ) {
-        composable<SplashScreenRoute> {
-            SplashScreen(navController)
-        }
-
-        composable<PostListRoute> {
-            PostList(navController)
-        }
-
-        composable<PostScreenRoute>(
-            typeMap = mapOf(
-                typeOf<Post>() to CustomNavType.PostType
-            )
+    SharedTransitionLayout {
+        NavHost(
+            navController = navController,
+            startDestination = SplashScreenRoute,
+            modifier = modifier
         ) {
-            val args = it.toRoute<PostScreenRoute>()
-            PostScreen(post = args.post)
-        }
+            composable<SplashScreenRoute> {
+                SplashScreen(navController)
+            }
 
-        composable<AlbumsListRoute> {
-            AlbumsList(navController)
-        }
+            composable<PostListRoute> {
+                PostList(navController)
+            }
 
-        composable<AlbumScreenRoute>(
-            typeMap = mapOf(
-                typeOf<Album>() to CustomNavType.AlbumType
-            )
-        ) {
-            val args = it.toRoute<AlbumScreenRoute>()
-            AlbumScreen(album = args.album, navController)
-        }
+            composable<PostScreenRoute>(
+                typeMap = mapOf(
+                    typeOf<Post>() to CustomNavType.PostType
+                )
+            ) {
+                val args = it.toRoute<PostScreenRoute>()
+                PostScreen(post = args.post)
+            }
 
-        composable<ImagePagerRoute>(
-            typeMap = mapOf(
-                typeOf<Album>() to CustomNavType.AlbumType,
-                typeOf<Int>() to NavType.IntType
-            )
-        ) {
-            val args = it.toRoute<ImagePagerRoute>()
-            ImagePager(
-                album = args.album,
-                initialImage = args.initialImage,
-                navController
-            )
-        }
+            composable<AlbumsListRoute> {
+                AlbumsList(navController)
+            }
 
-        composable<TodosListRoute> {
-            TodosList()
-        }
+            composable<AlbumScreenRoute>(
+                typeMap = mapOf(
+                    typeOf<Album>() to CustomNavType.AlbumType
+                )
+            ) {
+                val args = it.toRoute<AlbumScreenRoute>()
+                AlbumScreen(
+                    album = args.album,
+                    navController,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedContentScope = this@composable
+                )
+            }
 
-        composable<UsersListRoute> {
-            UsersList(navController)
-        }
+            composable<ImagePagerRoute>(
+                typeMap = mapOf(
+                    typeOf<Album>() to CustomNavType.AlbumType,
+                    typeOf<Int>() to NavType.IntType
+                )
+            ) {
+                val args = it.toRoute<ImagePagerRoute>()
+                ImagePager(
+                    album = args.album,
+                    initialImage = args.initialImage,
+                    navController,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedContentScope = this@composable
+                )
+            }
 
-        composable<UserScreenRoute>(
-            typeMap = mapOf(
-                typeOf<User>() to CustomNavType.UserType
-            )
-        ) {
-            val args = it.toRoute<UserScreenRoute>()
-            UserScreen(user = args.user)
+            composable<TodosListRoute> {
+                TodosList()
+            }
+
+            composable<UsersListRoute> {
+                UsersList(
+                    navController,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedContentScope = this@composable
+                )
+            }
+
+            composable<UserScreenRoute>(
+                typeMap = mapOf(
+                    typeOf<User>() to CustomNavType.UserType
+                )
+            ) {
+                val args = it.toRoute<UserScreenRoute>()
+                UserScreen(
+                    user = args.user,
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedContentScope = this@composable
+                )
+            }
         }
     }
 }

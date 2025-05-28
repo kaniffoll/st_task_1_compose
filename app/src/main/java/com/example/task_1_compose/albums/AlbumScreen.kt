@@ -1,5 +1,8 @@
 package com.example.task_1_compose.albums
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -11,18 +14,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.R
 import com.example.task_1_compose.components.cards.PhotoCard
 import com.example.task_1_compose.data.dataclasses.Album
 import com.example.task_1_compose.navigation.ImagePagerRoute
-import com.example.task_1_compose.data.albumsList
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun AlbumScreen(
-    album: Album, navController: NavController
+    album: Album, navController: NavController,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
 ) {
     var currentIndex by remember { mutableIntStateOf(0) }
     LazyColumn(
@@ -30,14 +33,19 @@ fun AlbumScreen(
     ) {
         items(album.photos.size) { id ->
             PhotoCard(
-                modifier = Modifier, index = id, album = album, onClick = {
-                    currentIndex = id
-                    navController.navigate(
-                        ImagePagerRoute(
-                            album = album, initialImage = currentIndex
-                        )
+                modifier = Modifier,
+                index = id,
+                album = album,
+                sharedTransitionScope = sharedTransitionScope,
+                animatedContentScope = animatedContentScope
+            ) {
+                currentIndex = id
+                navController.navigate(
+                    ImagePagerRoute(
+                        album = album, initialImage = currentIndex
                     )
-                })
+                )
+            }
         }
         item {
             Spacer(
@@ -47,10 +55,4 @@ fun AlbumScreen(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AlbumPreview() {
-    AlbumScreen(album = albumsList[0], navController = rememberNavController())
 }
