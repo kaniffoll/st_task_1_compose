@@ -30,10 +30,10 @@ fun PhotoCard(
         onClick = onClick,
         modifier = modifier
     ) {
-        UserImageAndName(username = photo.first)
+        UserImageAndName(username = photo.name)
         with(sharedTransitionScope) {
             Image(
-                painter = painterResource(photo.second.photo),
+                painter = painterResource(photo.photo),
                 contentDescription = "photo",
                 modifier = Modifier
                     .sharedElement(

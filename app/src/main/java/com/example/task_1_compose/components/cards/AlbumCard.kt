@@ -17,7 +17,7 @@ import com.example.task_1_compose.data.dataclasses.Album
 
 @Composable
 fun AlbumCard(
-    album: Album,
+    name: String,
     onClick: () -> Unit
 ) {
     Box(
@@ -35,7 +35,7 @@ fun AlbumCard(
             .clickable{ onClick() }
     ) {
         Text(
-            text = album.name,
+            text = name,
             fontSize = dimensionResource(R.dimen.text_small).value.sp,
             modifier = Modifier.padding(
                 dimensionResource(R.dimen.padding_medium)

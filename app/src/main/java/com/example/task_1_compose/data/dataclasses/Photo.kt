@@ -1,10 +1,10 @@
 package com.example.task_1_compose.data.dataclasses
 
+import androidx.annotation.DrawableRes
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Album(
-    val id: Int,
+data class Photo(
     val name: String,
-    val photos: List<Photo>
+    @DrawableRes val photo: Int
 )

@@ -49,7 +49,7 @@ fun ImagePager(
                 verticalArrangement = Arrangement.Bottom
             ) {
                 ImageItem(
-                    painter = painterResource(album.photos[index].second.photo),
+                    painter = painterResource(album.photos[index].photo),
                     index = initialImage,
                     sharedTransitionScope = sharedTransitionScope,
                     animatedContentScope = animatedContentScope

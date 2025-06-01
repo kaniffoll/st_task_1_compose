@@ -10,22 +10,27 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.R
 import com.example.task_1_compose.components.cards.AlbumCard
+import com.example.task_1_compose.data.dataclasses.Album
 import com.example.task_1_compose.navigation.AlbumScreenRoute
-import com.example.task_1_compose.data.albumsList
 
 @Composable
-fun AlbumsList(navController: NavController) {
+fun AlbumsList(
+    navController: NavController,
+    state: List<Pair<String, Int>>,
+    onAlbumCLick: (String, Int) -> Album
+) {
     LazyColumn(
         verticalArrangement = Arrangement
             .spacedBy(
                 dimensionResource(R.dimen.padding_small)
             )
     ) {
-        items(albumsList) {
+        items(state) {
             AlbumCard(
-                album = it
+                name = it.first
             ) {
-                navController.navigate(AlbumScreenRoute(album = it))
+                val album = onAlbumCLick(it.first, it.second)
+                navController.navigate(AlbumScreenRoute(album = album))
             }
         }
     }
@@ -35,6 +40,9 @@ fun AlbumsList(navController: NavController) {
 @Composable
 fun PreviewAlbums() {
     AlbumsList(
-        navController = rememberNavController()
-    )
+        navController = rememberNavController(),
+        state = listOf("Album 1" to 1)
+    ){ _, _ ->
+        Album(3, "Album 1", photos = emptyList())
+    }
 }

@@ -20,10 +20,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.task_1_compose.R
 import com.example.task_1_compose.data.EmptyTopBars
 import com.example.task_1_compose.data.dataclasses.Post
-import com.example.task_1_compose.data.postsList
 import com.example.task_1_compose.navigation.ImagePagerRoute
 import com.example.task_1_compose.navigation.PostScreenRoute
 import com.example.task_1_compose.navigation.SplashScreenRoute
+import com.example.task_1_compose.repositories.PostRepository
 import kotlinx.serialization.json.Json
 import java.net.URLDecoder
 
@@ -37,8 +37,7 @@ fun TopBar(navController: NavController) {
             val tmpPost = encodedPost?.let {
                 Json.decodeFromString<Post>(URLDecoder.decode(it, "UTF-8"))
             } ?: throw (RuntimeException("Post = null"))
-            val post = postsList.find { it.username == tmpPost.username }
-                ?: throw (RuntimeException("Post = null"))
+            val post = PostRepository().findPostById(tmpPost.id)
             PostAppBar(navController, post)
         }
 

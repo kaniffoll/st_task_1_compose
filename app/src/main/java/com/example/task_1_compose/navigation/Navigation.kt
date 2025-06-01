@@ -3,7 +3,12 @@ package com.example.task_1_compose.navigation
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,10 +22,12 @@ import com.example.task_1_compose.data.dataclasses.Post
 import com.example.task_1_compose.data.dataclasses.User
 import com.example.task_1_compose.posts.PostList
 import com.example.task_1_compose.posts.PostScreen
+import com.example.task_1_compose.repositories.PhotoRepository
 import com.example.task_1_compose.splash_screen.SplashScreen
 import com.example.task_1_compose.todos.TodosList
 import com.example.task_1_compose.users.UserScreen
 import com.example.task_1_compose.users.UsersList
+import com.example.task_1_compose.viewmodels.PhotoViewModel
 import kotlin.reflect.typeOf
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -29,6 +36,13 @@ fun Navigation(
     navController: NavHostController,
     modifier: Modifier
 ) {
+    val photoViewModel: PhotoViewModel = viewModel(
+        factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return PhotoViewModel(PhotoRepository()) as T
+            }
+        }
+    )
     SharedTransitionLayout {
         NavHost(
             navController = navController,
@@ -51,9 +65,14 @@ fun Navigation(
                 val args = it.toRoute<PostScreenRoute>()
                 PostScreen(post = args.post)
             }
-
             composable<AlbumsListRoute> {
-                AlbumsList(navController)
+                val state by photoViewModel.photoState.collectAsState()
+                AlbumsList(
+                    navController,
+                    state = state
+                ) { name, id ->
+                    photoViewModel.loadInitialPhotosForAlbum(name = name, id = id)
+                }
             }
 
             composable<AlbumScreenRoute>(
@@ -67,7 +86,9 @@ fun Navigation(
                     navController,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable
-                )
+                ){ name, id ->
+                    photoViewModel.loadSomePhotosForAlbum(name = name, id = id)
+                }
             }
 
             composable<ImagePagerRoute>(

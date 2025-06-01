@@ -14,12 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.R
 import com.example.task_1_compose.components.general.UserImageAndName
 import com.example.task_1_compose.data.dataclasses.Post
-import com.example.task_1_compose.data.postsList
 
 @Composable
 fun PostCard(
@@ -37,8 +37,13 @@ fun PostCard(
         ) {
             Text(
                 text = post.description,
-                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_small)),
-                fontSize = dimensionResource(R.dimen.text_standard).value.sp
+                modifier = Modifier
+                    .padding(start = dimensionResource(R.dimen.padding_small))
+                    .weight(1f)
+                    .padding(end = dimensionResource(R.dimen.padding_small)),
+                fontSize = dimensionResource(R.dimen.text_standard).value.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
             Icon(
                 if (post.likedState) {
@@ -62,6 +67,13 @@ fun PostCard(
 @Preview(showBackground = true)
 @Composable
 fun PreviewPostCard() {
-    PostCard(postsList[0], modifier = Modifier) {}
+    PostCard(
+        Post(
+            id = 32133,
+            username = "User 1",
+            description = "Sharing complex coroutine use cases from our production environment",
+            title = "Title"
+        ), modifier = Modifier
+    ) {}
 }
 

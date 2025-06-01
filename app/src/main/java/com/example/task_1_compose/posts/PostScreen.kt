@@ -23,9 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.R
 import com.example.task_1_compose.components.buttons.TextButton
-import com.example.task_1_compose.data.dataclasses.Post
-import com.example.task_1_compose.data.postsList
 import com.example.task_1_compose.components.cards.CommentCard
+import com.example.task_1_compose.data.dataclasses.Post
 
 @Composable
 fun PostScreen(
@@ -88,5 +87,5 @@ fun PostScreen(
 @Preview(showBackground = true)
 @Composable
 fun PostScreenPreview() {
-    PostScreen(post = postsList[4])
+    PostScreen(post =  Post(id = 333, username = "User 1", title = "Title", description = "Description"))
 }

@@ -30,7 +30,6 @@ fun HomePage() {
             TopBar(navController)
         },
         bottomBar = {
-            //!currentRoute.contains(ImagePagerRoute::class.simpleName.toString())
             if (EmptyBottomBars.none{currentRoute.contains(it)}) {
                 BottomNavBar(navController)
                 HorizontalDivider(
