@@ -12,4 +12,5 @@
     <color name="orange_for_photos">#FFFFAE36</color>
     <color name="red_for_todos">#FFFF241A</color>
     <color name="cyan_for_users">#FF00AB90</color>
+    <color name="text_field_unfocused">#555555</color>
 </resources>
