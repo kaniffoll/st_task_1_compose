@@ -1,6 +1,7 @@
 package com.example.task_1_compose.repositories
 
 import com.example.task_1_compose.data.albumsList
+import com.example.task_1_compose.data.dataclasses.Album
 import com.example.task_1_compose.data.dataclasses.Photo
 
 class PhotoRepository {
@@ -12,7 +13,7 @@ class PhotoRepository {
         return albums.map { it.name to it.id }
     }
 
-    fun getSomePhotos(id: Int) : List<Photo> {
+    fun getSomePhotosById(id: Int): List<Photo> {
         val startIndex = currentPage * photosPerPage
         val endIndex = minOf(startIndex + photosPerPage, albums[id].photos.size)
         if (startIndex >= endIndex) return emptyList()

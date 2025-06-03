@@ -15,30 +15,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.task_1_compose.R
 import com.example.task_1_compose.components.cards.PostCard
+import com.example.task_1_compose.data.dataclasses.Post
 import com.example.task_1_compose.navigation.PostScreenRoute
-import com.example.task_1_compose.repositories.PostRepository
-import com.example.task_1_compose.viewmodels.PostViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun PostList(navController: NavController) {
-    val postViewModel: PostViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return PostViewModel(PostRepository()) as T
-            }
-        }
-    )
-
+fun PostList(
+    navController: NavController,
+    postsState: StateFlow<List<Post>>,
+    onLikeClicked: (Int) -> Unit,
+    getId: (Int) -> Unit,
+    loadMorePosts: () -> Unit
+) {
     val lazyListState = rememberLazyListState()
-    val posts by postViewModel.postsState.collectAsState()
+    val posts by postsState.collectAsState()
     val isAtBottom by remember {
         derivedStateOf {
             lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == lazyListState.layoutInfo.totalItemsCount - 1
@@ -48,7 +44,7 @@ fun PostList(navController: NavController) {
     LaunchedEffect(isAtBottom) {
         if (isAtBottom) {
             delay(1000L) //очевидно стоит убрать, нужно просто для демонстрации работы подгрузки
-            postViewModel.loadMorePosts()
+            loadMorePosts()
         }
     }
 
@@ -63,8 +59,12 @@ fun PostList(navController: NavController) {
                 modifier = Modifier
                     .padding(
                         bottom = dimensionResource(R.dimen.padding_small_2)
-                    )
-            ) { navController.navigate(PostScreenRoute(it)) }
+                    ),
+                onLikeClicked = onLikeClicked
+            ) {
+                getId(it.id)
+                navController.navigate(PostScreenRoute)
+            }
         }
     }
 }
@@ -72,5 +72,10 @@ fun PostList(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun PostListPreview() {
-    PostList(navController = rememberNavController())
+    PostList(
+        navController = rememberNavController(),
+        postsState = MutableStateFlow(emptyList()),
+        {},
+        {}
+    ) {}
 }

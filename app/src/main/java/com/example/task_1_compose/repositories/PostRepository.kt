@@ -15,10 +15,6 @@ class PostRepository {
         return postsList.subList(startIndex, endIndex)
     }
 
-    fun findPostById(id: Int): Post {
-        return posts.find { it.id == id } ?: throw (RuntimeException("Post = null"))
-    }
-
     fun resetPagination() {
         currentPage = 0
     }

@@ -1,8 +1,5 @@
 package com.example.task_1_compose.data.dataclasses
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,7 +9,5 @@ data class Post(
     val title: String,
     val description: String,
     val comments: MutableList<Comment> = mutableListOf(),
-    var isLiked: Boolean = false
-) : java.io.Serializable {
-    var likedState by mutableStateOf(isLiked)
-}
+    var likedState: Boolean = false
+) : java.io.Serializable

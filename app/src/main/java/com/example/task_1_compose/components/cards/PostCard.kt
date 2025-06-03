@@ -23,7 +23,10 @@ import com.example.task_1_compose.data.dataclasses.Post
 
 @Composable
 fun PostCard(
-    post: Post, modifier: Modifier, onClick: () -> Unit
+    post: Post,
+    modifier: Modifier,
+    onLikeClicked: (Int) -> Unit,
+    onClick: () -> Unit
 ) {
     OutlinedCustomCard(onClick = onClick, modifier = modifier) {
         UserImageAndName(post.username)
@@ -58,7 +61,7 @@ fun PostCard(
                         bottom = dimensionResource(R.dimen.padding_mini)
                     )
                     .size(dimensionResource(R.dimen.heart_size))
-                    .clickable { post.likedState = !post.likedState },
+                    .clickable { onLikeClicked(post.id) },
             )
         }
     }
@@ -73,7 +76,9 @@ fun PreviewPostCard() {
             username = "User 1",
             description = "Sharing complex coroutine use cases from our production environment",
             title = "Title"
-        ), modifier = Modifier
+        ),
+        modifier = Modifier,
+        {}
     ) {}
 }
 

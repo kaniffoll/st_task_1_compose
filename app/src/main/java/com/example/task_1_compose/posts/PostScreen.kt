@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,11 +26,18 @@ import com.example.task_1_compose.R
 import com.example.task_1_compose.components.buttons.TextButton
 import com.example.task_1_compose.components.cards.CommentCard
 import com.example.task_1_compose.data.dataclasses.Post
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun PostScreen(
-    post: Post,
+    postsState: StateFlow<List<Post>>,
+    postId: StateFlow<Int?>,
+    onLikeClicked: (Int) -> Unit,
 ) {
+    val posts by postsState.collectAsState()
+    val id = postId.value ?: throw (RuntimeException("PostId = null"))
+    val post = posts[id]
     var count by remember { mutableIntStateOf(post.comments.size) }
     var canLoadMore by remember { mutableStateOf(2 < post.comments.size) }
     LazyColumn(
@@ -51,7 +59,9 @@ fun PostScreen(
             .spacedBy(dimensionResource(R.dimen.padding_small))
     ) {
         item {
-            PostBody(post)
+            PostBody(post) {
+                onLikeClicked(post.id)
+            }
         }
         item {
             Text(
@@ -87,5 +97,8 @@ fun PostScreen(
 @Preview(showBackground = true)
 @Composable
 fun PostScreenPreview() {
-    PostScreen(post =  Post(id = 333, username = "User 1", title = "Title", description = "Description"))
+    PostScreen(
+        postsState = MutableStateFlow(emptyList()),
+        postId = MutableStateFlow(null),
+    ) {}
 }

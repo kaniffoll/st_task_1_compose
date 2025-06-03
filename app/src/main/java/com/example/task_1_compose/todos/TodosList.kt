@@ -8,7 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,17 +19,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.task_1_compose.R
 import com.example.task_1_compose.components.cards.TodosCard
 import com.example.task_1_compose.components.fabs.TodosFab
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun TodosList() {
-    val todos = remember { mutableStateListOf<String>() }
+fun TodosList(
+    state: StateFlow<List<String>>,
+    removeAtIndex: (Int) -> Unit,
+    onTextChangeById: (Int, String) -> Unit,
+    addTodo: () -> Unit
+) {
+    val todos by state.collectAsState()
     val focusManager = LocalFocusManager.current
     Box(
         modifier = Modifier
             .fillMaxSize()
             .clickable(
                 indication = null,
-                interactionSource = remember { MutableInteractionSource() }
+                interactionSource = remember {
+                    MutableInteractionSource()
+                }
             ) {
                 focusManager.clearFocus()
             }
@@ -42,11 +52,15 @@ fun TodosList() {
                 )
         ) {
             items(todos.size) { index ->
-                TodosCard(index, todos)
+                TodosCard(
+                    index,
+                    state,
+                    onTextChangeById
+                ) { removeAtIndex(index) }
             }
         }
         TodosFab {
-            todos.add("")
+            addTodo()
         }
     }
 }
@@ -54,5 +68,9 @@ fun TodosList() {
 @Preview
 @Composable
 fun PreviewTodoList() {
-    TodosList()
+    TodosList(
+        MutableStateFlow(emptyList()),
+        {},
+        { _, _ -> }
+    ) {}
 }

@@ -32,15 +32,6 @@ fun TopBar(navController: NavController) {
     val backStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = backStackEntry?.destination.toString()
     when {
-        currentRoute.contains(PostScreenRoute::class.simpleName.toString()) -> {
-            val encodedPost = backStackEntry?.arguments?.getString("post")
-            val tmpPost = encodedPost?.let {
-                Json.decodeFromString<Post>(URLDecoder.decode(it, "UTF-8"))
-            } ?: throw (RuntimeException("Post = null"))
-            val post = PostRepository().findPostById(tmpPost.id)
-            PostAppBar(navController, post)
-        }
-
         EmptyTopBars.any { item -> currentRoute.contains(item) } -> {
             Box(modifier = Modifier.height(dimensionResource(R.dimen.top_appbar_height)))
         }
@@ -68,7 +59,6 @@ fun TopBar(navController: NavController) {
                 )
             }
         }
-
 
         else -> {
             Box(

@@ -24,14 +24,10 @@ data object TodosListRoute : AppRoute
 data object UsersListRoute : AppRoute
 
 @Serializable
-data class PostScreenRoute(
-    val post: Post
-) : AppRoute
+data object AlbumScreenRoute : AppRoute
 
 @Serializable
-data class AlbumScreenRoute(
-    val album: Album
-) : AppRoute
+data object PostScreenRoute : AppRoute
 
 @Serializable
 data class ImagePagerRoute(

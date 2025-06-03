@@ -11,25 +11,25 @@ import kotlinx.serialization.json.Json
 
 object CustomNavType {
 
-    val PostType = object : NavType<Post>(
-        isNullableAllowed = false
-    ) {
-        override fun put(bundle: SavedState, key: String, value: Post) {
-            bundle.putString(key, Json.encodeToString(value))
-        }
-
-        override fun get(bundle: SavedState, key: String): Post? {
-            return Json.decodeFromString(bundle.getString(key) ?: return null)
-        }
-
-        override fun serializeAsValue(value: Post): String {
-            return Uri.encode(Json.encodeToString(value))
-        }
-
-        override fun parseValue(value: String): Post {
-            return Json.decodeFromString(Uri.decode(value))
-        }
-    }
+//    val PostType = object : NavType<Post>(
+//        isNullableAllowed = false
+//    ) {
+//        override fun put(bundle: SavedState, key: String, value: Post) {
+//            bundle.putString(key, Json.encodeToString(value))
+//        }
+//
+//        override fun get(bundle: SavedState, key: String): Post? {
+//            return Json.decodeFromString(bundle.getString(key) ?: return null)
+//        }
+//
+//        override fun serializeAsValue(value: Post): String {
+//            return Uri.encode(Json.encodeToString(value))
+//        }
+//
+//        override fun parseValue(value: String): Post {
+//            return Json.decodeFromString(Uri.decode(value))
+//        }
+//    }
 
     val UserType = object : NavType<User>(
         isNullableAllowed = false

@@ -11,8 +11,10 @@ class PostViewModel(
     private val postRepository: PostRepository
 ) : ViewModel() {
     private val _postsState = MutableStateFlow<List<Post>>(emptyList())
-    private var allPostsLoaded = false
     val postsState: StateFlow<List<Post>> = _postsState.asStateFlow()
+    private var allPostsLoaded = false
+    private var _currentPostId = MutableStateFlow<Int?>(null)
+    val currentPostId = _currentPostId.asStateFlow()
 
     init {
         loadFirstPosts()
@@ -29,5 +31,15 @@ class PostViewModel(
         val posts = postRepository.getSomePosts()
         if (posts.isEmpty()) allPostsLoaded = true
         _postsState.value += posts
+    }
+
+    fun toggleLike(id: Int) {
+        _postsState.value = _postsState.value.map {
+            if( it.id == id ) it.copy(likedState = !it.likedState) else it
+        }
+    }
+
+    fun setCurrentPostId(id: Int) {
+        _currentPostId.value = id
     }
 }

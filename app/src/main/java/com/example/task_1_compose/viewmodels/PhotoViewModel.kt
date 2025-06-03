@@ -1,5 +1,8 @@
 package com.example.task_1_compose.viewmodels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.task_1_compose.data.dataclasses.Album
 import com.example.task_1_compose.data.dataclasses.Photo
@@ -11,9 +14,12 @@ import kotlinx.coroutines.flow.asStateFlow
 class PhotoViewModel(
     private val photoRepository: PhotoRepository
 ) : ViewModel() {
-    private val _photoState = MutableStateFlow<List<Pair<String, Int>>>(emptyList())
-    val photoState: StateFlow<List<Pair<String, Int>>> = _photoState.asStateFlow()
-    private var currentPhotos = emptyList<Photo>()
+    private val _albumsState = MutableStateFlow<List<Pair<String, Int>>>(emptyList())
+    val albumsState: StateFlow<List<Pair<String, Int>>> = _albumsState.asStateFlow()
+    private var currentPhotos by mutableStateOf(emptyList<Photo>())
+    private val _currentAlbumState = MutableStateFlow(Album(-1, "", emptyList()))
+    val currentAlbumState = _currentAlbumState.asStateFlow()
+    private var activeAlbumId: Int? = null
 
     init {
         photoRepository.resetPagination()
@@ -22,24 +28,24 @@ class PhotoViewModel(
     }
 
     private fun loadAlbums() {
-        _photoState.value = photoRepository.getAlbumsNames()
+        _albumsState.value = photoRepository.getAlbumsNames()
     }
 
-    fun loadSomePhotosForAlbum(name: String, id: Int): Album {
-        currentPhotos += photoRepository.getSomePhotos(id)
-        return Album(
-            id = id,
-            name = name,
-            photos = currentPhotos
-        )
-    }
+    fun updateCurrentAlbum(id: Int) {
+        if (id != activeAlbumId) {
+            currentPhotos = emptyList()
+            photoRepository.resetPagination()
+            activeAlbumId = id
+            currentPhotos = photoRepository.getSomePhotosById(id)
+        } else {
+            currentPhotos += photoRepository.getSomePhotosById(id)
+        }
+        val pair = _albumsState.value.firstOrNull { it.second == id }
+            ?: return
 
-    fun loadInitialPhotosForAlbum(name: String, id: Int): Album {
-        photoRepository.resetPagination()
-        currentPhotos = photoRepository.getSomePhotos(id)
-        return Album(
-            id = id,
-            name = name,
+        _currentAlbumState.value = Album(
+            id = pair.second,
+            name = pair.first,
             photos = currentPhotos
         )
     }

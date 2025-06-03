@@ -211,6 +211,7 @@ val postsList = mutableStateListOf(
         )
     )
 )
+
 //Фейковые данные фотографий
 val albumsList: List<Album> = listOf(
     Album(
