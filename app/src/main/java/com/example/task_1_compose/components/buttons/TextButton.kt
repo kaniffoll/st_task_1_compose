@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -15,15 +14,11 @@ import com.example.task_1_compose.R
 
 @Composable
 fun TextButton(
-    canLoadMore: Boolean,
+    text: String,
     onClick: () -> Unit
 ) {
     Text(
-        text = if (canLoadMore) {
-            stringResource(R.string.show_more)
-        } else {
-            stringResource(R.string.show_less)
-        },
+        text = text,
         modifier = Modifier
             .padding(
                 end = dimensionResource(R.dimen.padding_small),

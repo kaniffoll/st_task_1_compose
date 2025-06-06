@@ -9,5 +9,5 @@ data class Post(
     val title: String,
     val description: String,
     val comments: MutableList<Comment> = mutableListOf(),
-    var likedState: Boolean = false
+    var isLiked: Boolean = false
 ) : java.io.Serializable

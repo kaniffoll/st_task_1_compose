@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.R
+import com.example.task_1_compose.utilities.getInitials
 
 @Composable
 fun Avatar(
@@ -36,9 +37,7 @@ fun Avatar(
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = username[0].toString() + (if (username.trimEnd()
-                    .indexOf(' ') != -1
-            ) username[username.indexOf(' ') + 1] else ""),
+            text = username.getInitials(),
             fontSize = fontSize
         )
     }

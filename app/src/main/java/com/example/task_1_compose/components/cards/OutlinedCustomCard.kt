@@ -12,12 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.Dp
 import com.example.task_1_compose.R
 
 @Composable
 fun OutlinedCustomCard(
-    onClick: () -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
+    itemsSpacedBy: Dp = dimensionResource(R.dimen.padding_large),
+    onClick: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     OutlinedCard(
@@ -40,12 +42,11 @@ fun OutlinedCustomCard(
         Column(
             verticalArrangement = Arrangement
                 .spacedBy(
-                    dimensionResource(R.dimen.padding_large)
+                    itemsSpacedBy
                 ),
             modifier = Modifier
                 .padding(
-                    start = dimensionResource(R.dimen.padding_small),
-                    top = dimensionResource(R.dimen.padding_small)
+                    dimensionResource(R.dimen.padding_small),
                 )
         ) {
             content()

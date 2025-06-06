@@ -1,9 +1,11 @@
 package com.example.task_1_compose.repositories
 
-class TodosRepository {
-    private val todos: MutableList<String> = mutableListOf()
+import com.example.task_1_compose.data.dataclasses.Todo
 
-    fun loadTodos() : MutableList<String> {
+class TodosRepository {
+    private val todos: MutableList<Todo> = mutableListOf()
+
+    fun loadTodos() : MutableList<Todo> {
         return todos
     }
 }

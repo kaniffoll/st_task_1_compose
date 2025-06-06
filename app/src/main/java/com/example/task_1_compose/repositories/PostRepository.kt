@@ -3,19 +3,25 @@ package com.example.task_1_compose.repositories
 import com.example.task_1_compose.data.dataclasses.Post
 import com.example.task_1_compose.data.postsList
 
-class PostRepository {
+object PostRepository {
     private val posts = postsList
-    private var currentPage = 0
-    private val postsPerPage = 10
-    fun getSomePosts(): List<Post> {
+
+    fun getSomePosts(currentPage: Int, postsPerPage: Int): List<Post> {
         val startIndex = currentPage * postsPerPage
         val endIndex = minOf(startIndex + postsPerPage, posts.size)
-        if (startIndex >= endIndex) return emptyList()
-        currentPage++
+        if (startIndex >= endIndex) {
+            return emptyList()
+        }
         return postsList.subList(startIndex, endIndex)
     }
 
-    fun resetPagination() {
-        currentPage = 0
+    fun toggleLike(id: Int) {
+        posts.replaceAll { post ->
+            if (post.id == id) post.copy(isLiked = !post.isLiked) else post
+        }
+    }
+
+    fun getPostById(id: Int): Post {
+        return posts.find { it.id == id } ?: throw (RuntimeException("Post Id == null"))
     }
 }
