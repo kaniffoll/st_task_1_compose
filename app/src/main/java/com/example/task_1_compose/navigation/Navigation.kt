@@ -9,18 +9,18 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.task_1_compose.data.dataclasses.Album
-import com.example.task_1_compose.data.dataclasses.Post
-import com.example.task_1_compose.data.dataclasses.User
-import com.example.task_1_compose.screens.albumscreen.AlbumScreen
-import com.example.task_1_compose.screens.albumslist.AlbumsList
-import com.example.task_1_compose.screens.imagepager.ImagePager
-import com.example.task_1_compose.screens.postscreen.PostScreen
-import com.example.task_1_compose.screens.postslist.PostsList
-import com.example.task_1_compose.screens.splash_screen.SplashScreen
-import com.example.task_1_compose.screens.todoslist.TodosList
-import com.example.task_1_compose.screens.userscreen.UserScreen
-import com.example.task_1_compose.screens.userslist.UsersList
+import com.example.domain.data.dataclasses.Album
+import com.example.domain.data.dataclasses.Post
+import com.example.domain.data.dataclasses.User
+import com.example.task_1_compose.ui.screens.album.AlbumScreen
+import com.example.task_1_compose.ui.screens.albumslist.AlbumsList
+import com.example.task_1_compose.ui.screens.imagepager.ImagePager
+import com.example.task_1_compose.ui.screens.post.PostScreen
+import com.example.task_1_compose.ui.screens.postslist.PostsList
+import com.example.task_1_compose.ui.screens.splash_screen.SplashScreen
+import com.example.task_1_compose.ui.screens.todoslist.TodosList
+import com.example.task_1_compose.ui.screens.userscreen.UserScreen
+import com.example.task_1_compose.ui.screens.userslist.UsersList
 import kotlin.reflect.typeOf
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -61,7 +61,7 @@ fun Navigation(
                 val args = it.toRoute<AlbumScreenRoute>()
                 AlbumScreen(
                     navController,
-                    id = args.id,
+                    albumId = args.id,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable
                 )

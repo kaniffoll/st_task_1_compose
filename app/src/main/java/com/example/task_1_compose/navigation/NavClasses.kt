@@ -1,8 +1,8 @@
 package com.example.task_1_compose.navigation
 
-import com.example.task_1_compose.data.dataclasses.Album
-import com.example.task_1_compose.data.dataclasses.Post
-import com.example.task_1_compose.data.dataclasses.User
+import com.example.domain.data.dataclasses.Album
+import com.example.domain.data.dataclasses.Post
+import com.example.domain.data.dataclasses.User
 import kotlinx.serialization.Serializable
 
 @Serializable
