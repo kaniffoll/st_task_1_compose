@@ -5,19 +5,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.domain.data.dataclasses.Comment
 import com.example.domain.data.dataclasses.Post
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.containers.CommentsSection
@@ -32,7 +35,13 @@ fun PostScreen(
 
     val currentPost by viewModel.post.collectAsState()
 
-    Column(
+    val isLoading by viewModel.isLoading.collectAsState()
+
+    val loadingError by viewModel.loadingError.collectAsState()
+
+    val canLoadMore by viewModel.canLoadMore.collectAsState()
+
+    LazyColumn(
         modifier = Modifier
             .padding(
                 start = dimensionResource(R.dimen.padding_medium),
@@ -50,11 +59,23 @@ fun PostScreen(
         verticalArrangement = Arrangement
             .spacedBy(dimensionResource(R.dimen.padding_small))
     ) {
-        PostBody(currentPost) {
-            viewModel.toggleLike()
+        item {
+            PostBody(currentPost) {
+                viewModel.toggleLike()
+            }
         }
 
-        CommentsSection(comments = post.comments)
+        item {
+            CommentsSection(
+                comments = currentPost.comments,
+                modifier = Modifier.fillParentMaxSize(),
+                isLoading = isLoading,
+                loadingError = loadingError,
+                canLoadMore = canLoadMore
+            ) {
+                viewModel.loadComments()
+            }
+        }
     }
 }
 
@@ -75,7 +96,7 @@ fun PostBody(
                 dimensionResource(R.dimen.padding_large)
             ),
     ) {
-        UserImageAndName(post.username)
+        UserImageAndName(post.userId.toString())
         PostBodyTitle(post)
         PostBodyDescriptionContent(post, onLikeClicked = onLikeClicked)
     }
@@ -98,14 +119,15 @@ fun PostBodyDescriptionContent(
     post: Post,
     onLikeClicked: () -> Unit
 ) {
-    Row(
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalAlignment = Alignment.End
     ) {
         Text(
             text = post.description,
             modifier = Modifier.padding(
                 start = dimensionResource(R.dimen.padding_small),
+                end = dimensionResource(R.dimen.padding_small),
                 bottom = dimensionResource(R.dimen.padding_small)
             ),
             fontSize = dimensionResource(R.dimen.text_standard).value.sp
@@ -113,4 +135,20 @@ fun PostBodyDescriptionContent(
 
         LikeButton(status = post.isLiked, onClicked = onLikeClicked)
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PostScreenPreview() {
+    PostScreen(
+        post = Post(
+            id = -1,
+            userId = 1,
+            title = "Title",
+            description = "D".repeat(100),
+            comments = mutableListOf(
+                Comment("", "")
+            )
+        )
+    )
 }

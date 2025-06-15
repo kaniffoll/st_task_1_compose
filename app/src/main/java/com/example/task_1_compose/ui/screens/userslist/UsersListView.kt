@@ -43,7 +43,9 @@ fun UsersList(
                     .padding(
                         bottom = dimensionResource(R.dimen.padding_medium)
                     )
-            ) { navController.navigate(UserScreenRoute(it)) }
+            ) {
+                navController.navigate(UserScreenRoute(it))
+            }
         }
     }
 }

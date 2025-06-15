@@ -13,6 +13,7 @@ navigationCompose = "2.9.0"
 jetbrainsKotlinJvm = "2.0.21"
 appcompat = "1.7.1"
 material = "1.12.0"
+retrofit = "3.0.0"
 
 
 [libraries]
@@ -35,6 +36,8 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 zoomable = { module = "net.engawapg.lib:zoomable", version = "2.7.0" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
+retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

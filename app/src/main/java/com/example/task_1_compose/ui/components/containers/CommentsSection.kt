@@ -20,12 +20,17 @@ import com.example.domain.data.dataclasses.Comment
 import com.example.task_1_compose.R
 import com.example.task_1_compose.resources.AppSettings.INITIAL_COMMENTS_COUNT
 import com.example.task_1_compose.ui.components.cards.CommentCard
+import com.example.task_1_compose.ui.components.general.LoadingAndError
 import com.example.task_1_compose.ui.components.views.buttons.TextButton
 
 @Composable
 fun CommentsSection(
     modifier: Modifier = Modifier,
-    comments: List<Comment>
+    comments: List<Comment>,
+    loadingError: Boolean,
+    isLoading: Boolean,
+    canLoadMore: Boolean,
+    onRetry: () -> Unit
 ) {
 
     var isCommentsExpanded by remember { mutableStateOf(comments.size < INITIAL_COMMENTS_COUNT) }
@@ -33,12 +38,30 @@ fun CommentsSection(
 
     LazyColumn(
         modifier = modifier.background(color = Color.White),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
     ) {
         item { CommentsSectionTitle() }
 
+
         items(commentsCount) { index ->
             CommentCard(comment = comments[index])
+        }
+
+        item {
+            LoadingAndError(isLoading, loadingError) {
+                onRetry()
+            }
+        }
+
+        item {
+            LoadMore(
+                canLoadMore,
+                isCommentsExpanded,
+                isLoading,
+                loadingError
+            ) {
+                onRetry()
+            }
         }
 
         if (comments.size > INITIAL_COMMENTS_COUNT) {
@@ -76,4 +99,22 @@ fun CommentsSectionShowMoreButton(
     }
 
     TextButton(text = text, onClick = onClick)
+}
+
+@Composable
+fun LoadMore(
+    isCommentsExpanded: Boolean,
+    canLoadMore: Boolean,
+    isLoading: Boolean,
+    loadingError: Boolean,
+    onClick: () -> Unit
+) {
+    if (canLoadMore && isCommentsExpanded && !isLoading && !loadingError) {
+        TextButton(
+            text = stringResource(R.string.load_more),
+            color = Color.Gray
+        ) {
+            onClick()
+        }
+    }
 }

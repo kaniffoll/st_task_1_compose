@@ -16,6 +16,7 @@ import com.example.task_1_compose.R
 @Composable
 fun LikeButton(
     status: Boolean,
+    modifier: Modifier = Modifier,
     onClicked: () -> Unit
 ) {
     Icon(
@@ -25,7 +26,7 @@ fun LikeButton(
             Icons.Rounded.FavoriteBorder
         },
         contentDescription = stringResource(R.string.like_icon),
-        modifier = Modifier
+        modifier = modifier
             .padding(
                 end = dimensionResource(R.dimen.padding_medium),
                 bottom = dimensionResource(R.dimen.padding_mini)

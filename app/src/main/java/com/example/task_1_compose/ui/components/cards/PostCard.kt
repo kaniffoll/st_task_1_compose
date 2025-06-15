@@ -23,7 +23,7 @@ fun PostCard(
     onClick: () -> Unit
 ) {
     OutlinedCustomCard(onClick = onClick, modifier = modifier) {
-        UserImageAndName(post.username)
+        UserImageAndName(post.userId.toString())
         Text(
             text = post.title,
             modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_small)),

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -15,6 +16,7 @@ import com.example.task_1_compose.R
 @Composable
 fun TextButton(
     text: String,
+    color: Color = Color.Black,
     onClick: () -> Unit
 ) {
     Text(
@@ -28,6 +30,7 @@ fun TextButton(
             .clickable {
                 onClick()
             },
+        color = color,
         fontSize = dimensionResource(R.dimen.text_comment).value.sp,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center

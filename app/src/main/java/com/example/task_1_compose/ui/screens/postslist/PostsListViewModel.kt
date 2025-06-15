@@ -1,12 +1,14 @@
 package com.example.task_1_compose.ui.screens.postslist
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.domain.data.dataclasses.Post
 import com.example.domain.repositories.PostsRepository
 import com.example.task_1_compose.resources.AppSettings.POSTS_PER_PAGE
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class PostsListViewModel : ViewModel() {
     private val postsRepository = PostsRepository()
@@ -20,7 +22,14 @@ class PostsListViewModel : ViewModel() {
     private var lastOpenedPostId: Int? = null
 
     init {
-        loadNextPosts()
+        loadData()
+    }
+
+    private fun loadData() {
+        viewModelScope.launch {
+            postsRepository.fetchData()
+            loadNextPosts()
+        }
     }
 
     fun toggleLike(id: Int) {
@@ -37,7 +46,6 @@ class PostsListViewModel : ViewModel() {
 
     fun refreshPost() {
         val id = lastOpenedPostId ?: return
-
         val lastOpenedPost = postsRepository.getPostById(id)
 
         _posts.value = _posts.value.map {

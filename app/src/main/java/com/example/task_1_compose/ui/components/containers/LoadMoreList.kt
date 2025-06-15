@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.task_1_compose.R
-import kotlinx.coroutines.delay
 
 @Composable
 fun LoadMoreList(
@@ -44,7 +43,6 @@ fun LoadMoreList(
         if (isAtBottom && canLoadMore) {
             isLoadingMore = true
 
-            delay(1000L)
             onLoadMore()
 
             isLoadingMore = false

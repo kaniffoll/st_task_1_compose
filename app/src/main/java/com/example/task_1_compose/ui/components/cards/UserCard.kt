@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.task_1_compose.R
 import com.example.domain.data.dataclasses.User
 import com.example.task_1_compose.ui.components.general.Avatar
+import com.example.task_1_compose.utilities.getAddressAsString
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -37,7 +38,7 @@ fun UserCard(
             user, sharedTransitionScope, animatedContentScope
         )
         Text(
-            text = stringResource(R.string.address) + " " + user.address,
+            text = stringResource(R.string.address) + getAddressAsString(user.address),
             modifier = Modifier.padding(
                 start = dimensionResource(R.dimen.padding_small)
             ),
