@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.domain.data.dataclasses.Album
 import com.example.task_1_compose.navigation.ImagePagerRoute
 import com.example.task_1_compose.ui.components.cards.PhotoCard
 import com.example.task_1_compose.ui.components.containers.LoadMoreList
@@ -23,23 +25,29 @@ fun AlbumScreen(
 ) {
     val viewModel: AlbumScreenViewModel = viewModel { AlbumScreenViewModel(albumId) }
 
-    val album by viewModel.album.collectAsState()
+    val photos by viewModel.photos.collectAsState()
 
     LoadMoreList(
-        canLoadMore = viewModel.canLoadMore,
         onLoadMore = { viewModel.loadNextAlbumPhotos() },
-        contentSize = album.photos.size
+        isPaginationFinished = { !viewModel.canLoadMorePhotos() },
+        scope = viewModel.viewModelScope,
+        data = photos
     ) { index ->
+        val currentPhotos = viewModel.currentPhotos()
         PhotoCard(
             modifier = Modifier,
             id = index,
-            photo = album.photos[index],
+            photo = currentPhotos[index],
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = animatedContentScope
         ) {
             navController.navigate(
                 ImagePagerRoute(
-                    album = album, initialImage = index
+                    album = Album(
+                        id = albumId,
+                        name = "",
+                        photos = currentPhotos.toMutableList(),
+                    ), initialImage = index
                 )
             )
         }

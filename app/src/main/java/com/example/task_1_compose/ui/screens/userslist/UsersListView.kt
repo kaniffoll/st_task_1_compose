@@ -15,9 +15,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.domain.statefuldata.ErrorData
+import com.example.domain.statefuldata.LoadingData
+import com.example.domain.statefuldata.SuccessData
 import com.example.task_1_compose.R
 import com.example.task_1_compose.navigation.UserScreenRoute
 import com.example.task_1_compose.ui.components.cards.UserCard
+import com.example.task_1_compose.ui.components.general.LoadingIndicator
+import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -34,17 +39,36 @@ fun UsersList(
         modifier = Modifier
             .background(color = Color.White)
     ) {
-        items(users) {
-            UserCard(
-                user = it,
-                sharedTransitionScope = sharedTransitionScope,
-                animatedContentScope = animatedContentScope,
-                modifier = Modifier
-                    .padding(
-                        bottom = dimensionResource(R.dimen.padding_medium)
-                    )
-            ) {
-                navController.navigate(UserScreenRoute(it))
+        when (users) {
+            is LoadingData -> {
+                item {
+                    LoadingIndicator()
+                }
+            }
+
+            is ErrorData -> {
+                item {
+                    ErrorButton {
+                        viewModel.loadData()
+                    }
+                }
+            }
+
+            is SuccessData -> {
+                val currentUsers = viewModel.currentUsers()
+                items(currentUsers) {
+                    UserCard(
+                        user = it,
+                        sharedTransitionScope = sharedTransitionScope,
+                        animatedContentScope = animatedContentScope,
+                        modifier = Modifier
+                            .padding(
+                                bottom = dimensionResource(R.dimen.padding_medium)
+                            )
+                    ) {
+                        navController.navigate(UserScreenRoute(it))
+                    }
+                }
             }
         }
     }

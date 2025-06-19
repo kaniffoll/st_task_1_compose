@@ -14,6 +14,8 @@ jetbrainsKotlinJvm = "2.0.21"
 appcompat = "1.7.1"
 material = "1.12.0"
 retrofit = "3.0.0"
+coil = "3.2.0"
+logging-interceptor = "4.12.0"
 
 
 [libraries]
@@ -36,8 +38,10 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 zoomable = { module = "net.engawapg.lib:zoomable", version = "2.7.0" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
-retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit"}
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
+coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+logging-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

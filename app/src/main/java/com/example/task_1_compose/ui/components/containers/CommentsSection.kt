@@ -17,24 +17,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.domain.data.dataclasses.Comment
+import com.example.domain.statefuldata.ErrorData
+import com.example.domain.statefuldata.LoadingData
+import com.example.domain.statefuldata.StatefulData
+import com.example.domain.statefuldata.SuccessData
 import com.example.task_1_compose.R
 import com.example.task_1_compose.resources.AppSettings.INITIAL_COMMENTS_COUNT
 import com.example.task_1_compose.ui.components.cards.CommentCard
-import com.example.task_1_compose.ui.components.general.LoadingAndError
+import com.example.task_1_compose.ui.components.general.LoadingIndicator
+import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
 import com.example.task_1_compose.ui.components.views.buttons.TextButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun CommentsSection(
     modifier: Modifier = Modifier,
-    comments: List<Comment>,
-    loadingError: Boolean,
-    isLoading: Boolean,
-    canLoadMore: Boolean,
-    onRetry: () -> Unit
+    comments: StatefulData<List<Comment>>,
+    canLoadMore: () -> Boolean,
+    scope: CoroutineScope,
+    onRetry: suspend () -> Unit
 ) {
 
-    var isCommentsExpanded by remember { mutableStateOf(comments.size < INITIAL_COMMENTS_COUNT) }
-    val commentsCount = if (isCommentsExpanded) comments.size else INITIAL_COMMENTS_COUNT
+    var isCommentsExpanded by remember {
+        mutableStateOf(
+            comments is SuccessData && comments.result.size < INITIAL_COMMENTS_COUNT
+        )
+    }
 
     LazyColumn(
         modifier = modifier.background(color = Color.White),
@@ -42,32 +51,51 @@ fun CommentsSection(
     ) {
         item { CommentsSectionTitle() }
 
-
-        items(commentsCount) { index ->
-            CommentCard(comment = comments[index])
-        }
-
-        item {
-            LoadingAndError(isLoading, loadingError) {
-                onRetry()
+        when (comments) {
+            is LoadingData -> {
+                item {
+                    LoadingIndicator()
+                }
             }
-        }
 
-        item {
-            LoadMore(
-                canLoadMore,
-                isCommentsExpanded,
-                isLoading,
-                loadingError
-            ) {
-                onRetry()
+            is ErrorData -> {
+                item {
+                    ErrorButton {
+                        scope.launch {
+                            onRetry()
+                        }
+                    }
+                }
             }
-        }
 
-        if (comments.size > INITIAL_COMMENTS_COUNT) {
-            item {
-                CommentsSectionShowMoreButton(isCommentsExpanded = isCommentsExpanded) {
-                    isCommentsExpanded = !isCommentsExpanded
+            is SuccessData -> {
+                val allComments = comments.result
+                val commentsCount =
+                    if (isCommentsExpanded) allComments.size else INITIAL_COMMENTS_COUNT
+
+                items(commentsCount) { index ->
+                    CommentCard(comment = allComments[index])
+                }
+
+                if (canLoadMore() && isCommentsExpanded) {
+                    item {
+                        TextButton(
+                            text = stringResource(R.string.load_more),
+                            color = Color.Gray
+                        ) {
+                            scope.launch {
+                                onRetry()
+                            }
+                        }
+                    }
+                }
+
+                if (allComments.size > INITIAL_COMMENTS_COUNT) {
+                    item {
+                        CommentsSectionShowMoreButton(isCommentsExpanded) {
+                            isCommentsExpanded = !isCommentsExpanded
+                        }
+                    }
                 }
             }
         }
@@ -99,22 +127,4 @@ fun CommentsSectionShowMoreButton(
     }
 
     TextButton(text = text, onClick = onClick)
-}
-
-@Composable
-fun LoadMore(
-    isCommentsExpanded: Boolean,
-    canLoadMore: Boolean,
-    isLoading: Boolean,
-    loadingError: Boolean,
-    onClick: () -> Unit
-) {
-    if (canLoadMore && isCommentsExpanded && !isLoading && !loadingError) {
-        TextButton(
-            text = stringResource(R.string.load_more),
-            color = Color.Gray
-        ) {
-            onClick()
-        }
-    }
 }

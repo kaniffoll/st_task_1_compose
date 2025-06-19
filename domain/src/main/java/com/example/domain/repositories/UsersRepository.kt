@@ -9,14 +9,14 @@ import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
 
 class UsersRepository {
     private val api: UserApi = RetrofitClient.userApi
-    private val users = mutableListOf<User>()
 
-    suspend fun fetchData() {
+    suspend fun loadUsers(): List<User>? {
         try {
             val response = api.getUsers()
-            users.addAll(response)
+            return response
         } catch (e: Exception) {
             Log.e("USERS_REPOSITORY", e.toString())
+            return null
         }
     }
 
@@ -28,9 +28,5 @@ class UsersRepository {
             Log.e("USERS_REPOSITORY", e.toString())
             return null
         }
-    }
-
-    fun getUsers(): List<User> {
-        return users
     }
 }

@@ -1,41 +1,44 @@
 package com.example.task_1_compose.ui.screens.albumslist
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.domain.data.dataclasses.Album
 import com.example.domain.repositories.AlbumsRepository
+import com.example.domain.statefuldata.ErrorData
+import com.example.domain.statefuldata.LoadingData
+import com.example.domain.statefuldata.StatefulData
+import com.example.domain.statefuldata.SuccessData
+import com.example.domain.statefuldata.canLoadMore
+import com.example.task_1_compose.resources.AppSettings.ALBUMS_PER_PAGE
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class AlbumsListViewModel : ViewModel() {
     private val albumsRepository = AlbumsRepository()
 
-    private val _albums = MutableStateFlow<List<Album>>(emptyList())
-
+    private val _albums = MutableStateFlow<StatefulData<List<Album>>>(LoadingData())
     val albums = _albums.asStateFlow()
 
-    private var _isLoading = MutableStateFlow(true)
-    val isLoading = _isLoading.asStateFlow()
+    private var currentPage = 0
 
-    private var _loadingError = MutableStateFlow(false)
-    val loadingError = _loadingError.asStateFlow()
-
-    init {
-        loadAlbums()
+    fun canLoadMoreAlbums(): Boolean {
+        return _albums.value.canLoadMore(ALBUMS_PER_PAGE)
     }
 
-    fun loadAlbums() {
-        viewModelScope.launch {
-            _isLoading.value = true
-            _loadingError.value = false
-            val albums = albumsRepository.getAlbums()
-            if (albums == null) {
-                _loadingError.value = true
-            } else {
-                _albums.value = albums
+    fun currentAlbums(): List<Album> {
+        return _albums.value.unwrap(defaultValue = emptyList())
+    }
+
+    suspend fun loadNextAlbums() {
+        if (!canLoadMoreAlbums()) {
+            return
+        }
+
+        when (val newAlbums = albumsRepository.loadNextAlbums(currentPage)) {
+            null -> _albums.value = ErrorData("Loading albums error")
+            else -> {
+                currentPage++
+                _albums.value = SuccessData(newAlbums)
             }
-            _isLoading.value = false
         }
     }
 }

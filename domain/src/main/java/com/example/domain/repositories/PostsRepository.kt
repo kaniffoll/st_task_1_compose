@@ -13,20 +13,15 @@ class PostsRepository {
     private val api: PostApi = RetrofitClient.postApi
     private var posts = mutableStateListOf<Post>()
 
-    suspend fun fetchData() {
+    suspend fun loadNextPosts(currentPage: Int): List<Post>? {
         try {
-            val response = api.getPosts()
+            val response = api.getPosts(currentPage * POSTS_PER_PAGE, POSTS_PER_PAGE)
             posts.addAll(response)
         } catch (e: Exception) {
             Log.e("POST_REPOSITORY_FETCH_DATA", e.toString())
-            e.printStackTrace()
+            return null
         }
-    }
-
-    fun loadNextPosts(currentPage: Int): List<Post> {
-        val endIndex = minOf(currentPage * POSTS_PER_PAGE + POSTS_PER_PAGE, posts.size)
-
-        return posts.subList(0, endIndex)
+        return posts
     }
 
     fun toggleLike(id: Int) {
@@ -39,10 +34,6 @@ class PostsRepository {
                 post
             }
         }
-    }
-
-    fun getPostById(id: Int): Post {
-        return posts.find { it.id == id } ?: throw (RuntimeException("Post Id == null"))
     }
 
     suspend fun loadPostCommentsById(id: Int, currentPage: Int): List<Comment>? {

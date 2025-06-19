@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.data.dataclasses.User
 import com.example.domain.repositories.UsersRepository
+import com.example.domain.statefuldata.ErrorData
+import com.example.domain.statefuldata.LoadingData
+import com.example.domain.statefuldata.StatefulData
+import com.example.domain.statefuldata.SuccessData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -11,22 +15,25 @@ import kotlinx.coroutines.launch
 class UsersViewModel : ViewModel() {
     private val usersRepository = UsersRepository()
 
-    private var _users = MutableStateFlow<List<User>>(emptyList())
+    private var _users = MutableStateFlow<StatefulData<List<User>>>(LoadingData())
     val users = _users.asStateFlow()
 
     init {
         loadData()
     }
 
-    private fun loadData() {
+    fun currentUsers(): List<User> {
+        return _users.value.unwrap(defaultValue = emptyList())
+    }
+
+    fun loadData() {
         viewModelScope.launch {
-            usersRepository.fetchData()
-            getUsersFromRepository()
+            when (val newUsers = usersRepository.loadUsers()) {
+                null -> _users.value = ErrorData("Loading users error")
+                else -> {
+                    _users.value = SuccessData(newUsers)
+                }
+            }
         }
     }
-
-    private fun getUsersFromRepository() {
-        _users.value = usersRepository.getUsers()
-    }
-
 }

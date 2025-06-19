@@ -10,5 +10,5 @@ data class Album(
     @SerialName("title")
     val name: String,
 
-    val photos: List<Photo> = emptyList()
+    val photos: MutableList<Photo> = mutableListOf()
 )

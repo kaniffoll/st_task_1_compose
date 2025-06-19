@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.data.dataclasses.Comment
 import com.example.domain.data.dataclasses.Post
@@ -35,11 +36,7 @@ fun PostScreen(
 
     val currentPost by viewModel.post.collectAsState()
 
-    val isLoading by viewModel.isLoading.collectAsState()
-
-    val loadingError by viewModel.loadingError.collectAsState()
-
-    val canLoadMore by viewModel.canLoadMore.collectAsState()
+    val comments by viewModel.comments.collectAsState()
 
     LazyColumn(
         modifier = Modifier
@@ -67,11 +64,10 @@ fun PostScreen(
 
         item {
             CommentsSection(
-                comments = currentPost.comments,
+                comments = comments,
                 modifier = Modifier.fillParentMaxSize(),
-                isLoading = isLoading,
-                loadingError = loadingError,
-                canLoadMore = canLoadMore
+                canLoadMore = { viewModel.canLoadMoreComments() },
+                scope = viewModel.viewModelScope
             ) {
                 viewModel.loadComments()
             }

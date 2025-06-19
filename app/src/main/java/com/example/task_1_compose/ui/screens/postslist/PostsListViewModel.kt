@@ -1,71 +1,58 @@
 package com.example.task_1_compose.ui.screens.postslist
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.domain.data.dataclasses.Post
 import com.example.domain.repositories.PostsRepository
 import com.example.task_1_compose.resources.AppSettings.POSTS_PER_PAGE
+import com.example.domain.statefuldata.ErrorData
+import com.example.domain.statefuldata.LoadingData
+import com.example.domain.statefuldata.StatefulData
+import com.example.domain.statefuldata.SuccessData
+import com.example.domain.statefuldata.canLoadMore
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class PostsListViewModel : ViewModel() {
     private val postsRepository = PostsRepository()
 
-    private val _posts = MutableStateFlow<List<Post>>(emptyList())
-    val posts: StateFlow<List<Post>> = _posts.asStateFlow()
+    private var _posts = MutableStateFlow<StatefulData<List<Post>>>(LoadingData())
+    val posts = _posts.asStateFlow()
 
     private var currentPage = 0
-    var canLoadMore = true
-
-    private var lastOpenedPostId: Int? = null
-
-    init {
-        loadData()
-    }
-
-    private fun loadData() {
-        viewModelScope.launch {
-            postsRepository.fetchData()
-            loadNextPosts()
-        }
-    }
 
     fun toggleLike(id: Int) {
-        _posts.value = _posts.value.map {
-            if (it.id == id) it.copy(isLiked = !it.isLiked) else it
+        if (_posts.value is SuccessData) {
+            val currentState = _posts.value as SuccessData
+
+            _posts.value = SuccessData(
+                result = currentState.result.map {
+                    if (it.id == id) it.copy(isLiked = !it.isLiked) else it
+                }
+            )
+
+            postsRepository.toggleLike(id)
         }
-
-        postsRepository.toggleLike(id)
     }
 
-    fun saveLastOpenedPostId(id: Int) {
-        lastOpenedPostId = id
+    fun canLoadMorePosts(): Boolean {
+        return _posts.value.canLoadMore(POSTS_PER_PAGE)
     }
 
-    fun refreshPost() {
-        val id = lastOpenedPostId ?: return
-        val lastOpenedPost = postsRepository.getPostById(id)
-
-        _posts.value = _posts.value.map {
-            if (it.id == lastOpenedPostId) it.copy(isLiked = lastOpenedPost.isLiked) else it
-        }
-
-        lastOpenedPostId = null
+    fun currentPosts(): List<Post> {
+        return _posts.value.unwrap(defaultValue = emptyList())
     }
 
-    fun loadNextPosts() {
-        if (!canLoadMore) {
+    suspend fun loadNextPosts() {
+        if (!canLoadMorePosts()) {
             return
         }
 
-        val currentCount = _posts.value.size
-
-        val newPosts = postsRepository.loadNextPosts(currentPage)
-
-        _posts.value = newPosts
-        canLoadMore = newPosts.size - currentCount == POSTS_PER_PAGE
-        currentPage++
+        when (val newPosts = postsRepository.loadNextPosts(currentPage)) {
+            null -> _posts.value = ErrorData("Loading posts error")
+            else -> {
+                currentPage++
+                _posts.value = SuccessData(newPosts)
+            }
+        }
     }
 }

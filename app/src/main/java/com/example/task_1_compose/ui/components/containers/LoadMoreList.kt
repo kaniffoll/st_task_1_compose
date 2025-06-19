@@ -1,15 +1,11 @@
 package com.example.task_1_compose.ui.components.containers
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -17,18 +13,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.task_1_compose.R
+import com.example.task_1_compose.ui.components.general.LoadingIndicator
+import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
+import com.example.domain.statefuldata.ErrorData
+import com.example.domain.statefuldata.LoadingData
+import com.example.domain.statefuldata.StatefulData
+import com.example.domain.statefuldata.SuccessData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
-fun LoadMoreList(
-    canLoadMore: Boolean,
-    onLoadMore: () -> Unit,
-    contentSize: Int,
+fun <T> LoadMoreList(
+    data: StatefulData<List<T>>,
+    onLoadMore: suspend () -> Unit,
+    isPaginationFinished: () -> Boolean,
+    scope: CoroutineScope,
     itemContent: @Composable LazyItemScope.(index: Int) -> Unit
 ) {
+    var isPaginationInProgress by remember { mutableStateOf(false) }
+
     val lazyListState = rememberLazyListState()
 
     val isAtBottom by remember {
@@ -37,15 +43,13 @@ fun LoadMoreList(
         }
     }
 
-    var isLoadingMore by remember { mutableStateOf(false) }
-
     LaunchedEffect(isAtBottom) {
-        if (isAtBottom && canLoadMore) {
-            isLoadingMore = true
-
-            onLoadMore()
-
-            isLoadingMore = false
+        if (isAtBottom && !isPaginationFinished() && !isPaginationInProgress) {
+            isPaginationInProgress = true
+            scope.launch {
+                onLoadMore()
+                isPaginationInProgress = false
+            }
         }
     }
 
@@ -53,20 +57,29 @@ fun LoadMoreList(
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_large))
     ) {
-        items(contentSize, itemContent = itemContent)
+        when (data) {
+            is LoadingData -> {
+                item {
+                    LoadingIndicator()
+                }
+            }
 
-        item {
-            if (isLoadingMore) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(dimensionResource(R.dimen.loader_size))
-                    )
+            is ErrorData -> {
+                item {
+                    ErrorButton { onLoadMore() }
+                }
+            }
+
+            is SuccessData -> {
+                items(data.result.size, itemContent = itemContent)
+                if (isPaginationInProgress) {
+                    item {
+                       LoadingIndicator()
+                    }
                 }
             }
         }
+
         item {
             Spacer(
                 modifier = Modifier.height(

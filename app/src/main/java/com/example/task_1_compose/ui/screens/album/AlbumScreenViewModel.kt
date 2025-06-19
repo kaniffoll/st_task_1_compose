@@ -1,7 +1,13 @@
 package com.example.task_1_compose.ui.screens.album
 
 import androidx.lifecycle.ViewModel
+import com.example.domain.data.dataclasses.Photo
 import com.example.domain.repositories.AlbumsRepository
+import com.example.domain.statefuldata.ErrorData
+import com.example.domain.statefuldata.LoadingData
+import com.example.domain.statefuldata.StatefulData
+import com.example.domain.statefuldata.SuccessData
+import com.example.domain.statefuldata.canLoadMore
 import com.example.task_1_compose.resources.AppSettings.PHOTOS_PER_PAGE
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,31 +15,30 @@ import kotlinx.coroutines.flow.asStateFlow
 class AlbumScreenViewModel(private val albumId: Int) : ViewModel() {
     private val albumsRepository = AlbumsRepository()
 
-    private var _album = MutableStateFlow(albumsRepository.getAlbumById(albumId).copy(photos = listOf()))
-
-    val album = _album.asStateFlow()
+    private var _photos = MutableStateFlow<StatefulData<List<Photo>>>(LoadingData())
+    val photos = _photos.asStateFlow()
 
     private var currentPage = 0
-    var canLoadMore = true
 
-    init {
-        loadNextAlbumPhotos()
+    fun canLoadMorePhotos(): Boolean {
+        return _photos.value.canLoadMore(PHOTOS_PER_PAGE)
     }
 
-    fun loadNextAlbumPhotos() {
-        if (!canLoadMore) {
+    fun currentPhotos(): List<Photo> {
+        return _photos.value.unwrap(defaultValue = emptyList())
+    }
+
+    suspend fun loadNextAlbumPhotos() {
+        if (!canLoadMorePhotos()) {
             return
         }
 
-        val currentCount = _album.value.photos.size
-
-        val newPhotos = albumsRepository.loadNextAlbumPhotos(
-            albumId = albumId,
-            currentPage = currentPage
-        )
-
-        _album.value = _album.value.copy(photos = newPhotos)
-        canLoadMore = newPhotos.size - currentCount == PHOTOS_PER_PAGE
-        currentPage++
+        when (val newPhotos = albumsRepository.loadNextAlbumPhotos(albumId, currentPage)) {
+            null -> _photos.value = ErrorData("Loading photos error")
+            else -> {
+                currentPage++
+                _photos.value = SuccessData(currentPhotos() + newPhotos)
+            }
+        }
     }
 }

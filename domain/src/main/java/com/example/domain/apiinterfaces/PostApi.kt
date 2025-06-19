@@ -8,7 +8,10 @@ import retrofit2.http.Query
 
 interface PostApi {
     @GET("posts")
-    suspend fun getPosts(): List<Post>
+    suspend fun getPosts(
+        @Query("_start") start: Int,
+        @Query("_limit") limit: Int
+    ): List<Post>
 
     @GET("posts/{id}/comments")
     suspend fun getComments(

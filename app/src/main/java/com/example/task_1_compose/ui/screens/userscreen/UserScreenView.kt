@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.data.dataclasses.User
 import com.example.task_1_compose.R
@@ -43,9 +44,7 @@ fun UserScreen(
 
     val currentUser by viewModel.user.collectAsState()
 
-    val isLoading by viewModel.isLoading.collectAsState()
-    val loadingError by viewModel.loadingError.collectAsState()
-    val canLoadMore by viewModel.canLoadMore.collectAsState()
+    val comments by viewModel.comments.collectAsState()
 
     LazyColumn(
         verticalArrangement = Arrangement
@@ -60,12 +59,13 @@ fun UserScreen(
         }
         item {
             CommentsSection(
-                comments = currentUser.comments,
+                comments = comments,
                 modifier = Modifier.fillParentMaxSize(),
-                loadingError = loadingError,
-                isLoading = isLoading,
-                canLoadMore = canLoadMore
-            ) { viewModel.loadComments() }
+                canLoadMore = { viewModel.canLoadMoreComments() },
+                scope = viewModel.viewModelScope
+            ) {
+                viewModel.loadComments()
+            }
         }
     }
 }

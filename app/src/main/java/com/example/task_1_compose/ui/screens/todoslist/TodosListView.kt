@@ -2,28 +2,39 @@ package com.example.task_1_compose.ui.screens.todoslist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.domain.statefuldata.ErrorData
+import com.example.domain.statefuldata.LoadingData
+import com.example.domain.statefuldata.SuccessData
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.cards.TodosCard
 import com.example.task_1_compose.ui.components.containers.RemoveFocusContainer
+import com.example.task_1_compose.ui.components.general.LoadingIndicator
+import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
+import kotlinx.coroutines.launch
 
 @Composable
 fun TodosList() {
@@ -31,41 +42,72 @@ fun TodosList() {
 
     val todos by viewModel.todos.collectAsState()
 
+    val scope = rememberCoroutineScope()
+
+    val lazyListState = rememberLazyListState()
+
     RemoveFocusContainer {
         LazyColumn(
             Modifier.fillMaxWidth(),
+            state = lazyListState,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement
                 .spacedBy(
                     dimensionResource(R.dimen.padding_medium_2)
                 )
         ) {
-            items(todos) { todo ->
-                TodosCard(
-                    todo,
-                    onTextChangeById = { id, text ->
-                        viewModel.updateText(id, text)
+            when (todos) {
+                is LoadingData -> {
+                    item {
+                        LoadingIndicator()
                     }
-                ) { viewModel.removeTodoByIndex(todo.id) }
+                }
+
+                is ErrorData -> {
+                    item {
+                        ErrorButton { viewModel.retryLastFun() }
+                    }
+                }
+
+                is SuccessData -> {
+                    val currentTodos = viewModel.currentTodos()
+                    items(currentTodos.reversed(), key = { it.id }) { todo ->
+                        TodosCard(
+                            todo,
+                            onTextChangeById = { id, text ->
+                                viewModel.updateText(id, text)
+                            },
+                            scope = viewModel.viewModelScope
+                        ) { viewModel.removeTodoByIndex(todo.id) }
+                    }
+                }
+            }
+            item {
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_large)))
             }
         }
 
         TodosFab {
-            viewModel.addTodo()
+            scope.launch {
+                viewModel.addTodo()
+                lazyListState.animateScrollToItem(0)
+            }
         }
     }
 }
 
 @Composable
 fun TodosFab(
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
         FloatingActionButton(
-            onClick = { onClick() },
+            onClick = {
+                onClick()
+            },
             modifier = Modifier
                 .padding(
                     bottom = dimensionResource(R.dimen.padding_medium_2),

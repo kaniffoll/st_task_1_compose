@@ -2,11 +2,11 @@ package com.example.task_1_compose.ui.screens.postslist
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.task_1_compose.R
@@ -22,16 +22,14 @@ fun PostsList(
 
     val posts by viewModel.posts.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.refreshPost()
-    }
-
     LoadMoreList(
-        canLoadMore = viewModel.canLoadMore,
         onLoadMore = { viewModel.loadNextPosts() },
-        contentSize = posts.size
+        isPaginationFinished = { !viewModel.canLoadMorePosts() },
+        scope = viewModel.viewModelScope,
+        data = posts,
     ) { index ->
-        val post = posts[index]
+        val currentPosts = viewModel.currentPosts()
+        val post = currentPosts[index]
 
         PostCard(
             post = post,
@@ -43,7 +41,6 @@ fun PostsList(
                 viewModel.toggleLike(postId)
             }
         ) {
-            viewModel.saveLastOpenedPostId(post.id)
             navController.navigate(PostScreenRoute(post = post))
         }
     }
