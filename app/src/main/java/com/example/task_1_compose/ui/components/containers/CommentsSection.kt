@@ -22,7 +22,7 @@ import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.task_1_compose.R
-import com.example.task_1_compose.resources.AppSettings.INITIAL_COMMENTS_COUNT
+import com.example.domain.resources.AppSettings.INITIAL_COMMENTS_COUNT
 import com.example.task_1_compose.ui.components.cards.CommentCard
 import com.example.task_1_compose.ui.components.general.LoadingIndicator
 import com.example.task_1_compose.ui.components.views.buttons.ErrorButton

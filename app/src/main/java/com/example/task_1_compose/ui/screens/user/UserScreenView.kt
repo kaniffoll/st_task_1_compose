@@ -1,4 +1,4 @@
-package com.example.task_1_compose.ui.screens.userscreen
+package com.example.task_1_compose.ui.screens.user
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi

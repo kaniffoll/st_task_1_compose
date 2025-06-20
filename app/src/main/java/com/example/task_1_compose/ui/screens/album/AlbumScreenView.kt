@@ -45,7 +45,7 @@ fun AlbumScreen(
                 ImagePagerRoute(
                     album = Album(
                         id = albumId,
-                        name = "",
+                        title = "",
                         photos = currentPhotos.toMutableList(),
                     ), initialImage = index
                 )

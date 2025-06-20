@@ -120,7 +120,7 @@ fun PostBodyDescriptionContent(
         horizontalAlignment = Alignment.End
     ) {
         Text(
-            text = post.description,
+            text = post.body,
             modifier = Modifier.padding(
                 start = dimensionResource(R.dimen.padding_small),
                 end = dimensionResource(R.dimen.padding_small),
@@ -141,7 +141,7 @@ fun PostScreenPreview() {
             id = -1,
             userId = 1,
             title = "Title",
-            description = "D".repeat(100),
+            body = "D".repeat(100),
             comments = mutableListOf(
                 Comment("", "")
             )

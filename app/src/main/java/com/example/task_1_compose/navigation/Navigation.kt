@@ -17,9 +17,9 @@ import com.example.task_1_compose.ui.screens.albumslist.AlbumsList
 import com.example.task_1_compose.ui.screens.imagepager.ImagePager
 import com.example.task_1_compose.ui.screens.post.PostScreen
 import com.example.task_1_compose.ui.screens.postslist.PostsList
-import com.example.task_1_compose.ui.screens.splash_screen.SplashScreen
+import com.example.task_1_compose.ui.screens.splash.SplashScreen
 import com.example.task_1_compose.ui.screens.todoslist.TodosList
-import com.example.task_1_compose.ui.screens.userscreen.UserScreen
+import com.example.task_1_compose.ui.screens.user.UserScreen
 import com.example.task_1_compose.ui.screens.userslist.UsersList
 import kotlin.reflect.typeOf
 

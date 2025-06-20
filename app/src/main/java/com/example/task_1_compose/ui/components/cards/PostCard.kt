@@ -42,7 +42,7 @@ fun PostCardDescriptionContent(
         modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = post.description,
+            text = post.body,
             modifier = Modifier
                 .padding(start = dimensionResource(R.dimen.padding_small))
                 .weight(1f)

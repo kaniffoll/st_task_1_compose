@@ -7,7 +7,7 @@ fun <T: List<*>> StatefulData<T>.canLoadMore(itemsPerPage: Int): Boolean {
     return true
 }
 
-fun <T: List<*>> StatefulData<T>.errorName(): Any? {
+fun StatefulData<*>.errorName(): Any? {
     if (this is ErrorData) {
         return this.error
     }

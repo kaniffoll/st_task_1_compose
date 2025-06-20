@@ -29,7 +29,7 @@ class TodosListViewModel : ViewModel() {
         UPDATE_TODO
     }
 
-    private suspend fun retryAction() = when (todos.value.errorName()) {
+    suspend fun retryAction() = when (todos.value.errorName()) {
         Errors.LOADING_TODOS -> loadTodos()
         Errors.ADD_TODO -> addTodo()
         Errors.REMOVE_TODO -> lastRemovedId?.let { removeTodoByIndex(it) }
@@ -58,7 +58,7 @@ class TodosListViewModel : ViewModel() {
 
 
     suspend fun addTodo() {
-        when (val newTodo = todosRepository.createTodo(Todo(id = 0, text = ""))) {
+        when (val newTodo = todosRepository.createTodo(Todo(id = 0, title = ""))) {
             null -> _todos.value = ErrorData(Errors.ADD_TODO)
             else -> _todos.value = SuccessData(currentTodos() + newTodo)
         }
@@ -85,15 +85,11 @@ class TodosListViewModel : ViewModel() {
             null -> _todos.value = ErrorData(Errors.UPDATE_TODO)
             else -> {
                 val newTodos = currentTodos().map { todo ->
-                    if (todo.id == id) todo.copy(text = newText) else todo
+                    if (todo.id == id) todo.copy(title = newText) else todo
                 }
                 _todos.value = SuccessData(newTodos)
             }
         }
 
-    }
-
-    suspend fun retryLastFun() {
-        retryAction()
     }
 }

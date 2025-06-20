@@ -55,8 +55,8 @@ class TodosRepository {
                 "title" to localText
             )
             api.updateTodo(id = id, fieldsToUpdate = fieldsToUpdate)
-            todos.map { if (it.id == id) it.text = localText }
-            activeTodos.map { if (it.id == id) it.text = localText }
+            todos.map { if (it.id == id) it.title = localText }
+            activeTodos.map { if (it.id == id) it.title = localText }
             return localText
         } catch (e: Exception) {
             Log.e("TODOS_REPOSITORY_UPDATE_TODO", e.toString())

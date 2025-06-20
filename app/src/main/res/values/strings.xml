@@ -11,6 +11,7 @@
     <string name="address">Адрес:</string>
     <string name="number">Номер:</string>
     <string name="load_more">Загрузить ещё:</string>
+    <string name="loading_error">Loading Error, try again</string>
 
     <!--content Description -->
     <string name="done_icon">Done</string>

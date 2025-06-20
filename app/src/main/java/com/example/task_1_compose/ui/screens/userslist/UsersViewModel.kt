@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.data.dataclasses.User
 import com.example.domain.repositories.UsersRepository
+import com.example.domain.resources.StringResources.LOADING_USERS_ERROR
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
@@ -29,7 +30,7 @@ class UsersViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
             when (val newUsers = usersRepository.loadUsers()) {
-                null -> _users.value = ErrorData("Loading users error")
+                null -> _users.value = ErrorData(LOADING_USERS_ERROR)
                 else -> {
                     _users.value = SuccessData(newUsers)
                 }

@@ -16,7 +16,7 @@ fun AlbumCard(
 ) {
     OutlinedCustomCard(onClick = onClick, modifier = Modifier) {
         Text(
-            text = album.name,
+            text = album.title,
             fontSize = dimensionResource(R.dimen.text_small).value.sp,
             modifier = Modifier.padding(
                 dimensionResource(R.dimen.padding_medium)

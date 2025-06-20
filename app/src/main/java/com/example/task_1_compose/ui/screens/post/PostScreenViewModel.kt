@@ -6,6 +6,7 @@ import com.example.domain.data.dataclasses.Comment
 import com.example.domain.data.dataclasses.Post
 import com.example.domain.repositories.PostsRepository
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
+import com.example.domain.resources.StringResources.LOADING_COMMENTS_ERROR
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
@@ -42,7 +43,7 @@ class PostScreenViewModel(post: Post) : ViewModel() {
         }
 
         when (val newComments = postRepository.loadPostCommentsById(_post.value.id, currentPage)) {
-            null -> _comments.value = ErrorData("Loading comments Error")
+            null -> _comments.value = ErrorData(LOADING_COMMENTS_ERROR)
             else -> {
                 val updatedComments = _post.value.comments + newComments
                 _post.value = _post.value.copy(comments = updatedComments.toMutableList())

@@ -38,7 +38,7 @@ fun TodosCard(
     removeAtIndex: suspend (Int) -> Unit
 ) {
     OutlinedCustomCard {
-        var localText by remember { mutableStateOf(todo.text) }
+        var localText by remember { mutableStateOf(todo.title) }
         var isFocused by remember { mutableStateOf(false) }
         var hasChanged by remember { mutableStateOf(false) }
 
@@ -46,67 +46,84 @@ fun TodosCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            OutlinedTextField(
-                value = localText,
-                onValueChange = {
+            TodoTextField(
+                text = localText,
+                onTextChange = {
                     localText = it
                     hasChanged = true
                 },
-                modifier = Modifier
-                    .weight(1f)
-                    .onFocusChanged { focusState ->
-                        isFocused = focusState.isFocused
-                        if (!isFocused && hasChanged) {
-                            scope.launch {
-                                onTextChangeById(todo.id, localText)
-                            }
-                            hasChanged = false
+                onFocusChange = { focused ->
+                    isFocused = focused
+                    if (!isFocused && hasChanged) {
+                        scope.launch {
+                            onTextChangeById(todo.id, localText)
                         }
-                    },
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedTextColor = colorResource(R.color.text_field_unfocused),
-                    focusedTextColor = Color.Black,
-                    unfocusedBorderColor = Color.Transparent,
-                    focusedBorderColor = Color.Transparent,
-                    disabledBorderColor = Color.Transparent
-                ),
-                textStyle = TextStyle(
-                    fontSize = dimensionResource(R.dimen.text_standard).value.sp
-                )
+                        hasChanged = false
+                    }
+                },
+                modifier = Modifier.weight(1f)
             )
-            if (isFocused) {
-                Icon(
-                    Icons.Rounded.Refresh,
-                    contentDescription = stringResource(R.string.done_icon),
-                    modifier = Modifier
-                        .size(dimensionResource(R.dimen.check_size))
-                        .clickable {
-                            scope.launch {
-                                onTextChangeById(todo.id, localText)
-                            }
-                        }
-                        .padding(
-                            end = dimensionResource(R.dimen.padding_small)
-                        ),
-                    tint = Color.Black
-                )
-            } else {
-                Icon(
-                    Icons.Rounded.Check,
-                    contentDescription = stringResource(R.string.done_icon),
-                    modifier = Modifier
-                        .size(dimensionResource(R.dimen.check_size))
-                        .clickable {
-                            scope.launch {
-                                removeAtIndex(todo.id)
-                            }
-                        }
-                        .padding(
-                            end = dimensionResource(R.dimen.padding_small)
-                        ),
-                    tint = Color.Black
-                )
-            }
+
+            TodoIcon(
+                onTextChangeById = onTextChangeById,
+                removeAtIndex = removeAtIndex,
+                scope = scope,
+                todo = todo,
+                localText = localText,
+                isFocused = isFocused
+            )
         }
     }
+}
+
+@Composable
+fun TodoIcon(
+    onTextChangeById: suspend (Int, String) -> Unit,
+    removeAtIndex: suspend (Int) -> Unit,
+    scope: CoroutineScope,
+    todo: Todo,
+    localText: String,
+    isFocused: Boolean
+) {
+    Icon(
+        imageVector = if (isFocused) Icons.Rounded.Refresh else Icons.Rounded.Check,
+        contentDescription = stringResource(R.string.done_icon),
+        modifier = Modifier
+            .size(dimensionResource(R.dimen.check_size))
+            .clickable {
+                scope.launch {
+                    if (isFocused) onTextChangeById(todo.id, localText) else removeAtIndex(
+                        todo.id
+                    )
+                }
+            }
+            .padding(
+                end = dimensionResource(R.dimen.padding_small)
+            ),
+        tint = Color.Black)
+}
+
+@Composable
+fun TodoTextField(
+    text: String, onTextChange: (String) -> Unit,
+    onFocusChange: (Boolean) -> Unit,
+    modifier: Modifier
+) {
+    OutlinedTextField(
+        value = text,
+        onValueChange = onTextChange,
+        modifier = modifier.onFocusChanged { focusState ->
+            onFocusChange(focusState.isFocused)
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedTextColor = colorResource(R.color.text_field_unfocused),
+            focusedTextColor = Color.Black,
+            unfocusedBorderColor = Color.Transparent,
+            focusedBorderColor = Color.Transparent,
+            disabledBorderColor = Color.Transparent
+        ),
+        textStyle = TextStyle(
+            fontSize = dimensionResource(R.dimen.text_standard).value.sp
+        )
+    )
 }

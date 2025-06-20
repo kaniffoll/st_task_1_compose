@@ -14,8 +14,8 @@ import com.example.task_1_compose.R
 fun CommentCard(
     comment: Comment,
 ) {
-    val username = comment.author
-    val commentText = comment.message
+    val username = comment.name
+    val commentText = comment.body
     OutlinedCustomCard(itemsSpacedBy = dimensionResource(R.dimen.padding_small)) {
         Text(
             text = username,

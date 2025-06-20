@@ -1,4 +1,4 @@
-package com.example.task_1_compose.ui.screens.userscreen
+package com.example.task_1_compose.ui.screens.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,6 +6,7 @@ import com.example.domain.data.dataclasses.Comment
 import com.example.domain.data.dataclasses.User
 import com.example.domain.repositories.UsersRepository
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
+import com.example.domain.resources.StringResources.LOADING_COMMENTS_ERROR
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
@@ -42,7 +43,7 @@ class UserScreenViewModel(user: User) : ViewModel() {
         }
 
         when (val newComments = usersRepository.loadUserCommentsById(_user.value.id, currentPage)) {
-            null -> _comments.value = ErrorData("Loading comments Error")
+            null -> _comments.value = ErrorData(LOADING_COMMENTS_ERROR)
             else -> {
                 val updatedComments = _user.value.comments + newComments
                 _user.value = _user.value.copy(comments = updatedComments.toMutableList())

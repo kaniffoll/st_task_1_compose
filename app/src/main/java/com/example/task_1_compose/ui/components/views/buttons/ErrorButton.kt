@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.example.task_1_compose.R
 import kotlinx.coroutines.runBlocking
 
 @Composable
@@ -15,7 +17,7 @@ fun ErrorButton(onRetry: suspend () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         TextButton(
-            text = "Loading Error, try again",
+            text = stringResource(R.string.loading_error),
             color = Color.Red
         ) {
             runBlocking {

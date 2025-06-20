@@ -1,4 +1,4 @@
-package com.example.task_1_compose.ui.screens.splash_screen
+package com.example.task_1_compose.ui.screens.splash
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateIntOffsetAsState

@@ -3,7 +3,8 @@ package com.example.task_1_compose.ui.screens.postslist
 import androidx.lifecycle.ViewModel
 import com.example.domain.data.dataclasses.Post
 import com.example.domain.repositories.PostsRepository
-import com.example.task_1_compose.resources.AppSettings.POSTS_PER_PAGE
+import com.example.domain.resources.AppSettings.POSTS_PER_PAGE
+import com.example.domain.resources.StringResources.LOADING_POSTS_ERROR
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
@@ -48,7 +49,7 @@ class PostsListViewModel : ViewModel() {
         }
 
         when (val newPosts = postsRepository.loadNextPosts(currentPage)) {
-            null -> _posts.value = ErrorData("Loading posts error")
+            null -> _posts.value = ErrorData(LOADING_POSTS_ERROR)
             else -> {
                 currentPage++
                 _posts.value = SuccessData(newPosts)

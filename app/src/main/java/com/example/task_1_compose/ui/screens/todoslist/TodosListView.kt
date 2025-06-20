@@ -65,7 +65,7 @@ fun TodosList() {
 
                 is ErrorData -> {
                     item {
-                        ErrorButton { viewModel.retryLastFun() }
+                        ErrorButton { viewModel.retryAction() }
                     }
                 }
 

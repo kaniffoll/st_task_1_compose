@@ -29,7 +29,7 @@ fun PhotoCard(
         onClick = onClick,
         modifier = modifier
     ) {
-        UserImageAndName(username = photo.name)
+        UserImageAndName(username = photo.title)
         with(sharedTransitionScope) {
             Image(
                 painter = painterResource(photo.photo),
