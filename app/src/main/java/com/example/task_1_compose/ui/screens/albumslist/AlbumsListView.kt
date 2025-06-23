@@ -3,8 +3,8 @@ package com.example.task_1_compose.ui.screens.albumslist
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.task_1_compose.navigation.AlbumScreenRoute
 import com.example.task_1_compose.ui.components.cards.AlbumCard
@@ -12,7 +12,7 @@ import com.example.task_1_compose.ui.components.containers.LoadMoreList
 
 @Composable
 fun AlbumsList(navController: NavController) {
-    val viewModel: AlbumsListViewModel = viewModel()
+    val viewModel: AlbumsListViewModel = hiltViewModel()
 
     val albums by viewModel.albums.collectAsState()
 

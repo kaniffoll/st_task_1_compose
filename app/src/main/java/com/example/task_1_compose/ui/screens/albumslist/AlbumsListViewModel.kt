@@ -10,12 +10,15 @@ import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class AlbumsListViewModel : ViewModel() {
-    private val albumsRepository = AlbumsRepository()
-
+@HiltViewModel
+class AlbumsListViewModel @Inject constructor(
+    private val repository: AlbumsRepository
+) : ViewModel() {
     private val _albums = MutableStateFlow<StatefulData<List<Album>>>(LoadingData())
     val albums = _albums.asStateFlow()
 
@@ -34,7 +37,7 @@ class AlbumsListViewModel : ViewModel() {
             return
         }
 
-        when (val newAlbums = albumsRepository.loadNextAlbums(currentPage)) {
+        when (val newAlbums = repository.loadNextAlbums(currentPage)) {
             null -> _albums.value = ErrorData(LOADING_ALBUMS_ERROR)
             else -> {
                 currentPage++

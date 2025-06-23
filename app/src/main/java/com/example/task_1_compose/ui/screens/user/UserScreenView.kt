@@ -25,8 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.data.dataclasses.User
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.containers.CommentsSection
@@ -40,7 +40,10 @@ fun UserScreen(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
 ) {
-    val viewModel: UserScreenViewModel = viewModel { UserScreenViewModel(user) }
+    val viewModel =
+        hiltViewModel<UserScreenViewModel, UserScreenViewModel.UserScreenViewModelFactory> { factory ->
+            factory.create(user)
+        }
 
     val currentUser by viewModel.user.collectAsState()
 

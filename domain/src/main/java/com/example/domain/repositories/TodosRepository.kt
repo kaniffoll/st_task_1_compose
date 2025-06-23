@@ -1,11 +1,12 @@
 package com.example.domain.repositories
 
-import android.util.Log
-import com.example.domain.RetrofitClient
+import com.example.domain.apiinterfaces.TodoApi
 import com.example.domain.data.dataclasses.Todo
+import com.example.domain.utilities.d
+import com.example.domain.utilities.e
+import javax.inject.Inject
 
-class TodosRepository {
-    private val api = RetrofitClient.todoApi
+class TodosRepository @Inject constructor(private val api: TodoApi) {
     private val todos = mutableListOf<Todo>()
     private val activeTodos = mutableListOf<Todo>()
     private var newId = 0
@@ -16,7 +17,7 @@ class TodosRepository {
             todos.addAll(response)
             activeTodos.addAll(todos.filter { !it.completed })
         } catch (e: Exception) {
-            Log.e("TODOS_REPOSITORY_FETCH_DATA", e.toString())
+            e.e()
             return null
         }
         return activeTodos
@@ -32,7 +33,7 @@ class TodosRepository {
             activeTodos.removeIf { it.id == id }
             return true
         } catch (e: Exception) {
-            Log.e("TODOS_REPOSITORY_FINISH_TODO", e.toString())
+            e.e()
             return null
         }
     }
@@ -41,10 +42,10 @@ class TodosRepository {
         try {
             val response = api.createTodo(todo)
             val newTodo = response.copy(id = response.id + newId++)
-            Log.d("TODOS_REPOSITORY_CURRENT_ID", newTodo.id.toString())
+            newTodo.id.d()
             return newTodo
         } catch (e: Exception) {
-            Log.e("TODOS_REPOSITORY_CREATE_TODO", e.toString())
+            e.e()
             return null
         }
     }
@@ -59,7 +60,7 @@ class TodosRepository {
             activeTodos.map { if (it.id == id) it.title = localText }
             return localText
         } catch (e: Exception) {
-            Log.e("TODOS_REPOSITORY_UPDATE_TODO", e.toString())
+            e.e()
             return null
         }
     }

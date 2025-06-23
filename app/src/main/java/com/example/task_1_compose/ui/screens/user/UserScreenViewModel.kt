@@ -12,12 +12,24 @@ import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class UserScreenViewModel(user: User) : ViewModel() {
-    private val usersRepository = UsersRepository()
+@HiltViewModel(assistedFactory = UserScreenViewModel.UserScreenViewModelFactory::class)
+class UserScreenViewModel @AssistedInject constructor(
+    private val repository: UsersRepository,
+    @Assisted user: User
+) : ViewModel() {
+
+    @AssistedFactory
+    interface UserScreenViewModelFactory {
+        fun create(user: User): UserScreenViewModel
+    }
 
     private val _user = MutableStateFlow(user)
     val user = _user.asStateFlow()
@@ -42,7 +54,7 @@ class UserScreenViewModel(user: User) : ViewModel() {
             return
         }
 
-        when (val newComments = usersRepository.loadUserCommentsById(_user.value.id, currentPage)) {
+        when (val newComments = repository.loadUserCommentsById(_user.value.id, currentPage)) {
             null -> _comments.value = ErrorData(LOADING_COMMENTS_ERROR)
             else -> {
                 val updatedComments = _user.value.comments + newComments

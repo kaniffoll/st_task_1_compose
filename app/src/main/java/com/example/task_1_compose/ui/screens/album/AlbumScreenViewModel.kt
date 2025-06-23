@@ -10,11 +10,23 @@ import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class AlbumScreenViewModel(private val albumId: Int) : ViewModel() {
-    private val albumsRepository = AlbumsRepository()
+@HiltViewModel(assistedFactory = AlbumScreenViewModel.AlbumScreenViewModelFactory::class)
+class AlbumScreenViewModel @AssistedInject constructor(
+    private val repository: AlbumsRepository,
+    @Assisted private val albumId: Int
+) : ViewModel() {
+
+    @AssistedFactory
+    interface AlbumScreenViewModelFactory {
+        fun create(albumId: Int): AlbumScreenViewModel
+    }
 
     private var _photos = MutableStateFlow<StatefulData<List<Photo>>>(LoadingData())
     val photos = _photos.asStateFlow()
@@ -34,7 +46,7 @@ class AlbumScreenViewModel(private val albumId: Int) : ViewModel() {
             return
         }
 
-        when (val newPhotos = albumsRepository.loadNextAlbumPhotos(albumId, currentPage)) {
+        when (val newPhotos = repository.loadNextAlbumPhotos(albumId, currentPage)) {
             null -> _photos.value = ErrorData(LOADING_PHOTOS_ERROR)
             else -> {
                 currentPage++

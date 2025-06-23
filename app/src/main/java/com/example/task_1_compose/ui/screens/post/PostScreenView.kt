@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.data.dataclasses.Comment
 import com.example.domain.data.dataclasses.Post
 import com.example.task_1_compose.R
@@ -32,7 +32,10 @@ import com.example.task_1_compose.ui.components.views.buttons.LikeButton
 fun PostScreen(
     post: Post,
 ) {
-    val viewModel: PostScreenViewModel = viewModel { PostScreenViewModel(post) }
+    val viewModel =
+        hiltViewModel<PostScreenViewModel, PostScreenViewModel.PostScreenViewModelFactory> { factory ->
+            factory.create(post)
+        }
 
     val currentPost by viewModel.post.collectAsState()
 

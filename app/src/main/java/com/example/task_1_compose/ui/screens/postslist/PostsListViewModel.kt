@@ -10,12 +10,15 @@ import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class PostsListViewModel : ViewModel() {
-    private val postsRepository = PostsRepository()
-
+@HiltViewModel
+class PostsListViewModel @Inject constructor(
+    private val repository: PostsRepository
+) : ViewModel() {
     private var _posts = MutableStateFlow<StatefulData<List<Post>>>(LoadingData())
     val posts = _posts.asStateFlow()
 
@@ -31,7 +34,7 @@ class PostsListViewModel : ViewModel() {
                 }
             )
 
-            postsRepository.toggleLike(id)
+            repository.toggleLike(id)
         }
     }
 
@@ -48,7 +51,7 @@ class PostsListViewModel : ViewModel() {
             return
         }
 
-        when (val newPosts = postsRepository.loadNextPosts(currentPage)) {
+        when (val newPosts = repository.loadNextPosts(currentPage)) {
             null -> _posts.value = ErrorData(LOADING_POSTS_ERROR)
             else -> {
                 currentPage++

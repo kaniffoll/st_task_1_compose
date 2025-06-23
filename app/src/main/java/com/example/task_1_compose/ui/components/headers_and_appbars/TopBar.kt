@@ -28,16 +28,13 @@ fun TopBar(navController: NavController) {
     val backStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = backStackEntry?.destination.toString()
     when {
-       EmptyTopBars.any { item -> currentRoute.contains(item) } -> {
+        EmptyTopBars.any { item -> currentRoute.contains(item) } -> {
             Box(modifier = Modifier.height(dimensionResource(R.dimen.top_appbar_height)))
         }
-
         currentRoute.contains(SplashScreenRoute::class.simpleName.toString()) -> {}
-
         currentRoute.contains(ImagePagerRoute::class.simpleName.toString()) -> {
             ImagePagerTopBar(navController)
         }
-
         else -> {
             DefaultTopBar(navController)
         }

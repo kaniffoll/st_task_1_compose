@@ -63,13 +63,11 @@ fun <T> LoadMoreList(
                     LoadingIndicator()
                 }
             }
-
             is ErrorData -> {
                 item {
                     ErrorButton { onLoadMore() }
                 }
             }
-
             is SuccessData -> {
                 items(data.result.size, itemContent = itemContent)
                 if (isPaginationInProgress) {

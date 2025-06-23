@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.SuccessData
@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun TodosList() {
-    val viewModel: TodosListViewModel = viewModel()
+    val viewModel: TodosListViewModel = hiltViewModel()
 
     val todos by viewModel.todos.collectAsState()
 

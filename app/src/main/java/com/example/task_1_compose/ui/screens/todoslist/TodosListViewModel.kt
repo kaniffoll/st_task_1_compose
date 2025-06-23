@@ -9,12 +9,16 @@ import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.errorName
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TodosListViewModel : ViewModel() {
-    private val todosRepository = TodosRepository()
+@HiltViewModel
+class TodosListViewModel @Inject constructor(
+    private val repository: TodosRepository
+) : ViewModel() {
 
     private val _todos = MutableStateFlow<StatefulData<List<Todo>>>(LoadingData())
     val todos = _todos.asStateFlow()
@@ -50,7 +54,7 @@ class TodosListViewModel : ViewModel() {
     }
 
     private suspend fun loadTodos() {
-        when (val newPosts = todosRepository.loadTodos()) {
+        when (val newPosts = repository.loadTodos()) {
             null -> _todos.value = ErrorData(Errors.LOADING_TODOS)
             else -> _todos.value = SuccessData(newPosts)
         }
@@ -58,7 +62,7 @@ class TodosListViewModel : ViewModel() {
 
 
     suspend fun addTodo() {
-        when (val newTodo = todosRepository.createTodo(Todo(id = 0, title = ""))) {
+        when (val newTodo = repository.createTodo(Todo(id = 0, title = ""))) {
             null -> _todos.value = ErrorData(Errors.ADD_TODO)
             else -> _todos.value = SuccessData(currentTodos() + newTodo)
         }
@@ -67,7 +71,7 @@ class TodosListViewModel : ViewModel() {
     suspend fun removeTodoByIndex(id: Int) {
         lastRemovedId = id
 
-        when (todosRepository.finishTodo(id)) {
+        when (repository.finishTodo(id)) {
             null -> _todos.value = ErrorData(Errors.REMOVE_TODO)
             else -> {
                 val newList = currentTodos().toMutableList()
@@ -81,7 +85,7 @@ class TodosListViewModel : ViewModel() {
 
         lastUpdated = id to text
 
-        when (val newText = todosRepository.updateTodo(id, text)) {
+        when (val newText = repository.updateTodo(id, text)) {
             null -> _todos.value = ErrorData(Errors.UPDATE_TODO)
             else -> {
                 val newTodos = currentTodos().map { todo ->

@@ -12,12 +12,24 @@ import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class PostScreenViewModel(post: Post) : ViewModel() {
-    private val postRepository = PostsRepository()
+@HiltViewModel(assistedFactory = PostScreenViewModel.PostScreenViewModelFactory::class)
+class PostScreenViewModel @AssistedInject constructor(
+    private val repository: PostsRepository,
+    @Assisted post: Post
+) : ViewModel() {
+
+    @AssistedFactory
+    interface PostScreenViewModelFactory {
+        fun create(post: Post): PostScreenViewModel
+    }
 
     private var _post = MutableStateFlow(post)
     val post = _post.asStateFlow()
@@ -42,7 +54,7 @@ class PostScreenViewModel(post: Post) : ViewModel() {
             return
         }
 
-        when (val newComments = postRepository.loadPostCommentsById(_post.value.id, currentPage)) {
+        when (val newComments = repository.loadPostCommentsById(_post.value.id, currentPage)) {
             null -> _comments.value = ErrorData(LOADING_COMMENTS_ERROR)
             else -> {
                 val updatedComments = _post.value.comments + newComments
@@ -58,6 +70,6 @@ class PostScreenViewModel(post: Post) : ViewModel() {
         val currentIsLiked = _post.value.isLiked
         _post.value = _post.value.copy(isLiked = !currentIsLiked)
 
-        postRepository.toggleLike(_post.value.id)
+        repository.toggleLike(_post.value.id)
     }
 }

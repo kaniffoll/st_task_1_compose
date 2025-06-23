@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.domain.data.dataclasses.Album
 import com.example.task_1_compose.navigation.ImagePagerRoute
@@ -23,7 +23,10 @@ fun AlbumScreen(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
 ) {
-    val viewModel: AlbumScreenViewModel = viewModel { AlbumScreenViewModel(albumId) }
+    val viewModel =
+        hiltViewModel<AlbumScreenViewModel, AlbumScreenViewModel.AlbumScreenViewModelFactory> { factory ->
+            factory.create(albumId)
+        }
 
     val photos by viewModel.photos.collectAsState()
 

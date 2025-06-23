@@ -13,7 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
@@ -31,7 +31,7 @@ fun UsersList(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope
 ) {
-    val viewModel: UsersViewModel = viewModel()
+    val viewModel: UsersViewModel = hiltViewModel()
 
     val users by viewModel.users.collectAsState()
 
@@ -49,7 +49,7 @@ fun UsersList(
             is ErrorData -> {
                 item {
                     ErrorButton {
-                        viewModel.loadData()
+                        viewModel.loadUsers()
                     }
                 }
             }

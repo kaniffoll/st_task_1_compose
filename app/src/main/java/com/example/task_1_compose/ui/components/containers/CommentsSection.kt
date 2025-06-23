@@ -38,7 +38,6 @@ fun CommentsSection(
     scope: CoroutineScope,
     onRetry: suspend () -> Unit
 ) {
-
     var isCommentsExpanded by remember {
         mutableStateOf(
             comments is SuccessData && comments.result.size < INITIAL_COMMENTS_COUNT
@@ -57,7 +56,6 @@ fun CommentsSection(
                     LoadingIndicator()
                 }
             }
-
             is ErrorData -> {
                 item {
                     ErrorButton {
@@ -67,7 +65,6 @@ fun CommentsSection(
                     }
                 }
             }
-
             is SuccessData -> {
                 val allComments = comments.result
                 val commentsCount =
@@ -125,6 +122,5 @@ fun CommentsSectionShowMoreButton(
     } else {
         stringResource(R.string.show_less)
     }
-
     TextButton(text = text, onClick = onClick)
 }
