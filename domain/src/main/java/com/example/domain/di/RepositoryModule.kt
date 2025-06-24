@@ -1,4 +1,4 @@
-package com.example.task_1_compose.di
+package com.example.domain.di
 
 import com.example.domain.apiinterfaces.AlbumApi
 import com.example.domain.apiinterfaces.PostApi

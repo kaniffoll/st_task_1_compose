@@ -4,12 +4,6 @@ import androidx.compose.ui.graphics.Color
 import com.example.domain.data.dataclasses.Address
 import kotlin.random.Random
 
-fun String.getInitials(): String {
-    return this[0].toString() + (if (this.trimEnd()
-            .indexOf(' ') != -1
-    ) this[this.indexOf(' ') + 1] else "")
-}
-
 fun getAddressAsString(address: Address): String {
     return " " + address.city + ", " + address.street + ", " + address.suite
 }
