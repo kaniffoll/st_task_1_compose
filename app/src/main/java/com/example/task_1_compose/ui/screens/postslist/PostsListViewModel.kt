@@ -33,8 +33,6 @@ class PostsListViewModel @Inject constructor(
                     if (it.id == id) it.copy(isLiked = !it.isLiked) else it
                 }
             )
-
-            repository.toggleLike(id)
         }
     }
 

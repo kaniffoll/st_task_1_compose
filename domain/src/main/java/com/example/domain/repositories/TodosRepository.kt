@@ -2,8 +2,6 @@ package com.example.domain.repositories
 
 import com.example.domain.apiinterfaces.TodoApi
 import com.example.domain.data.dataclasses.Todo
-import com.example.domain.utilities.d
-import com.example.domain.utilities.e
 import javax.inject.Inject
 
 class TodosRepository @Inject constructor(private val api: TodoApi) {
@@ -17,7 +15,6 @@ class TodosRepository @Inject constructor(private val api: TodoApi) {
             todos.addAll(response)
             activeTodos.addAll(todos.filter { !it.completed })
         } catch (e: Exception) {
-            e.e()
             return null
         }
         return activeTodos
@@ -33,7 +30,6 @@ class TodosRepository @Inject constructor(private val api: TodoApi) {
             activeTodos.removeIf { it.id == id }
             return true
         } catch (e: Exception) {
-            e.e()
             return null
         }
     }
@@ -42,10 +38,8 @@ class TodosRepository @Inject constructor(private val api: TodoApi) {
         try {
             val response = api.createTodo(todo)
             val newTodo = response.copy(id = response.id + newId++)
-            newTodo.id.d()
             return newTodo
         } catch (e: Exception) {
-            e.e()
             return null
         }
     }
@@ -60,7 +54,6 @@ class TodosRepository @Inject constructor(private val api: TodoApi) {
             activeTodos.map { if (it.id == id) it.title = localText }
             return localText
         } catch (e: Exception) {
-            e.e()
             return null
         }
     }

@@ -69,7 +69,5 @@ class PostScreenViewModel @AssistedInject constructor(
     fun toggleLike() {
         val currentIsLiked = _post.value.isLiked
         _post.value = _post.value.copy(isLiked = !currentIsLiked)
-
-        repository.toggleLike(_post.value.id)
     }
 }

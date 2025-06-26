@@ -5,7 +5,6 @@ import com.example.domain.data.dataclasses.Album
 import com.example.domain.data.dataclasses.Photo
 import com.example.domain.resources.AppSettings.ALBUMS_PER_PAGE
 import com.example.domain.resources.AppSettings.PHOTOS_PER_PAGE
-import com.example.domain.utilities.e
 import com.example.domain.utilities.getRandomPainterRes
 import javax.inject.Inject
 
@@ -17,7 +16,6 @@ class AlbumsRepository @Inject constructor(private val api: AlbumApi) {
             val response = api.getAlbums(currentPage * ALBUMS_PER_PAGE, ALBUMS_PER_PAGE)
             albums.addAll(response)
         } catch (e: Exception) {
-            e.e()
             return null
         }
         return albums
@@ -29,7 +27,6 @@ class AlbumsRepository @Inject constructor(private val api: AlbumApi) {
             response.forEach { it.photo = getRandomPainterRes() }
             return response
         } catch (e: Exception) {
-            e.e()
             return null
         }
     }
