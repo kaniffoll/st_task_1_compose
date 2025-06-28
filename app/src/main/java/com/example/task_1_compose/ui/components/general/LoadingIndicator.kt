@@ -7,7 +7,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
+import com.example.domain.resources.TestTags.LOADING_INDICATOR
 import com.example.task_1_compose.R
 
 @Composable
@@ -17,7 +19,7 @@ fun LoadingIndicator() {
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.size(dimensionResource(R.dimen.loader_size))
+            modifier = Modifier.size(dimensionResource(R.dimen.loader_size)).testTag(LOADING_INDICATOR)
         )
     }
 }

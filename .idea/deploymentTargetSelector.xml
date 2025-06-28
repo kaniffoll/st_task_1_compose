@@ -13,7 +13,19 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="addNewTodo_showNewTodo()">
+      <SelectionState runConfigName="addingTodo_scrollsToTop()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="TodosListViewTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="checkLikeButton()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="checkLoadingIndicator()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="loadingNewPosts_showLoadingIndicator()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

@@ -21,11 +21,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.resources.TestTags.TODO_CARD
+import com.example.domain.resources.TestTags.TODO_LAZY_COLUMN
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.SuccessData
@@ -48,7 +51,7 @@ fun TodosList() {
 
     RemoveFocusContainer {
         LazyColumn(
-            Modifier.fillMaxWidth(),
+            Modifier.fillMaxWidth().testTag(TODO_LAZY_COLUMN),
             state = lazyListState,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement
@@ -77,7 +80,8 @@ fun TodosList() {
                             onTextChangeById = { id, text ->
                                 viewModel.updateText(id, text)
                             },
-                            scope = viewModel.viewModelScope
+                            scope = viewModel.viewModelScope,
+                            modifier = Modifier.testTag(TODO_CARD)
                         ) { viewModel.removeTodoByIndex(todo.id) }
                     }
                 }

@@ -25,7 +25,7 @@ fun LikeButton(
         } else {
             Icons.Rounded.FavoriteBorder
         },
-        contentDescription = stringResource(R.string.like_icon),
+        contentDescription = if (status) stringResource(R.string.filled_like_icon) else stringResource(R.string.like_icon),
         modifier = modifier
             .padding(
                 end = dimensionResource(R.dimen.padding_medium),

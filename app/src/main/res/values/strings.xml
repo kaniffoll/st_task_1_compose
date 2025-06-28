@@ -16,6 +16,8 @@
     <!--content Description -->
     <string name="done_icon">Done</string>
     <string name="like_icon">Like icon</string>
+    <string name="filled_like_icon">Filled like icon</string>
+    <string name="update_icon">Update</string>
     <string name="photo">Photo</string>
     <string name="arrow_back_icon">Arrow back icon</string>
 </resources>

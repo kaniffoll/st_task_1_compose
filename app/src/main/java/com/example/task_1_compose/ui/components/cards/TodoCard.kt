@@ -20,12 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import com.example.domain.data.dataclasses.Todo
+import com.example.domain.resources.TestTags.TODO_CARD_TEXT_FIELD
 import com.example.task_1_compose.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -35,9 +37,10 @@ fun TodosCard(
     todo: Todo,
     onTextChangeById: suspend (Int, String) -> Unit,
     scope: CoroutineScope,
-    removeAtIndex: suspend (Int) -> Unit
+    modifier: Modifier = Modifier,
+    removeAtIndex: suspend (Int) -> Unit,
 ) {
-    OutlinedCustomCard {
+    OutlinedCustomCard(modifier) {
         var localText by remember { mutableStateOf(todo.title) }
         var isFocused by remember { mutableStateOf(false) }
         var hasChanged by remember { mutableStateOf(false) }
@@ -61,7 +64,7 @@ fun TodosCard(
                         hasChanged = false
                     }
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).testTag(TODO_CARD_TEXT_FIELD)
             )
 
             TodoIcon(
@@ -87,7 +90,7 @@ fun TodoIcon(
 ) {
     Icon(
         imageVector = if (isFocused) Icons.Rounded.Refresh else Icons.Rounded.Check,
-        contentDescription = stringResource(R.string.done_icon),
+        contentDescription = if (isFocused) stringResource(R.string.update_icon) else stringResource(R.string.done_icon),
         modifier = Modifier
             .size(dimensionResource(R.dimen.check_size))
             .clickable {
