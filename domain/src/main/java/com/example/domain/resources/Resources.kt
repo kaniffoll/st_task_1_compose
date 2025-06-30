@@ -24,4 +24,7 @@ object TestTags {
     const val LOADING_INDICATOR = "LOADING_INDICATOR"
     const val POST_CARD = "POST_CARD"
     const val LOAD_MORE_LIST = "LOAD_MORE_LIST"
+    const val COMMENT_CARD = "COMMENT_CARD"
+    const val COMMENTS_SECTION = "COMMENTS_SECTION"
+    const val IMAGE_PAGER = "IMAGE_PAGER"
 }

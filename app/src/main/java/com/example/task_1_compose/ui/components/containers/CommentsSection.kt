@@ -12,17 +12,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.domain.data.dataclasses.Comment
+import com.example.domain.resources.AppSettings.INITIAL_COMMENTS_COUNT
+import com.example.domain.resources.TestTags.COMMENTS_SECTION
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.task_1_compose.R
-import com.example.domain.resources.AppSettings.INITIAL_COMMENTS_COUNT
 import com.example.task_1_compose.ui.components.cards.CommentCard
 import com.example.task_1_compose.ui.components.general.LoadingIndicator
 import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
@@ -45,7 +47,9 @@ fun CommentsSection(
     }
 
     LazyColumn(
-        modifier = modifier.background(color = Color.White),
+        modifier = modifier
+            .background(color = Color.White)
+            .testTag(COMMENTS_SECTION),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
     ) {
         item { CommentsSectionTitle() }
@@ -56,6 +60,7 @@ fun CommentsSection(
                     LoadingIndicator()
                 }
             }
+
             is ErrorData -> {
                 item {
                     ErrorButton {
@@ -65,6 +70,7 @@ fun CommentsSection(
                     }
                 }
             }
+
             is SuccessData -> {
                 val allComments = comments.result
                 val commentsCount =

@@ -5,13 +5,12 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.navigation.compose.rememberNavController
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.domain.di.ApiModule
+import com.example.domain.resources.AppSettings.POSTS_PER_PAGE
 import com.example.domain.resources.TestTags.LOADING_INDICATOR
 import com.example.domain.resources.TestTags.LOAD_MORE_LIST
 import com.example.domain.resources.TestTags.POST_CARD
@@ -33,7 +32,6 @@ class PostsListViewTest {
     private val likeIconContentDescription = context.getString(R.string.like_icon)
     private val filledLikeIconContentDescription = context.getString(R.string.filled_like_icon)
     private val loadingTime = 5000L
-    private val loadingItemsCount = 10
 
 
     @get:Rule(order = 0)
@@ -61,6 +59,18 @@ class PostsListViewTest {
     }
 
     @Test
+    fun doubleClickLikeButton() {
+        composeRule.waitUntil(loadingTime) {
+            composeRule.onAllNodesWithTag(POST_CARD)
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.onAllNodesWithContentDescription(likeIconContentDescription)[0].performClick()
+        composeRule.onNodeWithContentDescription(filledLikeIconContentDescription).performClick()
+        composeRule.onNodeWithContentDescription(filledLikeIconContentDescription)
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun loadingFirstPost_showLoadingIndicator() {
         composeRule.onNodeWithTag(LOADING_INDICATOR).assertExists()
     }
@@ -71,7 +81,16 @@ class PostsListViewTest {
             composeRule.onAllNodesWithTag(POST_CARD)
                 .fetchSemanticsNodes().isNotEmpty()
         }
-        composeRule.onNodeWithTag(LOAD_MORE_LIST).performScrollToIndex(loadingItemsCount - 1)
+        composeRule.onNodeWithTag(LOAD_MORE_LIST).performScrollToIndex(POSTS_PER_PAGE - 1)
         composeRule.onNodeWithTag(LOADING_INDICATOR).assertExists()
+    }
+
+    @Test
+    fun loadingFinished_noLoadingIndicator() {
+        composeRule.waitUntil(loadingTime) {
+            composeRule.onAllNodesWithTag(POST_CARD)
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.onNodeWithTag(LOADING_INDICATOR).assertDoesNotExist()
     }
 }

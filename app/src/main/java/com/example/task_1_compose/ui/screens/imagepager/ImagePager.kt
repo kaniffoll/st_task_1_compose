@@ -17,11 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.domain.data.dataclasses.Album
+import com.example.domain.resources.TestTags.IMAGE_PAGER
 import com.example.task_1_compose.R
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
@@ -48,7 +50,7 @@ fun ImagePager(
             .zIndex(10f)
     ) {
         HorizontalPager(
-            state = pageState
+            state = pageState, modifier = Modifier.testTag(IMAGE_PAGER)
         ) { index ->
             Column(
                 Modifier.fillMaxSize(),
@@ -56,7 +58,7 @@ fun ImagePager(
             ) {
                 ImageItem(
                     painter = painterResource(album.photos[index].photo),
-                    index = initialImage,
+                    index = index,
                     sharedTransitionScope = sharedTransitionScope,
                     animatedContentScope = animatedContentScope
                 )
@@ -80,7 +82,7 @@ fun ImageItem(
         with(sharedTransitionScope) {
             Image(
                 painter = painter,
-                contentDescription = stringResource(R.string.photo),
+                contentDescription = stringResource(R.string.photo) + " $index",
                 modifier = Modifier
                     .sharedElement(
                         sharedTransitionScope.rememberSharedContentState(key = "image-${index}"),

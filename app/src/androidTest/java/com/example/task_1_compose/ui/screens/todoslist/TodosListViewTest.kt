@@ -13,14 +13,11 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.performTouchInput
-import androidx.test.espresso.action.ViewActions.swipeUp
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.domain.di.ApiModule
 import com.example.domain.resources.TestTags.REMOVE_FOCUS_CONTAINER
 import com.example.domain.resources.TestTags.TODO_CARD
 import com.example.domain.resources.TestTags.TODO_CARD_TEXT_FIELD
-import com.example.domain.resources.TestTags.TODO_LAZY_COLUMN
 import com.example.task_1_compose.R
 import com.example.task_1_compose.TestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -106,14 +103,14 @@ class TodosListViewTest {
     }
 
     @Test
-    fun checkTodoTextFieldFocus() {
+    fun checkTodoTextFieldFocused() {
         composeRule.onNodeWithText(plusText).performClick()
         composeRule.onNodeWithTag(TODO_CARD).performClick()
         composeRule.onNodeWithTag(TODO_CARD_TEXT_FIELD).assertIsFocused()
     }
 
     @Test
-    fun checkTodoTextFieldUnfocus() {
+    fun checkTodoTextFieldUnfocused() {
         composeRule.onNodeWithText(plusText).performClick()
         composeRule.onNodeWithTag(TODO_CARD).performClick()
         composeRule.onNodeWithTag(REMOVE_FOCUS_CONTAINER).performClick()
