@@ -12,11 +12,9 @@ import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 import androidx.navigation.compose.rememberNavController
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.domain.data.dataclasses.Album
-import com.example.domain.data.dataclasses.Photo
 import com.example.domain.di.ApiModule
 import com.example.domain.resources.TestTags.IMAGE_PAGER
-import com.example.domain.resources.imagesList
+import com.example.domain.resources.mocks.mockAlbum
 import com.example.task_1_compose.R
 import com.example.task_1_compose.TestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -29,14 +27,6 @@ import org.junit.Test
 @HiltAndroidTest
 @UninstallModules(ApiModule::class)
 class ImagePagerTest {
-    private val mockAlbum = Album(
-        id = 0,
-        title = "Album",
-        photos = imagesList.map {
-            Photo(title = "", photo = it)
-        }.toMutableList()
-    )
-
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val photo = context.getString(R.string.photo)
 

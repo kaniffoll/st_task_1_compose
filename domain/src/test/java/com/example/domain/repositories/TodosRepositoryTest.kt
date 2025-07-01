@@ -1,7 +1,8 @@
 package com.example.domain.repositories
 
 import com.example.domain.apiinterfaces.TodoApi
-import com.example.domain.data.dataclasses.Todo
+import com.example.domain.resources.mocks.mockTodo
+import com.example.domain.resources.mocks.mockTodos
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -15,7 +16,6 @@ import org.mockito.kotlin.whenever
 class TodosRepositoryTest {
 
     private val mockTodoId = 0
-    private val mockTodo = Todo(0, "")
 
     private lateinit var repository: TodosRepository
     private lateinit var api: TodoApi
@@ -28,7 +28,6 @@ class TodosRepositoryTest {
 
     @Test
     fun `loadTodos returns todos on success`() = runTest {
-        val mockTodos = listOf(Todo(0, ""))
         whenever(api.getTodos()).thenReturn(mockTodos)
 
         val result = repository.loadTodos()

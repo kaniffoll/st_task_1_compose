@@ -6,7 +6,6 @@ import androidx.savedstate.SavedState
 import com.example.domain.data.dataclasses.Album
 import com.example.domain.data.dataclasses.Post
 import com.example.domain.data.dataclasses.User
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 object CustomNavType {

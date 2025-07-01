@@ -1,9 +1,9 @@
 package com.example.domain.repositories
 
 import com.example.domain.apiinterfaces.PostApi
-import com.example.domain.data.dataclasses.Comment
-import com.example.domain.data.dataclasses.Post
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
+import com.example.domain.resources.mocks.mockPostComments
+import com.example.domain.resources.mocks.mockPosts
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -30,7 +30,7 @@ class PostsRepositoryTest {
 
     @Test
     fun `loadNextPosts returns posts on success`() = runTest {
-        val mockPosts = listOf(Post(id = 0, userId = 0, title = "", body = ""))
+
         whenever(api.getPosts(any(), any())).thenReturn(mockPosts)
 
         val result = repository.loadNextPosts(initPage)
@@ -47,17 +47,16 @@ class PostsRepositoryTest {
 
     @Test
     fun `loadPostCommentsById returns comments on success`() = runTest {
-        val mockComments = listOf(Comment(name = "", body = ""))
         whenever(
             api.getComments(
                 mockPostId,
                 initPage * COMMENTS_PER_PAGE,
                 COMMENTS_PER_PAGE
             )
-        ).thenReturn(mockComments)
+        ).thenReturn(mockPostComments)
 
         val result = repository.loadPostCommentsById(mockPostId, initPage)
-        assertEquals(mockComments, result)
+        assertEquals(mockPostComments, result)
     }
 
     @Test

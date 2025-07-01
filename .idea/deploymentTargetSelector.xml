@@ -13,13 +13,16 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="cannotSwipeBeforeFirstImage()">
+      <SelectionState runConfigName="clickLikeButton()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="cannotSwipeAfterLastImage()">
+      <SelectionState runConfigName="PostsListViewTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ImagePagerTest">
+      <SelectionState runConfigName="loadingFinished_noLoadingIndicator()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="UserScreenViewTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

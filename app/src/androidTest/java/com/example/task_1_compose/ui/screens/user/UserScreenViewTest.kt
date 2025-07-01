@@ -46,7 +46,6 @@ class UserScreenViewTest {
     private val showMoreButtonText = context.getString(R.string.show_more)
     private val showLessButtonText = context.getString(R.string.show_less)
     private val loadMoreButtonText = context.getString(R.string.load_more)
-    private val loadingTime = 5000L
 
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
@@ -75,10 +74,6 @@ class UserScreenViewTest {
 
     @Test
     fun clickShowMoreButton_displayMoreComments() {
-        composeRule.waitUntil(loadingTime) {
-            composeRule.onAllNodesWithTag(COMMENT_CARD)
-                .fetchSemanticsNodes().isNotEmpty()
-        }
         composeRule.onAllNodesWithTag(COMMENT_CARD).assertCountEquals(INITIAL_COMMENTS_COUNT)
         composeRule.onNodeWithText(showMoreButtonText).performClick()
         for (i in 0..<COMMENTS_PER_PAGE) {
@@ -89,10 +84,6 @@ class UserScreenViewTest {
 
     @Test
     fun clickShowLessButton_displayLessComments() {
-        composeRule.waitUntil(loadingTime) {
-            composeRule.onAllNodesWithTag(COMMENT_CARD)
-                .fetchSemanticsNodes().isNotEmpty()
-        }
         composeRule.onNodeWithText(showMoreButtonText).performClick()
         composeRule.onNodeWithTag(COMMENTS_SECTION).performScrollToNode(
             hasText(showLessButtonText)
@@ -103,10 +94,6 @@ class UserScreenViewTest {
 
     @Test
     fun loadMoreComments_displayLoadMoreButton() {
-        composeRule.waitUntil(loadingTime) {
-            composeRule.onAllNodesWithTag(COMMENT_CARD)
-                .fetchSemanticsNodes().isNotEmpty()
-        }
         composeRule.onNodeWithText(showMoreButtonText).performClick()
         composeRule.onNodeWithTag(COMMENTS_SECTION).performScrollToNode(
             hasText(loadMoreButtonText)
@@ -115,10 +102,6 @@ class UserScreenViewTest {
 
     @Test
     fun clickLoadMoreComments() {
-        composeRule.waitUntil(loadingTime) {
-            composeRule.onAllNodesWithTag(COMMENT_CARD)
-                .fetchSemanticsNodes().isNotEmpty()
-        }
         composeRule.onNodeWithText(showMoreButtonText).performClick()
         composeRule.onNodeWithTag(COMMENTS_SECTION).performScrollToNode(
             hasText(loadMoreButtonText)

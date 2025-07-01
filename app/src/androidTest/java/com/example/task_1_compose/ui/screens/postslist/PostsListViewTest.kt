@@ -31,7 +31,7 @@ class PostsListViewTest {
 
     private val likeIconContentDescription = context.getString(R.string.like_icon)
     private val filledLikeIconContentDescription = context.getString(R.string.filled_like_icon)
-    private val loadingTime = 5000L
+    private val loadingTime = 1000L
 
 
     @get:Rule(order = 0)

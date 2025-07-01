@@ -1,10 +1,9 @@
 package com.example.domain.repositories
 
 import com.example.domain.apiinterfaces.UserApi
-import com.example.domain.data.dataclasses.Address
-import com.example.domain.data.dataclasses.Comment
-import com.example.domain.data.dataclasses.User
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
+import com.example.domain.resources.mocks.mockUserComments
+import com.example.domain.resources.mocks.mockUsers
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -30,8 +29,6 @@ class UsersRepositoryTest {
 
     @Test
     fun `loadNextUsers returns users on success`() = runTest {
-        val mockUsers =
-            listOf(User(id = 0, name = "", username = "", address = Address(), phone = ""))
         whenever(api.getUsers()).thenReturn(mockUsers)
 
         val result = repository.loadUsers()
@@ -48,17 +45,16 @@ class UsersRepositoryTest {
 
     @Test
     fun `loadUserCommentsById returns comments on success`() = runTest {
-        val mockComments = listOf(Comment(name = "", body = ""))
         whenever(
             api.getComments(
                 mockUserId,
                 initPage * COMMENTS_PER_PAGE,
                 COMMENTS_PER_PAGE
             )
-        ).thenReturn(mockComments)
+        ).thenReturn(mockUserComments)
 
         val result = repository.loadUserCommentsById(mockUserId, initPage)
-        assertEquals(mockComments, result)
+        assertEquals(mockUserComments, result)
     }
 
     @Test

@@ -1,9 +1,9 @@
 package com.example.domain.repositories
 
 import com.example.domain.apiinterfaces.AlbumApi
-import com.example.domain.data.dataclasses.Album
-import com.example.domain.data.dataclasses.Photo
 import com.example.domain.resources.AppSettings.PHOTOS_PER_PAGE
+import com.example.domain.resources.mocks.mockAlbums
+import com.example.domain.resources.mocks.mockPhotos
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -30,7 +30,6 @@ class AlbumsRepositoryTest {
 
     @Test
     fun `loadNextAlbums returns albums on success`() = runTest {
-        val mockAlbums = listOf(Album(1, "Album"))
         whenever(api.getAlbums(any(), any())).thenReturn(mockAlbums)
 
         val result = repository.loadNextAlbums(initPage)
@@ -47,7 +46,6 @@ class AlbumsRepositoryTest {
 
     @Test
     fun `loadNextAlbumPhotos returns photos on success`() = runTest {
-        val mockPhotos = listOf(Photo(""))
         whenever(
             api.getPhotos(
                 mockAlbumId,

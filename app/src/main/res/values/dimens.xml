@@ -32,7 +32,6 @@
     <dimen name="splash_box_offset">50dp</dimen>
 
     <!--Font size-->
-    <dimen name="text_small_2">17sp</dimen>
     <dimen name="text_small">20sp</dimen>
     <dimen name="text_standard">25sp</dimen>
     <dimen name="text_comment">18sp</dimen>
