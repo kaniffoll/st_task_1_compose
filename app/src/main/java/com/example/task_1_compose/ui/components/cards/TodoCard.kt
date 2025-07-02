@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +27,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.domain.data.dataclasses.Todo
 import com.example.domain.resources.TestTags.TODO_CARD_TEXT_FIELD
@@ -38,6 +41,7 @@ fun TodosCard(
     onTextChangeById: suspend (Int, String) -> Unit,
     scope: CoroutineScope,
     modifier: Modifier = Modifier,
+    onTodoTimePickerClicked: (String) -> Unit,
     removeAtIndex: suspend (Int) -> Unit,
 ) {
     OutlinedCustomCard(modifier) {
@@ -67,14 +71,18 @@ fun TodosCard(
                 modifier = Modifier.weight(1f).testTag(TODO_CARD_TEXT_FIELD)
             )
 
-            TodoIcon(
-                onTextChangeById = onTextChangeById,
-                removeAtIndex = removeAtIndex,
-                scope = scope,
-                todo = todo,
-                localText = localText,
-                isFocused = isFocused
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))) {
+                TodoTimePickerIcon { onTodoTimePickerClicked(localText) }
+
+                TodoIcon(
+                    onTextChangeById = onTextChangeById,
+                    removeAtIndex = removeAtIndex,
+                    scope = scope,
+                    todo = todo,
+                    localText = localText,
+                    isFocused = isFocused
+                )
+            }
         }
     }
 }
@@ -92,7 +100,7 @@ fun TodoIcon(
         imageVector = if (isFocused) Icons.Rounded.Refresh else Icons.Rounded.Check,
         contentDescription = if (isFocused) stringResource(R.string.update_icon) else stringResource(R.string.done_icon),
         modifier = Modifier
-            .size(dimensionResource(R.dimen.check_size))
+            .size(dimensionResource(R.dimen.todo_icon_size))
             .clickable {
                 scope.launch {
                     if (isFocused) onTextChangeById(todo.id, localText) else removeAtIndex(
@@ -103,7 +111,20 @@ fun TodoIcon(
             .padding(
                 end = dimensionResource(R.dimen.padding_small)
             ),
-        tint = Color.Black)
+        tint = Color.Black
+    )
+}
+
+@Composable
+fun TodoTimePickerIcon(onClick: () -> Unit) {
+    Icon(
+        imageVector = Icons.Rounded.DateRange,
+        contentDescription = stringResource(R.string.time_picker_icon),
+        modifier = Modifier
+            .size(dimensionResource(R.dimen.todo_icon_size))
+            .clickable { onClick() },
+        tint = Color.Black
+    )
 }
 
 @Composable
@@ -128,5 +149,17 @@ fun TodoTextField(
         textStyle = TextStyle(
             fontSize = dimensionResource(R.dimen.text_standard).value.sp
         )
+    )
+}
+
+@Preview
+@Composable
+fun TodoPreview() {
+    TodosCard(
+        todo = Todo(0, "", false),
+        onTextChangeById = { _, _ -> },
+        scope = rememberCoroutineScope(),
+        onTodoTimePickerClicked = {},
+        removeAtIndex = { _ -> }
     )
 }

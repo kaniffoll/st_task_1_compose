@@ -6,4 +6,6 @@ object StringResources {
     const val LOADING_ALBUMS_ERROR = "Loading albums error"
     const val LOADING_COMMENTS_ERROR = "Loading comments error"
     const val LOADING_USERS_ERROR = "Loading users error"
+    const val NOTIFICATION_CHANEL_NAME = "Reminder"
+    const val NOTIFICATION_CHANEL_DESCRIPTION = "Used for remind about todos"
 }

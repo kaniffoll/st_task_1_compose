@@ -1,5 +1,5 @@
-<resources>
-    <string name="app_name">task_1_compose</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="Typos">task_1_compose</string>
     <string name="comments">Комментарии:</string>
     <string name="show_more">Показать больше</string>
     <string name="show_less">Скрыть</string>
@@ -12,6 +12,8 @@
     <string name="number">Номер:</string>
     <string name="load_more">Загрузить ещё:</string>
     <string name="loading_error">Loading Error, try again</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="ok">OK</string>
 
     <!--content Description -->
     <string name="done_icon">Done</string>
@@ -20,4 +22,5 @@
     <string name="update_icon">Update</string>
     <string name="photo">Photo</string>
     <string name="arrow_back_icon">Arrow back icon</string>
+    <string name="time_picker_icon">Time picker icon</string>
 </resources>
