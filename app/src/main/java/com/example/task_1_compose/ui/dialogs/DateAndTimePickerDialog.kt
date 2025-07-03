@@ -1,4 +1,4 @@
-package com.example.task_1_compose.ui.components.dialogs
+package com.example.task_1_compose.ui.dialogs
 
 import android.os.Build
 import androidx.annotation.RequiresApi

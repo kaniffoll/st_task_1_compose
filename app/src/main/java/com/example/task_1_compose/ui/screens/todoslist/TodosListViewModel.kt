@@ -1,23 +1,30 @@
 package com.example.task_1_compose.ui.screens.todoslist
 
+import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.data.dataclasses.Todo
+import com.example.domain.interactors.RemindWorkManagerInteractor
 import com.example.domain.repositories.TodosRepository
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.errorName
+import com.example.task_1_compose.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class TodosListViewModel @Inject constructor(
-    private val repository: TodosRepository
+    private val repository: TodosRepository,
+    private val workManagerInteractor: RemindWorkManagerInteractor
 ) : ViewModel() {
 
     private val _todos = MutableStateFlow<StatefulData<List<Todo>>>(LoadingData())
@@ -82,7 +89,6 @@ class TodosListViewModel @Inject constructor(
     }
 
     suspend fun updateText(id: Int, text: String) {
-
         lastUpdated = id to text
 
         when (val newText = repository.updateTodo(id, text)) {
@@ -94,6 +100,19 @@ class TodosListViewModel @Inject constructor(
                 _todos.value = SuccessData(newTodos)
             }
         }
+    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createWorkRequest(
+        context: Context,
+        triggerTime: LocalDateTime,
+        title: String,
+    ) {
+        workManagerInteractor.createWorkRequest(
+            context = context,
+            triggerTime = triggerTime,
+            title = title,
+            activityClass = MainActivity::class.java
+        )
     }
 }

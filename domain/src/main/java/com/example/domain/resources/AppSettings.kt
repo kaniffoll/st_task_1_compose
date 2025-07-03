@@ -6,4 +6,5 @@ object AppSettings {
     const val COMMENTS_PER_PAGE = 10
     const val ALBUMS_PER_PAGE = 10
     const val INITIAL_COMMENTS_COUNT = 2
+    const val REQUEST_NOTIFICATION_CODE = 1
 }

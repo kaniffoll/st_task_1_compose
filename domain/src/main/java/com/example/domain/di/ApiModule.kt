@@ -56,5 +56,4 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideTodoApi(retrofit: Retrofit): TodoApi = retrofit.create(TodoApi::class.java)
-
 }

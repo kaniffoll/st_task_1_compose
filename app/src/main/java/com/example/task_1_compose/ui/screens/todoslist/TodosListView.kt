@@ -1,6 +1,5 @@
 package com.example.task_1_compose.ui.screens.todoslist
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -34,9 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.example.domain.resources.TestTags.TODO_CARD
 import com.example.domain.resources.TestTags.TODO_LAZY_COLUMN
 import com.example.domain.statefuldata.ErrorData
@@ -45,14 +41,10 @@ import com.example.domain.statefuldata.SuccessData
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.cards.TodosCard
 import com.example.task_1_compose.ui.components.containers.RemoveFocusContainer
-import com.example.task_1_compose.ui.components.dialogs.DateAndTimePickerDialog
 import com.example.task_1_compose.ui.components.general.LoadingIndicator
 import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
-import com.example.task_1_compose.worker.RemindWorker
+import com.example.task_1_compose.ui.dialogs.DateAndTimePickerDialog
 import kotlinx.coroutines.launch
-import java.time.Duration
-import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -130,7 +122,7 @@ fun TodosList() {
                 onDismiss = { showDialog = false },
                 onConfirm = { triggerTime ->
                     showDialog = false
-                    createWorkRequest(context, triggerTime, lastAddedTitle)
+                    viewModel.createWorkRequest(context, triggerTime, lastAddedTitle)
                 }
             )
         }
@@ -167,23 +159,4 @@ fun TodosFab(
             )
         }
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun createWorkRequest(context: Context, triggerTime: LocalDateTime, title: String) {
-
-    val delayMillis =
-        Duration.between(LocalDateTime.now(), triggerTime).toMillis().coerceAtLeast(0L)
-
-    val data = Data.Builder()
-        .putString("todo_title", title)
-        .build()
-
-    val request = OneTimeWorkRequestBuilder<RemindWorker>()
-        .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
-        .setInputData(data)
-        .build()
-
-    WorkManager.getInstance(context)
-        .enqueue(request)
 }

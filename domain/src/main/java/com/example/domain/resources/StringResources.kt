@@ -8,4 +8,5 @@ object StringResources {
     const val LOADING_USERS_ERROR = "Loading users error"
     const val NOTIFICATION_CHANEL_NAME = "Reminder"
     const val NOTIFICATION_CHANEL_DESCRIPTION = "Used for remind about todos"
+    const val REMINDER_CHANEL_ID = "reminder chanel"
 }
