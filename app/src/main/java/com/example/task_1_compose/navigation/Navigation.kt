@@ -8,10 +8,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import com.example.domain.data.dataclasses.Album
 import com.example.domain.data.dataclasses.Post
 import com.example.domain.data.dataclasses.User
+import com.example.domain.resources.DeepLinkResources.DEEPLINK_DOMAIN
 import com.example.task_1_compose.ui.screens.album.AlbumScreen
 import com.example.task_1_compose.ui.screens.albumslist.AlbumsList
 import com.example.task_1_compose.ui.screens.imagepager.ImagePager
@@ -57,7 +59,13 @@ fun Navigation(
                 AlbumsList(navController)
             }
 
-            composable<AlbumScreenRoute> {
+            composable<AlbumScreenRoute>(
+                deepLinks = listOf(
+                    navDeepLink<AlbumScreenRoute>(
+                        basePath = "https://$DEEPLINK_DOMAIN/album"
+                    )
+                ),
+            ) {
                 val args = it.toRoute<AlbumScreenRoute>()
                 AlbumScreen(
                     navController,
