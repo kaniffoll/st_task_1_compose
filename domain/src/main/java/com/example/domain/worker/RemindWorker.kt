@@ -11,11 +11,12 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.domain.R
+import com.example.domain.resources.AppSettings.NOTIFICATION_REQUEST_ID
+import com.example.domain.resources.AppSettings.REQUEST_NOTIFICATION_CODE
 import com.example.domain.resources.BundleKeyNames.ACTIVITY_KEY
 import com.example.domain.resources.BundleKeyNames.TITLE_KEY
 import com.example.domain.resources.StringResources.NOTIFICATION_CHANEL_NAME
 import com.example.domain.resources.StringResources.REMINDER_CHANEL_ID
-import com.example.domain.resources.AppSettings.REQUEST_NOTIFICATION_CODE
 
 class RemindWorker(appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
@@ -49,7 +50,7 @@ class RemindWorker(appContext: Context, workerParams: WorkerParameters) :
             return
         }
 
-        notificationManager.notify(REQUEST_NOTIFICATION_CODE, notification.build())
+        notificationManager.notify(NOTIFICATION_REQUEST_ID, notification.build())
     }
 }
 

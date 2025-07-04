@@ -72,6 +72,7 @@ fun CommentsSection(
             }
 
             is SuccessData -> {
+                isCommentsExpanded = isCommentsExpanded || comments.result.size < INITIAL_COMMENTS_COUNT
                 val allComments = comments.result
                 val commentsCount =
                     if (isCommentsExpanded) allComments.size else INITIAL_COMMENTS_COUNT

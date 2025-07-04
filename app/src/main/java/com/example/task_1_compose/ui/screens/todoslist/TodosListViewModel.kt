@@ -1,12 +1,10 @@
 package com.example.task_1_compose.ui.screens.todoslist
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.data.dataclasses.Todo
-import com.example.domain.interactors.RemindWorkManagerInteractor
+import com.example.domain.interactors.WorkManagerInteractor
 import com.example.domain.repositories.TodosRepository
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
@@ -24,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TodosListViewModel @Inject constructor(
     private val repository: TodosRepository,
-    private val workManagerInteractor: RemindWorkManagerInteractor
+    private val workManagerInteractor: WorkManagerInteractor
 ) : ViewModel() {
 
     private val _todos = MutableStateFlow<StatefulData<List<Todo>>>(LoadingData())
@@ -102,13 +100,12 @@ class TodosListViewModel @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun createWorkRequest(
         context: Context,
         triggerTime: LocalDateTime,
         title: String,
     ) {
-        workManagerInteractor.createWorkRequest(
+        workManagerInteractor.createRemindWorkRequest(
             context = context,
             triggerTime = triggerTime,
             title = title,

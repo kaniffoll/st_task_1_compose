@@ -1,8 +1,6 @@
 package com.example.domain.interactors
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -13,10 +11,9 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
-class RemindWorkManagerInteractor {
+class WorkManagerInteractor {
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun createWorkRequest(
+    fun createRemindWorkRequest(
         context: Context,
         triggerTime: LocalDateTime,
         title: String,

@@ -46,7 +46,7 @@ class AlbumScreenViewModel @AssistedInject constructor(
             return
         }
 
-        when (val newPhotos = repository.loadNextAlbumPhotos(albumId, currentPage)) {
+        when (val newPhotos = repository.loadNextAlbumPhotos(albumId, currentPage, )) {
             null -> _photos.value = ErrorData(LOADING_PHOTOS_ERROR)
             else -> {
                 currentPage++
