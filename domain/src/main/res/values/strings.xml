@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="deeplink_host">task_compose.com</string>
+    <string name="loading_photos_error">Loading photos error</string>
+    <string name="loading_posts_error">Loading posts error</string>
+    <string name="loading_albums_error">Loading albums error</string>
+    <string name="loading_comments_error">Loading comments error</string>
+    <string name="loading_users_error">Loading users error</string>
+</resources>

@@ -1,9 +1,11 @@
 package com.example.domain.repositories
 
-import com.example.domain.apiinterfaces.TodoApi
-import com.example.domain.connectivityobserver.NetworkConnectivityObserver
-import com.example.domain.data.dataclasses.Todo
+import com.example.domain.api.TodoApi
+import com.example.domain.utilities.NetworkConnectivityObserver
+import com.example.domain.data.Todo
 import com.example.domain.db.daos.TodoDao
+import com.example.domain.api.RequestKeys.TITLE_KEY
+import com.example.domain.api.RequestKeys.COMPLETED_KEY
 import javax.inject.Inject
 
 class TodosRepository @Inject constructor(
@@ -39,7 +41,7 @@ class TodosRepository @Inject constructor(
         if (networkConnectivityObserver.isNetworkAvailable()) {
             try {
                 val fieldsToUpdate = mapOf(
-                    "completed" to true
+                    COMPLETED_KEY to true
                 )
                 api.completeTodo(id = id, fieldsToUpdate = fieldsToUpdate)
                 dao.finishTodo(id)
@@ -76,7 +78,7 @@ class TodosRepository @Inject constructor(
         if (networkConnectivityObserver.isNetworkAvailable()) {
             try {
                 val fieldsToUpdate = mapOf(
-                    "title" to localText
+                    TITLE_KEY to localText
                 )
                 api.updateTodo(id = id, fieldsToUpdate = fieldsToUpdate)
                 dao.updateTodoText(id = id, localText = localText)

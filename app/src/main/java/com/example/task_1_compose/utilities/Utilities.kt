@@ -1,7 +1,7 @@
 package com.example.task_1_compose.utilities
 
 import androidx.compose.ui.graphics.Color
-import com.example.domain.data.dataclasses.Address
+import com.example.domain.data.Address
 import kotlin.random.Random
 
 fun getAddressAsString(address: Address): String {

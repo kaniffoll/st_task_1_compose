@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.example.task_1_compose"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.task_1_compose"
@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.androidx.work)
     ksp(libs.hilt.android.compiler)
     testImplementation(libs.junit)
+    androidTestImplementation(project(":testmocks"))
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,15 +1,16 @@
 package com.example.task_1_compose.ui.screens.postslist
 
 import androidx.lifecycle.ViewModel
-import com.example.domain.data.dataclasses.Post
+import com.example.domain.R
+import com.example.domain.data.Post
 import com.example.domain.repositories.PostsRepository
 import com.example.domain.resources.AppSettings.POSTS_PER_PAGE
-import com.example.domain.resources.StringResources.LOADING_POSTS_ERROR
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
+import com.example.domain.utilities.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostsListViewModel @Inject constructor(
-    private val repository: PostsRepository
+    private val repository: PostsRepository,
+    private val resourceProvider: ResourceProvider
 ) : ViewModel() {
     private var _posts = MutableStateFlow<StatefulData<List<Post>>>(LoadingData())
     val posts = _posts.asStateFlow()
@@ -50,7 +52,9 @@ class PostsListViewModel @Inject constructor(
         }
 
         when (val newPosts = repository.loadNextPosts(currentPage)) {
-            null -> _posts.value = ErrorData(LOADING_POSTS_ERROR)
+            null -> _posts.value = ErrorData(
+                resourceProvider.getStringResource(R.string.loading_posts_error)
+            )
             else -> {
                 currentPage++
                 _posts.value = SuccessData(newPosts)

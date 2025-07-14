@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.example.domain.data.dataclasses.Photo
+import com.example.domain.data.Photo
 import com.example.task_1_compose.R
-import com.example.task_1_compose.ui.components.general.UserImageAndName
+import com.example.task_1_compose.ui.components.general.UserTile
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -29,7 +29,7 @@ fun PhotoCard(
         onClick = onClick,
         modifier = modifier
     ) {
-        UserImageAndName(username = photo.title)
+        UserTile(username = photo.title)
         with(sharedTransitionScope) {
             Image(
                 painter = painterResource(photo.photo),

@@ -14,7 +14,6 @@
     <string name="loading_error">Loading Error, try again</string>
     <string name="dismiss">Dismiss</string>
     <string name="ok">OK</string>
-    <string name="deeplink_host">task_compose.com</string>
 
     <!--content Description -->
     <string name="done_icon">Done</string>

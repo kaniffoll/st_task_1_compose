@@ -2,7 +2,7 @@ package com.example.domain.db.daos
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.example.domain.data.dataclasses.User
+import com.example.domain.data.User
 import com.example.domain.db.daos.base.BaseDao
 
 @Dao

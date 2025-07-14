@@ -1,12 +1,13 @@
 package com.example.domain.db
 
 import androidx.room.TypeConverter
-import com.example.domain.data.dataclasses.Address
-import com.example.domain.data.dataclasses.Comment
-import com.example.domain.data.dataclasses.Photo
+import com.example.domain.data.Address
+import com.example.domain.data.Comment
+import com.example.domain.data.Photo
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 
+@SuppressWarnings
 class CustomTypeConverters {
 
     private val json = Json { encodeDefaults = true; ignoreUnknownKeys = true }

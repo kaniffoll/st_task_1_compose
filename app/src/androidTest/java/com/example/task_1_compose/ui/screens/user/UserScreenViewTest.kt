@@ -13,15 +13,14 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performScrollToNode
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.domain.data.dataclasses.Address
-import com.example.domain.data.dataclasses.User
 import com.example.domain.di.ApiModule
+import com.example.domain.resources.AppSettings.COLLAPSED_COMMENTS_DISPLAY_COUNT
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
-import com.example.domain.resources.AppSettings.INITIAL_COMMENTS_COUNT
-import com.example.domain.resources.TestTags.COMMENTS_SECTION
-import com.example.domain.resources.TestTags.COMMENT_CARD
+import com.example.domain.resources.TestTags.COMMENTS_SECTION_TEST_TAG
+import com.example.domain.resources.TestTags.COMMENT_CARD_TEST_TAG
 import com.example.task_1_compose.R
 import com.example.task_1_compose.TestActivity
+import com.example.testmocks.mockUser
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -32,16 +31,6 @@ import org.junit.Test
 @HiltAndroidTest
 @UninstallModules(ApiModule::class)
 class UserScreenViewTest {
-    private val mockUser = User(
-        id = 0,
-        name = "User 0",
-        username = "_username",
-        address = Address(
-            "", "", "",
-        ),
-        phone = ""
-    )
-
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val showMoreButtonText = context.getString(R.string.show_more)
     private val showLessButtonText = context.getString(R.string.show_less)
@@ -74,28 +63,30 @@ class UserScreenViewTest {
 
     @Test
     fun clickShowMoreButton_displayMoreComments() {
-        composeRule.onAllNodesWithTag(COMMENT_CARD).assertCountEquals(INITIAL_COMMENTS_COUNT)
+        composeRule.onAllNodesWithTag(COMMENT_CARD_TEST_TAG)
+            .assertCountEquals(COLLAPSED_COMMENTS_DISPLAY_COUNT)
         composeRule.onNodeWithText(showMoreButtonText).performClick()
         for (i in 0..<COMMENTS_PER_PAGE) {
-            composeRule.onAllNodesWithTag(COMMENT_CARD)[i].assertExists()
-            composeRule.onNodeWithTag(COMMENTS_SECTION).performScrollToIndex(i)
+            composeRule.onAllNodesWithTag(COMMENT_CARD_TEST_TAG)[i].assertExists()
+            composeRule.onNodeWithTag(COMMENTS_SECTION_TEST_TAG).performScrollToIndex(i)
         }
     }
 
     @Test
     fun clickShowLessButton_displayLessComments() {
         composeRule.onNodeWithText(showMoreButtonText).performClick()
-        composeRule.onNodeWithTag(COMMENTS_SECTION).performScrollToNode(
+        composeRule.onNodeWithTag(COMMENTS_SECTION_TEST_TAG).performScrollToNode(
             hasText(showLessButtonText)
         )
         composeRule.onNodeWithText(showLessButtonText).performClick()
-        composeRule.onAllNodesWithTag(COMMENT_CARD).assertCountEquals(INITIAL_COMMENTS_COUNT)
+        composeRule.onAllNodesWithTag(COMMENT_CARD_TEST_TAG)
+            .assertCountEquals(COLLAPSED_COMMENTS_DISPLAY_COUNT)
     }
 
     @Test
     fun loadMoreComments_displayLoadMoreButton() {
         composeRule.onNodeWithText(showMoreButtonText).performClick()
-        composeRule.onNodeWithTag(COMMENTS_SECTION).performScrollToNode(
+        composeRule.onNodeWithTag(COMMENTS_SECTION_TEST_TAG).performScrollToNode(
             hasText(loadMoreButtonText)
         )
     }
@@ -103,7 +94,7 @@ class UserScreenViewTest {
     @Test
     fun clickLoadMoreComments() {
         composeRule.onNodeWithText(showMoreButtonText).performClick()
-        composeRule.onNodeWithTag(COMMENTS_SECTION).performScrollToNode(
+        composeRule.onNodeWithTag(COMMENTS_SECTION_TEST_TAG).performScrollToNode(
             hasText(loadMoreButtonText)
         )
         composeRule.onNodeWithText(loadMoreButtonText).performClick()

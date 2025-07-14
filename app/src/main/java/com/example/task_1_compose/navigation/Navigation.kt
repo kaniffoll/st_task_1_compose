@@ -10,10 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
-import com.example.domain.data.dataclasses.Album
-import com.example.domain.data.dataclasses.Post
-import com.example.domain.data.dataclasses.User
-import com.example.domain.resources.DeepLinkResources.DEEPLINK_DOMAIN
+import com.example.domain.data.Album
+import com.example.domain.data.Post
+import com.example.domain.data.User
+import com.example.domain.resources.AppUrls.DEEPLINK_DOMAIN
 import com.example.task_1_compose.ui.screens.album.AlbumScreen
 import com.example.task_1_compose.ui.screens.albumslist.AlbumsList
 import com.example.task_1_compose.ui.screens.imagepager.ImagePager

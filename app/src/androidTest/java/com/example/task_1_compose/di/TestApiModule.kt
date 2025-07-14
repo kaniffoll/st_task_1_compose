@@ -1,9 +1,9 @@
 package com.example.task_1_compose.di
 
-import com.example.domain.apiinterfaces.AlbumApi
-import com.example.domain.apiinterfaces.PostApi
-import com.example.domain.apiinterfaces.TodoApi
-import com.example.domain.apiinterfaces.UserApi
+import com.example.domain.api.AlbumApi
+import com.example.domain.api.PostApi
+import com.example.domain.api.TodoApi
+import com.example.domain.api.UserApi
 import com.example.domain.di.ApiModule
 import com.example.task_1_compose.fakeapi.FakeAlbumApi
 import com.example.task_1_compose.fakeapi.FakePostApi

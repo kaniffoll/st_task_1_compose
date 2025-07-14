@@ -3,9 +3,9 @@ package com.example.task_1_compose.navigation
 import android.net.Uri
 import androidx.navigation.NavType
 import androidx.savedstate.SavedState
-import com.example.domain.data.dataclasses.Album
-import com.example.domain.data.dataclasses.Post
-import com.example.domain.data.dataclasses.User
+import com.example.domain.data.Album
+import com.example.domain.data.Post
+import com.example.domain.data.User
 import kotlinx.serialization.json.Json
 
 object CustomNavType {

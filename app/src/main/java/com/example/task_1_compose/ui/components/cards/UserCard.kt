@@ -17,8 +17,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.task_1_compose.R
-import com.example.domain.data.dataclasses.User
-import com.example.task_1_compose.ui.components.general.Avatar
+import com.example.domain.data.User
+import com.example.task_1_compose.ui.components.views.Avatar
 import com.example.task_1_compose.utilities.getAddressAsString
 
 @OptIn(ExperimentalSharedTransitionApi::class)

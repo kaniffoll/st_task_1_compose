@@ -11,9 +11,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import com.example.task_1_compose.R
-import com.example.domain.data.dataclasses.Post
+import com.example.domain.data.Post
 import com.example.task_1_compose.ui.components.views.buttons.LikeButton
-import com.example.task_1_compose.ui.components.general.UserImageAndName
+import com.example.task_1_compose.ui.components.general.UserTile
 
 @Composable
 fun PostCard(
@@ -23,7 +23,7 @@ fun PostCard(
     onClick: () -> Unit
 ) {
     OutlinedCustomCard(onClick = onClick, modifier = modifier) {
-        UserImageAndName(post.userId.toString())
+        UserTile(post.userId.toString())
         Text(
             text = post.title,
             modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_small)),

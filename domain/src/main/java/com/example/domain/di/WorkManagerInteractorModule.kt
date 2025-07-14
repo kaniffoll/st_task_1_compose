@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 
+@SuppressWarnings
 @Module
 @InstallIn(ViewModelComponent::class)
 object WorkManagerInteractorModule {

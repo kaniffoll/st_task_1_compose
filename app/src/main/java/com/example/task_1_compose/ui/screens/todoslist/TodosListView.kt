@@ -1,7 +1,5 @@
 package com.example.task_1_compose.ui.screens.todoslist
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -33,8 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.resources.TestTags.TODO_CARD
-import com.example.domain.resources.TestTags.TODO_LAZY_COLUMN
+import com.example.domain.resources.TestTags.TODO_CARD_TEST_TAG
+import com.example.domain.resources.TestTags.TODO_LAZY_COLUMN_TEST_TAG
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.SuccessData
@@ -46,7 +44,6 @@ import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
 import com.example.task_1_compose.ui.dialogs.DateAndTimePickerDialog
 import kotlinx.coroutines.launch
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TodosList() {
     val viewModel: TodosListViewModel = hiltViewModel()
@@ -65,7 +62,7 @@ fun TodosList() {
         LazyColumn(
             Modifier
                 .fillMaxWidth()
-                .testTag(TODO_LAZY_COLUMN),
+                .testTag(TODO_LAZY_COLUMN_TEST_TAG),
             state = lazyListState,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement
@@ -99,7 +96,7 @@ fun TodosList() {
                                 showDialog = true
                             },
                             scope = viewModel.viewModelScope,
-                            modifier = Modifier.testTag(TODO_CARD)
+                            modifier = Modifier.testTag(TODO_CARD_TEST_TAG)
                         ) { viewModel.removeTodoByIndex(todo.id) }
                     }
                 }

@@ -29,8 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.example.domain.data.dataclasses.Todo
-import com.example.domain.resources.TestTags.TODO_CARD_TEXT_FIELD
+import com.example.domain.data.Todo
+import com.example.domain.resources.TestTags.TODO_CARD_TEXT_FIELD_TEST_TAG
 import com.example.task_1_compose.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -68,7 +68,7 @@ fun TodosCard(
                         hasChanged = false
                     }
                 },
-                modifier = Modifier.weight(1f).testTag(TODO_CARD_TEXT_FIELD)
+                modifier = Modifier.weight(1f).testTag(TODO_CARD_TEXT_FIELD_TEST_TAG)
             )
 
             Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))) {
@@ -129,7 +129,8 @@ fun TodoTimePickerIcon(onClick: () -> Unit) {
 
 @Composable
 fun TodoTextField(
-    text: String, onTextChange: (String) -> Unit,
+    text: String,
+    onTextChange: (String) -> Unit,
     onFocusChange: (Boolean) -> Unit,
     modifier: Modifier
 ) {

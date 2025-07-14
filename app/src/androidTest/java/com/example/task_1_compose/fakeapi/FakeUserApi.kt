@@ -1,9 +1,9 @@
 package com.example.task_1_compose.fakeapi
 
-import com.example.domain.apiinterfaces.UserApi
-import com.example.domain.data.dataclasses.Comment
-import com.example.domain.data.dataclasses.User
-import com.example.domain.resources.mocks.mockUserComments
+import com.example.domain.api.UserApi
+import com.example.domain.data.Comment
+import com.example.domain.data.User
+import com.example.testmocks.mockUserComments
 
 class FakeUserApi : UserApi {
     private val users = listOf<User>()

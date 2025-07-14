@@ -17,9 +17,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.example.domain.data.dataclasses.Comment
-import com.example.domain.resources.AppSettings.INITIAL_COMMENTS_COUNT
-import com.example.domain.resources.TestTags.COMMENTS_SECTION
+import com.example.domain.data.Comment
+import com.example.domain.resources.AppSettings.COLLAPSED_COMMENTS_DISPLAY_COUNT
+import com.example.domain.resources.TestTags.COMMENTS_SECTION_TEST_TAG
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
@@ -42,14 +42,14 @@ fun CommentsSection(
 ) {
     var isCommentsExpanded by remember {
         mutableStateOf(
-            comments is SuccessData && comments.result.size < INITIAL_COMMENTS_COUNT
+            comments is SuccessData && comments.result.size < COLLAPSED_COMMENTS_DISPLAY_COUNT
         )
     }
 
     LazyColumn(
         modifier = modifier
             .background(color = Color.White)
-            .testTag(COMMENTS_SECTION),
+            .testTag(COMMENTS_SECTION_TEST_TAG),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
     ) {
         item { CommentsSectionTitle() }
@@ -72,10 +72,10 @@ fun CommentsSection(
             }
 
             is SuccessData -> {
-                isCommentsExpanded = isCommentsExpanded || comments.result.size < INITIAL_COMMENTS_COUNT
+                isCommentsExpanded = isCommentsExpanded || comments.result.size < COLLAPSED_COMMENTS_DISPLAY_COUNT
                 val allComments = comments.result
                 val commentsCount =
-                    if (isCommentsExpanded) allComments.size else INITIAL_COMMENTS_COUNT
+                    if (isCommentsExpanded) allComments.size else COLLAPSED_COMMENTS_DISPLAY_COUNT
 
                 items(commentsCount) { index ->
                     CommentCard(comment = allComments[index])
@@ -94,7 +94,7 @@ fun CommentsSection(
                     }
                 }
 
-                if (allComments.size > INITIAL_COMMENTS_COUNT) {
+                if (allComments.size > COLLAPSED_COMMENTS_DISPLAY_COUNT) {
                     item {
                         CommentsSectionShowMoreButton(isCommentsExpanded) {
                             isCommentsExpanded = !isCommentsExpanded

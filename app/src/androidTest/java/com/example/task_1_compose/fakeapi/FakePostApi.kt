@@ -1,9 +1,9 @@
 package com.example.task_1_compose.fakeapi
 
-import com.example.domain.apiinterfaces.PostApi
-import com.example.domain.data.dataclasses.Comment
-import com.example.domain.data.dataclasses.Post
-import com.example.domain.resources.mocks.mockPosts
+import com.example.domain.api.PostApi
+import com.example.domain.data.Comment
+import com.example.domain.data.Post
+import com.example.testmocks.mockPosts
 import kotlinx.coroutines.delay
 
 class FakePostApi : PostApi {

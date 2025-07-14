@@ -28,12 +28,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.domain.resources.AppSettings.SPLASH_SCREEN_ANIMATION_STEP_DURATION
 import com.example.task_1_compose.R
 import com.example.task_1_compose.navigation.PostListRoute
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
-
-private const val stepDuration = 400L
 
 private fun createSteps(px: Int): List<Pair<Int, Int>> = listOf(
     0 to 0,
@@ -68,10 +67,10 @@ fun SplashScreen(navController: NavController) {
         for ((x, y) in steps) {
             xOffset = x
             yOffset = y
-            delay(stepDuration)
+            delay(SPLASH_SCREEN_ANIMATION_STEP_DURATION)
         }
         visible = false
-        delay(stepDuration)
+        delay(SPLASH_SCREEN_ANIMATION_STEP_DURATION)
         navController.navigate(PostListRoute)
     }
 

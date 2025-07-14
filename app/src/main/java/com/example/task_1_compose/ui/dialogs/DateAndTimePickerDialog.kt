@@ -1,7 +1,5 @@
 package com.example.task_1_compose.ui.dialogs
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +25,6 @@ enum class PickerStep {
     TIME
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DateAndTimePickerDialog(
     onDismiss: () -> Unit,
@@ -58,7 +55,6 @@ fun DateAndTimePickerDialog(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDialog(
@@ -97,7 +93,6 @@ fun DatePickerDialog(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerDialog(

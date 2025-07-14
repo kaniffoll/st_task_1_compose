@@ -8,8 +8,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.example.domain.data.dataclasses.Comment
-import com.example.domain.resources.TestTags.COMMENT_CARD
+import com.example.domain.data.Comment
+import com.example.domain.resources.TestTags.COMMENT_CARD_TEST_TAG
 import com.example.task_1_compose.R
 
 @Composable
@@ -20,7 +20,7 @@ fun CommentCard(
     val commentText = comment.body
     OutlinedCustomCard(
         itemsSpacedBy = dimensionResource(R.dimen.padding_small), modifier = Modifier.testTag(
-            COMMENT_CARD
+            COMMENT_CARD_TEST_TAG
         )
     ) {
         Text(

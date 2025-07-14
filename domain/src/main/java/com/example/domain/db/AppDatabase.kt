@@ -3,10 +3,10 @@ package com.example.domain.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.domain.data.dataclasses.Album
-import com.example.domain.data.dataclasses.Post
-import com.example.domain.data.dataclasses.Todo
-import com.example.domain.data.dataclasses.User
+import com.example.domain.data.Album
+import com.example.domain.data.Post
+import com.example.domain.data.Todo
+import com.example.domain.data.User
 import com.example.domain.db.daos.AlbumDao
 import com.example.domain.db.daos.PostDao
 import com.example.domain.db.daos.TodoDao

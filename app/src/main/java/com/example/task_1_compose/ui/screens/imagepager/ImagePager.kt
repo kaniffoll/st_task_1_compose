@@ -22,8 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
-import com.example.domain.data.dataclasses.Album
-import com.example.domain.resources.TestTags.IMAGE_PAGER
+import com.example.domain.data.Album
+import com.example.domain.resources.TestTags.IMAGE_PAGER_TEST_TAG
 import com.example.task_1_compose.R
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
@@ -50,7 +50,7 @@ fun ImagePager(
             .zIndex(10f)
     ) {
         HorizontalPager(
-            state = pageState, modifier = Modifier.testTag(IMAGE_PAGER)
+            state = pageState, modifier = Modifier.testTag(IMAGE_PAGER_TEST_TAG)
         ) { index ->
             Column(
                 Modifier.fillMaxSize(),

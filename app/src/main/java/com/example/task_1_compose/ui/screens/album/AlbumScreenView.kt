@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.example.domain.data.dataclasses.Album
+import com.example.domain.data.Album
 import com.example.task_1_compose.navigation.ImagePagerRoute
 import com.example.task_1_compose.ui.components.cards.PhotoCard
 import com.example.task_1_compose.ui.components.containers.LoadMoreList

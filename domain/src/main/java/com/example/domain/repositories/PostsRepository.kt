@@ -1,10 +1,10 @@
 package com.example.domain.repositories
 
 import androidx.compose.runtime.mutableStateListOf
-import com.example.domain.apiinterfaces.PostApi
-import com.example.domain.connectivityobserver.NetworkConnectivityObserver
-import com.example.domain.data.dataclasses.Comment
-import com.example.domain.data.dataclasses.Post
+import com.example.domain.api.PostApi
+import com.example.domain.utilities.NetworkConnectivityObserver
+import com.example.domain.data.Comment
+import com.example.domain.data.Post
 import com.example.domain.db.daos.PostDao
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
 import com.example.domain.resources.AppSettings.POSTS_PER_PAGE
@@ -35,18 +35,17 @@ class PostsRepository @Inject constructor(
     }
 
     suspend fun loadPostCommentsById(id: Int, currentPage: Int): List<Comment>? {
-        if (networkConnectivityObserver.isNetworkAvailable()) {
-            try {
-                val response =
-                    api.getComments(id, currentPage * COMMENTS_PER_PAGE, COMMENTS_PER_PAGE)
-                val currentPost = dao.getPostById(id)
-                dao.update(currentPost.copy(comments = response.toMutableList()))
-                return response
-            } catch (e: Exception) {
-                return null
-            }
-        } else {
+        if (!networkConnectivityObserver.isNetworkAvailable()) {
             return emptyList()
+        }
+        try {
+            val response =
+                api.getComments(id, currentPage * COMMENTS_PER_PAGE, COMMENTS_PER_PAGE)
+            val currentPost = dao.getPostById(id)
+            dao.update(currentPost.copy(comments = response.toMutableList()))
+            return response
+        } catch (e: Exception) {
+            return null
         }
     }
 }

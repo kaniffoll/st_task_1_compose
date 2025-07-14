@@ -1,8 +1,8 @@
 package com.example.task_1_compose.fakeapi
 
-import com.example.domain.apiinterfaces.AlbumApi
-import com.example.domain.data.dataclasses.Album
-import com.example.domain.data.dataclasses.Photo
+import com.example.domain.api.AlbumApi
+import com.example.domain.data.Album
+import com.example.domain.data.Photo
 
 class FakeAlbumApi: AlbumApi {
     private val albums = listOf<Album>()

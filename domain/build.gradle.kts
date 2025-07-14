@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.example.domain"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 26
@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.work)
     ksp(libs.room.compiler)
     ksp(libs.hilt.android.compiler)
+    testImplementation(project(":testmocks"))
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.kotlinx.coroutines.test)

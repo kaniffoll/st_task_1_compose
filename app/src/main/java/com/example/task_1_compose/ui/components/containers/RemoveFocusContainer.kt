@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
-import com.example.domain.resources.TestTags.REMOVE_FOCUS_CONTAINER
+import com.example.domain.resources.TestTags.REMOVE_FOCUS_CONTAINER_TEST_TAG
 
 @Composable
 fun RemoveFocusContainer(
@@ -28,6 +28,6 @@ fun RemoveFocusContainer(
             ) {
                 focusManager.clearFocus()
             }
-            .testTag(REMOVE_FOCUS_CONTAINER)
+            .testTag(REMOVE_FOCUS_CONTAINER_TEST_TAG)
     ) { content() }
 }

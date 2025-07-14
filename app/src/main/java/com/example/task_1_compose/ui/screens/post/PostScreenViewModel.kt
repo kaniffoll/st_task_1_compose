@@ -2,16 +2,17 @@ package com.example.task_1_compose.ui.screens.post
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.data.dataclasses.Comment
-import com.example.domain.data.dataclasses.Post
+import com.example.domain.R
+import com.example.domain.data.Comment
+import com.example.domain.data.Post
 import com.example.domain.repositories.PostsRepository
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
-import com.example.domain.resources.StringResources.LOADING_COMMENTS_ERROR
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
+import com.example.domain.utilities.ResourceProvider
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel(assistedFactory = PostScreenViewModel.PostScreenViewModelFactory::class)
 class PostScreenViewModel @AssistedInject constructor(
     private val repository: PostsRepository,
+    private val resourceProvider: ResourceProvider,
     @Assisted post: Post
 ) : ViewModel() {
 
@@ -55,7 +57,9 @@ class PostScreenViewModel @AssistedInject constructor(
         }
 
         when (val newComments = repository.loadPostCommentsById(_post.value.id, currentPage)) {
-            null -> _comments.value = ErrorData(LOADING_COMMENTS_ERROR)
+            null -> _comments.value = ErrorData(
+                resourceProvider.getStringResource(R.string.loading_comments_error)
+            )
             else -> {
                 val updatedComments = _post.value.comments + newComments
                 _post.value = _post.value.copy(comments = updatedComments.toMutableList())

@@ -21,11 +21,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.data.dataclasses.Comment
-import com.example.domain.data.dataclasses.Post
+import com.example.domain.data.Comment
+import com.example.domain.data.Post
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.containers.CommentsSection
-import com.example.task_1_compose.ui.components.general.UserImageAndName
+import com.example.task_1_compose.ui.components.general.UserTile
 import com.example.task_1_compose.ui.components.views.buttons.LikeButton
 
 @Composable
@@ -95,7 +95,7 @@ fun PostBody(
                 dimensionResource(R.dimen.padding_large)
             ),
     ) {
-        UserImageAndName(post.userId.toString())
+        UserTile(post.userId.toString())
         PostBodyTitle(post)
         PostBodyDescriptionContent(post, onLikeClicked = onLikeClicked)
     }

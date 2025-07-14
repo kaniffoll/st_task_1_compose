@@ -1,9 +1,10 @@
 package com.example.domain.di
 
-import com.example.domain.apiinterfaces.AlbumApi
-import com.example.domain.apiinterfaces.PostApi
-import com.example.domain.apiinterfaces.TodoApi
-import com.example.domain.apiinterfaces.UserApi
+import com.example.domain.api.AlbumApi
+import com.example.domain.api.PostApi
+import com.example.domain.api.TodoApi
+import com.example.domain.api.UserApi
+import com.example.domain.resources.AppUrls.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,8 +27,6 @@ object ApiModule {
         val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
         return client
     }
-
-    private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
 
     private val json = Json { ignoreUnknownKeys = true }
 

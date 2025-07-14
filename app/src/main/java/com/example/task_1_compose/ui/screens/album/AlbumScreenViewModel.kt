@@ -1,15 +1,16 @@
 package com.example.task_1_compose.ui.screens.album
 
 import androidx.lifecycle.ViewModel
-import com.example.domain.data.dataclasses.Photo
+import com.example.domain.R
+import com.example.domain.data.Photo
 import com.example.domain.repositories.AlbumsRepository
 import com.example.domain.resources.AppSettings.PHOTOS_PER_PAGE
-import com.example.domain.resources.StringResources.LOADING_PHOTOS_ERROR
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
+import com.example.domain.utilities.ResourceProvider
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 @HiltViewModel(assistedFactory = AlbumScreenViewModel.AlbumScreenViewModelFactory::class)
 class AlbumScreenViewModel @AssistedInject constructor(
     private val repository: AlbumsRepository,
+    private val resourceProvider: ResourceProvider,
     @Assisted private val albumId: Int
 ) : ViewModel() {
 
@@ -46,8 +48,10 @@ class AlbumScreenViewModel @AssistedInject constructor(
             return
         }
 
-        when (val newPhotos = repository.loadNextAlbumPhotos(albumId, currentPage, )) {
-            null -> _photos.value = ErrorData(LOADING_PHOTOS_ERROR)
+        when (val newPhotos = repository.loadNextAlbumPhotos(albumId, currentPage)) {
+            null -> _photos.value = ErrorData(
+                resourceProvider.getStringResource(R.string.loading_photos_error)
+            )
             else -> {
                 currentPage++
                 _photos.value = SuccessData(currentPhotos() + newPhotos)

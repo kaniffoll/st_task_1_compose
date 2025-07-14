@@ -3,7 +3,7 @@ package com.example.domain.db.daos
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.example.domain.data.dataclasses.Todo
+import com.example.domain.data.Todo
 import com.example.domain.db.daos.base.BaseDao
 
 @Dao

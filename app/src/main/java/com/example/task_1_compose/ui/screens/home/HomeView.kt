@@ -13,7 +13,7 @@ import com.example.task_1_compose.R
 import com.example.task_1_compose.navigation.EmptyBottomBars
 import com.example.task_1_compose.navigation.ImagePagerRoute
 import com.example.task_1_compose.navigation.Navigation
-import com.example.task_1_compose.ui.components.headers_and_appbars.TopBar
+import com.example.task_1_compose.ui.components.appbars.TopBar
 import com.example.task_1_compose.ui.screens.home.components.BottomNavigationBar
 
 @Composable

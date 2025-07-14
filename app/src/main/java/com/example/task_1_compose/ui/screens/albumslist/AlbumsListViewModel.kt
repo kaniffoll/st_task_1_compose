@@ -1,15 +1,16 @@
 package com.example.task_1_compose.ui.screens.albumslist
 
 import androidx.lifecycle.ViewModel
-import com.example.domain.data.dataclasses.Album
+import com.example.domain.R
+import com.example.domain.data.Album
 import com.example.domain.repositories.AlbumsRepository
 import com.example.domain.resources.AppSettings.ALBUMS_PER_PAGE
-import com.example.domain.resources.StringResources.LOADING_ALBUMS_ERROR
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
+import com.example.domain.utilities.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumsListViewModel @Inject constructor(
-    private val repository: AlbumsRepository
+    private val repository: AlbumsRepository,
+    private val resourceProvider: ResourceProvider
 ) : ViewModel() {
     private val _albums = MutableStateFlow<StatefulData<List<Album>>>(LoadingData())
     val albums = _albums.asStateFlow()
@@ -38,7 +40,9 @@ class AlbumsListViewModel @Inject constructor(
         }
 
         when (val newAlbums = repository.loadNextAlbums(currentPage)) {
-            null -> _albums.value = ErrorData(LOADING_ALBUMS_ERROR)
+            null -> _albums.value = ErrorData(
+                resourceProvider.getStringResource(R.string.loading_albums_error)
+            )
             else -> {
                 currentPage++
                 _albums.value = SuccessData(newAlbums)

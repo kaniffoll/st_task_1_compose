@@ -1,9 +1,14 @@
 package com.example.domain.repositories
 
-import com.example.domain.apiinterfaces.AlbumApi
+import com.example.domain.api.AlbumApi
+import com.example.domain.data.Album
+import com.example.domain.db.daos.AlbumDao
 import com.example.domain.resources.AppSettings.PHOTOS_PER_PAGE
-import com.example.domain.resources.mocks.mockAlbums
-import com.example.domain.resources.mocks.mockPhotos
+import com.example.domain.utilities.NetworkConnectivityObserver
+import com.example.testmocks.initAlbumPage
+import com.example.testmocks.mockAlbumId
+import com.example.testmocks.mockAlbums
+import com.example.testmocks.mockPhotos
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -15,32 +20,34 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 class AlbumsRepositoryTest {
-
-    private val initPage = 0
-    private val mockAlbumId = 0
-
     private lateinit var repository: AlbumsRepository
     private lateinit var api: AlbumApi
+    private lateinit var dao: AlbumDao
+    private lateinit var connectivityObserver: NetworkConnectivityObserver
 
     @Before
     fun setUp() {
         api = mock()
-        repository = AlbumsRepository(api)
+        dao = mock()
+        connectivityObserver = mock()
+        repository = AlbumsRepository(api, dao, connectivityObserver)
     }
 
     @Test
     fun `loadNextAlbums returns albums on success`() = runTest {
         whenever(api.getAlbums(any(), any())).thenReturn(mockAlbums)
+        whenever(connectivityObserver.isNetworkAvailable()).thenReturn(true)
 
-        val result = repository.loadNextAlbums(initPage)
+        val result = repository.loadNextAlbums(initAlbumPage)
         assertEquals(mockAlbums, result)
     }
 
     @Test
     fun `loadNextAlbums returns null on exception`() = runTest {
         whenever(api.getAlbums(any(), any())).thenThrow(RuntimeException())
+        whenever(connectivityObserver.isNetworkAvailable()).thenReturn(true)
 
-        val result = repository.loadNextAlbums(initPage)
+        val result = repository.loadNextAlbums(initAlbumPage)
         assertNull(result)
     }
 
@@ -49,20 +56,23 @@ class AlbumsRepositoryTest {
         whenever(
             api.getPhotos(
                 mockAlbumId,
-                initPage * PHOTOS_PER_PAGE,
+                initAlbumPage * PHOTOS_PER_PAGE,
                 PHOTOS_PER_PAGE
             )
         ).thenReturn(mockPhotos)
+        whenever(connectivityObserver.isNetworkAvailable()).thenReturn(true)
+        whenever(dao.getAlbumById(mockAlbumId)).thenReturn(Album(mockAlbumId, ""))
 
-        val result = repository.loadNextAlbumPhotos(mockAlbumId, initPage)
+        val result = repository.loadNextAlbumPhotos(mockAlbumId, initAlbumPage)
         assertEquals(mockPhotos, result)
     }
 
     @Test
     fun `loadNextAlbumPhotos returns null on exception`() = runTest {
         whenever(api.getPhotos(eq(mockAlbumId), any(), any())).thenThrow(RuntimeException())
+        whenever(connectivityObserver.isNetworkAvailable()).thenReturn(true)
 
-        val result = repository.loadNextAlbumPhotos(mockAlbumId, initPage)
+        val result = repository.loadNextAlbumPhotos(mockAlbumId, initAlbumPage)
         assertNull(result)
     }
 }

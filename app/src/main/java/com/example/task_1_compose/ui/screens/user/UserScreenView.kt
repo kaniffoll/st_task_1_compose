@@ -27,10 +27,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.data.dataclasses.User
+import com.example.domain.data.User
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.containers.CommentsSection
-import com.example.task_1_compose.ui.components.general.Avatar
+import com.example.task_1_compose.ui.components.views.Avatar
 import com.example.task_1_compose.utilities.getRandomColorByUsername
 
 @OptIn(ExperimentalSharedTransitionApi::class)

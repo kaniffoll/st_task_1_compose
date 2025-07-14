@@ -1,9 +1,9 @@
 package com.example.domain.repositories
 
-import com.example.domain.apiinterfaces.AlbumApi
-import com.example.domain.connectivityobserver.NetworkConnectivityObserver
-import com.example.domain.data.dataclasses.Album
-import com.example.domain.data.dataclasses.Photo
+import com.example.domain.api.AlbumApi
+import com.example.domain.utilities.NetworkConnectivityObserver
+import com.example.domain.data.Album
+import com.example.domain.data.Photo
 import com.example.domain.db.daos.AlbumDao
 import com.example.domain.resources.AppSettings.ALBUMS_PER_PAGE
 import com.example.domain.resources.AppSettings.PHOTOS_PER_PAGE
@@ -41,21 +41,24 @@ class AlbumsRepository @Inject constructor(
                     api.getPhotos(albumId, currentPage * PHOTOS_PER_PAGE, PHOTOS_PER_PAGE)
                 val currentAlbum = dao.getAlbumById(albumId)
                 dao.update(currentAlbum.copy(photos = response.toMutableList()))
-                response.forEach { it.photo = getRandomPainterRes() }
-                return response
+                return generatePhotoResourcesForAlbum(Album(albumId, "", response.toMutableList()))
             } catch (e: Exception) {
                 return null
             }
         } else {
             val localAlbum = dao.getAlbumById(albumId)
-            if (albums.isEmpty()) {
-                albums.add(localAlbum)
-                val localPhotos = localAlbum.photos
-                localPhotos.forEach { it.photo = getRandomPainterRes() }
-                return localPhotos
-            } else {
+            if (albums.isNotEmpty()) {
                 return emptyList()
             }
+
+            albums.add(localAlbum)
+            return generatePhotoResourcesForAlbum(localAlbum)
         }
+    }
+
+    private fun generatePhotoResourcesForAlbum(album: Album): MutableList<Photo> {
+        val photos = album.photos
+        photos.forEach { it.photo = getRandomPainterRes() }
+        return photos
     }
 }

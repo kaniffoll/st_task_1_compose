@@ -5,8 +5,9 @@ object AppSettings {
     const val POSTS_PER_PAGE = 10
     const val COMMENTS_PER_PAGE = 10
     const val ALBUMS_PER_PAGE = 10
-    const val INITIAL_COMMENTS_COUNT = 2
+    const val COLLAPSED_COMMENTS_DISPLAY_COUNT = 2
     const val REQUEST_NOTIFICATION_CODE = 1
     const val NOTIFICATION_REQUEST_ID = 1
     const val DATA_BASE_VERSION = 1
+    const val SPLASH_SCREEN_ANIMATION_STEP_DURATION = 400L
 }

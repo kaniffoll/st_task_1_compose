@@ -13,8 +13,8 @@ import androidx.compose.ui.test.swipeRight
 import androidx.navigation.compose.rememberNavController
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.domain.di.ApiModule
-import com.example.domain.resources.TestTags.IMAGE_PAGER
-import com.example.domain.resources.mocks.mockAlbum
+import com.example.domain.resources.TestTags.IMAGE_PAGER_TEST_TAG
+import com.example.testmocks.mockAlbum
 import com.example.task_1_compose.R
 import com.example.task_1_compose.TestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -60,7 +60,7 @@ class ImagePagerTest {
     @Test
     fun swipeToRightImage() {
         composeRule.onNodeWithContentDescription("$photo 0").assertExists()
-        composeRule.onNodeWithTag(IMAGE_PAGER).performTouchInput {
+        composeRule.onNodeWithTag(IMAGE_PAGER_TEST_TAG).performTouchInput {
             swipeLeft()
         }
         composeRule.onNodeWithContentDescription("$photo 1").assertExists()
@@ -69,7 +69,7 @@ class ImagePagerTest {
     @Test
     fun cannotSwipeBeforeFirstImage() {
         composeRule.onNodeWithContentDescription("$photo 0").assertExists()
-        composeRule.onNodeWithTag(IMAGE_PAGER).performTouchInput {
+        composeRule.onNodeWithTag(IMAGE_PAGER_TEST_TAG).performTouchInput {
             swipeRight()
         }
         composeRule.onNodeWithContentDescription("$photo 0").assertExists()
@@ -77,11 +77,11 @@ class ImagePagerTest {
 
     @Test
     fun swipeToRightThanSwipeToLeftImage() {
-        composeRule.onNodeWithTag(IMAGE_PAGER).performTouchInput {
+        composeRule.onNodeWithTag(IMAGE_PAGER_TEST_TAG).performTouchInput {
             swipeLeft()
         }
         composeRule.onNodeWithContentDescription("$photo 1").assertExists()
-        composeRule.onNodeWithTag(IMAGE_PAGER).performTouchInput {
+        composeRule.onNodeWithTag(IMAGE_PAGER_TEST_TAG).performTouchInput {
             swipeRight()
         }
         composeRule.onNodeWithContentDescription("$photo 0").assertExists()
@@ -90,12 +90,12 @@ class ImagePagerTest {
     @Test
     fun cannotSwipeAfterLastImage() {
         for (i in mockAlbum.photos.indices) {
-            composeRule.onNodeWithTag(IMAGE_PAGER).performTouchInput {
+            composeRule.onNodeWithTag(IMAGE_PAGER_TEST_TAG).performTouchInput {
                 swipeLeft()
             }
         }
         composeRule.onNodeWithContentDescription("$photo ${mockAlbum.photos.size-1}").assertExists()
-        composeRule.onNodeWithTag(IMAGE_PAGER).performTouchInput {
+        composeRule.onNodeWithTag(IMAGE_PAGER_TEST_TAG).performTouchInput {
             swipeLeft()
         }
         composeRule.onNodeWithContentDescription("$photo ${mockAlbum.photos.size-1}").assertExists()
@@ -103,7 +103,7 @@ class ImagePagerTest {
 
     @Test
     fun pinchImage() {
-        composeRule.onNodeWithTag(IMAGE_PAGER).performTouchInput {
+        composeRule.onNodeWithTag(IMAGE_PAGER_TEST_TAG).performTouchInput {
             pinch(
                 start0 = centerLeft,
                 start1 = centerRight,
@@ -118,7 +118,7 @@ class ImagePagerTest {
     fun pagerDisplaysAllImages() {
         for (i in mockAlbum.photos.indices) {
             composeRule.onNodeWithContentDescription("$photo $i").assertExists()
-            composeRule.onNodeWithTag(IMAGE_PAGER).performTouchInput {
+            composeRule.onNodeWithTag(IMAGE_PAGER_TEST_TAG).performTouchInput {
                 swipeLeft()
             }
         }

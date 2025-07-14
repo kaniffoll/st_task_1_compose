@@ -10,7 +10,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.example.domain.resources.TestTags.POST_CARD
+import com.example.domain.resources.TestTags.POST_CARD_TEST_TAG
 import com.example.task_1_compose.R
 import com.example.task_1_compose.navigation.PostScreenRoute
 import com.example.task_1_compose.ui.components.cards.PostCard
@@ -39,7 +39,7 @@ fun PostsList(
                 .padding(
                     bottom = dimensionResource(R.dimen.padding_small_2)
                 )
-                .testTag(POST_CARD),
+                .testTag(POST_CARD_TEST_TAG),
             onLikeClicked = { postId ->
                 viewModel.toggleLike(postId)
             }

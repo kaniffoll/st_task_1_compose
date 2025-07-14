@@ -3,7 +3,7 @@ package com.example.task_1_compose.ui.screens.todoslist
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.data.dataclasses.Todo
+import com.example.domain.data.Todo
 import com.example.domain.interactors.WorkManagerInteractor
 import com.example.domain.repositories.TodosRepository
 import com.example.domain.statefuldata.ErrorData

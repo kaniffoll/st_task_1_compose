@@ -1,10 +1,10 @@
 package com.example.domain.di
 
-import com.example.domain.apiinterfaces.AlbumApi
-import com.example.domain.apiinterfaces.PostApi
-import com.example.domain.apiinterfaces.TodoApi
-import com.example.domain.apiinterfaces.UserApi
-import com.example.domain.connectivityobserver.NetworkConnectivityObserver
+import com.example.domain.api.AlbumApi
+import com.example.domain.api.PostApi
+import com.example.domain.api.TodoApi
+import com.example.domain.api.UserApi
+import com.example.domain.utilities.NetworkConnectivityObserver
 import com.example.domain.db.daos.AlbumDao
 import com.example.domain.db.daos.PostDao
 import com.example.domain.db.daos.TodoDao
