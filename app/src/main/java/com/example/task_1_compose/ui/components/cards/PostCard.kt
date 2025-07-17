@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
-import com.example.task_1_compose.R
 import com.example.domain.data.Post
-import com.example.task_1_compose.ui.components.views.buttons.LikeButton
+import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.general.UserTile
+import com.example.task_1_compose.ui.components.views.buttons.LikeButton
 
 @Composable
 fun PostCard(

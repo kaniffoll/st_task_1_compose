@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
     implementation(libs.androidx.work)
+    implementation(libs.mvikotlin)
+    implementation(libs.mvikotlin.main)
     ksp(libs.room.compiler)
     ksp(libs.hilt.android.compiler)
     testImplementation(project(":testmocks"))

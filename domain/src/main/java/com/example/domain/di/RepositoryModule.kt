@@ -1,12 +1,10 @@
 package com.example.domain.di
 
 import com.example.domain.api.AlbumApi
-import com.example.domain.api.PostApi
 import com.example.domain.api.TodoApi
 import com.example.domain.api.UserApi
 import com.example.domain.utilities.NetworkConnectivityObserver
 import com.example.domain.db.daos.AlbumDao
-import com.example.domain.db.daos.PostDao
 import com.example.domain.db.daos.TodoDao
 import com.example.domain.db.daos.UserDao
 import com.example.domain.repositories.AlbumsRepository
@@ -22,11 +20,7 @@ import dagger.hilt.android.components.ViewModelComponent
 @InstallIn(ViewModelComponent::class)
 object RepositoryModule {
     @Provides
-    fun providesPostsRepository(
-        api: PostApi,
-        dao: PostDao,
-        connectivityObserver: NetworkConnectivityObserver,
-    ) = PostsRepository(api, dao, connectivityObserver)
+    fun providesPostsRepository() = PostsRepository()
 
     @Provides
     fun providesUsersRepository(
