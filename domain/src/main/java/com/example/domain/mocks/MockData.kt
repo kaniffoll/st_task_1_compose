@@ -1,7 +1,10 @@
 package com.example.domain.mocks
 
 import androidx.compose.runtime.mutableStateListOf
+import com.example.domain.R
+import com.example.domain.data.Album
 import com.example.domain.data.Comment
+import com.example.domain.data.Photo
 import com.example.domain.data.Post
 
 val postsList = mutableStateListOf(
@@ -204,6 +207,45 @@ val postsList = mutableStateListOf(
             Comment("User 11", "Minor tweak needed for our environment"),
             Comment("User 19", "This deserves more upvotes"),
             Comment("User 30", "Glad to contribute to the discussion!")
+        )
+    )
+)
+
+val albumsList: List<Album> = listOf(
+    Album(
+        id = 0,
+        title = "Album 1", photos = mutableListOf(
+            Photo("User 1", R.drawable.img_1),
+            Photo("User 2", R.drawable.img_11),
+            Photo("User 3", R.drawable.img_2),
+            Photo("User 2", R.drawable.img_3),
+            Photo("User 2", R.drawable.img_12),
+            Photo("User 2", R.drawable.img_13),
+            Photo("User 2", R.drawable.img_14),
+            Photo("User 2", R.drawable.img_15),
+            Photo("User 2", R.drawable.img_16),
+            Photo("User 2", R.drawable.img_17),
+            Photo("User 2", R.drawable.img_18),
+            Photo("User 2", R.drawable.img_19),
+            Photo("User 2", R.drawable.img_20),
+            Photo("User 2", R.drawable.img_21)
+        )
+    ),
+    Album(
+        id = 1,
+        title = "Album 2", photos = mutableListOf(
+            Photo("User 1", R.drawable.img_4),
+            Photo("User 1", R.drawable.img_5),
+            Photo("User 4", R.drawable.img_6),
+        )
+    ),
+    Album(
+        id = 2,
+        title = "Album 3", photos = mutableListOf(
+            Photo("User 10", R.drawable.img_7),
+            Photo("User 11", R.drawable.img_8),
+            Photo("User 7", R.drawable.img_9),
+            Photo("User 9", R.drawable.img_10),
         )
     )
 )

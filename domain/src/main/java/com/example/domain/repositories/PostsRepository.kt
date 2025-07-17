@@ -5,10 +5,12 @@ import com.example.domain.data.Post
 import com.example.domain.mocks.postsList
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
 import com.example.domain.resources.AppSettings.POSTS_PER_PAGE
+import com.example.domain.utilities.e
 import kotlinx.coroutines.delay
 
 class PostsRepository {
     private var posts = postsList
+    private var allCommentsLoaded = false
 
     suspend fun loadNextPosts(currentPage: Int): List<Post>? {
         delay(1000L)
@@ -25,11 +27,19 @@ class PostsRepository {
 
     suspend fun loadPostCommentsById(id: Int, currentPage: Int): List<Comment>? {
         delay(1000L)
-        val currentPost = posts.firstOrNull { it.id == id }
-        return try {
-            currentPost?.comments?.subList(currentPage * COMMENTS_PER_PAGE, COMMENTS_PER_PAGE)
+        val currentPost = posts.firstOrNull { it.id == id } ?: return null
+        try {
+            val startIndex = currentPage * COMMENTS_PER_PAGE
+            val endIndex = (startIndex + COMMENTS_PER_PAGE).coerceAtMost(currentPost.comments.size)
+
+            if (startIndex >= currentPost.comments.size) {
+                allCommentsLoaded = true
+                return emptyList()
+            }
+            return currentPost.comments.subList(startIndex, endIndex)
         } catch (e: Exception) {
-            null
+            e.e("AAA")
+            return null
         }
     }
 }

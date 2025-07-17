@@ -20,6 +20,8 @@ import com.example.task_1_compose.R
 import com.example.task_1_compose.navigation.PostScreenRoute
 import com.example.task_1_compose.ui.components.cards.PostCard
 import com.example.task_1_compose.ui.components.containers.LoadMoreList
+import com.example.task_1_compose.ui.screens.postslist.store.PostsListIntent
+import com.example.task_1_compose.ui.screens.postslist.store.PostsListStoreFactory
 
 @Composable
 fun PostsList(

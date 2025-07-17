@@ -1,64 +1,42 @@
 package com.example.domain.repositories
 
-import com.example.domain.api.AlbumApi
-import com.example.domain.utilities.NetworkConnectivityObserver
 import com.example.domain.data.Album
 import com.example.domain.data.Photo
-import com.example.domain.db.daos.AlbumDao
+import com.example.domain.mocks.albumsList
 import com.example.domain.resources.AppSettings.ALBUMS_PER_PAGE
-import com.example.domain.resources.AppSettings.PHOTOS_PER_PAGE
-import com.example.domain.utilities.getRandomPainterRes
-import javax.inject.Inject
+import kotlinx.coroutines.delay
 
-class AlbumsRepository @Inject constructor(
-    private val api: AlbumApi,
-    private val dao: AlbumDao,
-    private val networkConnectivityObserver: NetworkConnectivityObserver,
-) {
-    private val albums = mutableListOf<Album>()
+class AlbumsRepository {
+    private val albums = albumsList
+    private var allPhotosLoaded = false
 
     suspend fun loadNextAlbums(currentPage: Int): List<Album>? {
-        if (networkConnectivityObserver.isNetworkAvailable()) {
-            try {
-                val response = api.getAlbums(currentPage * ALBUMS_PER_PAGE, ALBUMS_PER_PAGE)
-                albums.addAll(response)
-                dao.upsertAll(response)
-            } catch (e: Exception) {
-                return null
+        delay(1000L)
+        return try {
+            if (currentPage * ALBUMS_PER_PAGE > albums.size) {
+                albums
+            } else {
+                albums.subList(0, currentPage * ALBUMS_PER_PAGE)
             }
-        } else {
-            var newAlbums = dao.getAllAlbums()
-            newAlbums = newAlbums.filterNot { newAlbum -> albums.any { newAlbum.id == it.id } }
-            albums.addAll(newAlbums)
+        } catch (e: Exception) {
+            null
         }
-        return albums
     }
 
     suspend fun loadNextAlbumPhotos(albumId: Int, currentPage: Int): List<Photo>? {
-        if (networkConnectivityObserver.isNetworkAvailable()) {
-            try {
-                val response =
-                    api.getPhotos(albumId, currentPage * PHOTOS_PER_PAGE, PHOTOS_PER_PAGE)
-                val currentAlbum = dao.getAlbumById(albumId)
-                dao.update(currentAlbum.copy(photos = response.toMutableList()))
-                return generatePhotoResourcesForAlbum(Album(albumId, "", response.toMutableList()))
-            } catch (e: Exception) {
-                return null
-            }
-        } else {
-            val localAlbum = dao.getAlbumById(albumId)
-            if (albums.isNotEmpty()) {
+        delay(1000L)
+        val currentAlbum = albums.firstOrNull { it.id == albumId } ?: return null
+        try {
+            val startIndex = currentPage * ALBUMS_PER_PAGE
+            val endIndex = (startIndex + ALBUMS_PER_PAGE).coerceAtMost(currentAlbum.photos.size)
+
+            if (startIndex >= currentAlbum.photos.size) {
+                allPhotosLoaded = true
                 return emptyList()
             }
-
-            albums.add(localAlbum)
-            return generatePhotoResourcesForAlbum(localAlbum)
+            return currentAlbum.photos.subList(startIndex, endIndex)
+        } catch (e: Exception) {
+            return null
         }
-    }
-
-    private fun generatePhotoResourcesForAlbum(album: Album): MutableList<Photo> {
-        val photos = album.photos
-        photos.forEach { it.photo = getRandomPainterRes() }
-        return photos
     }
 }

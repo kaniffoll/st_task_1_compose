@@ -1,4 +1,4 @@
-package com.example.task_1_compose.ui.screens.postslist
+package com.example.task_1_compose.ui.screens.postslist.store
 
 import android.content.Context
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -8,27 +8,14 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.example.domain.R
 import com.example.domain.data.Post
 import com.example.domain.repositories.PostsRepository
-import com.example.domain.resources.AppSettings.POSTS_PER_PAGE
+import com.example.domain.resources.AppSettings
+import com.example.domain.resources.StringResources.POSTS_LIST_STORE_NAME
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
-import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
 import com.example.domain.utilities.ResourceProvider
 import kotlinx.coroutines.launch
-
-internal interface PostsListStore : Store<PostsListIntent, PostsListState, Nothing>
-
-sealed interface PostsListIntent {
-    data class ToggleLike(val id: Int) : PostsListIntent
-    data object LoadNextPosts : PostsListIntent
-}
-
-data class PostsListState(
-    val statefulData: StatefulData<List<Post>>,
-    val currentPage: Int = 1,
-    val currentPosts: List<Post> = emptyList()
-)
 
 internal class PostsListStoreFactory(
     private val storeFactory: StoreFactory,
@@ -39,33 +26,25 @@ internal class PostsListStoreFactory(
 
     fun create(): PostsListStore = object : PostsListStore,
         Store<PostsListIntent, PostsListState, Nothing> by storeFactory.create(
-            name = "PostsList",
+            name = POSTS_LIST_STORE_NAME,
             initialState = PostsListState(LoadingData()),
             reducer = ReducerImpl,
-            executorFactory = ::ExecutorImpl
+            executorFactory = { ExecutorImpl() }
         ) {}
 
 
-    sealed interface Msg {
-        class LikeClicked(val posts: List<Post>) : Msg
-        data object LikeFailed : Msg
-        data object AllPostsLoaded : Msg
-        class NextPostsLoaded(val posts: List<Post>) : Msg
-        class PostsLoadError(val statefulData: StatefulData<List<Post>>) : Msg
-    }
-
     private inner class ExecutorImpl :
-        CoroutineExecutor<PostsListIntent, Nothing, PostsListState, Msg, Nothing>() {
+        CoroutineExecutor<PostsListIntent, Nothing, PostsListState, PostsListMsg, Nothing>() {
         override fun executeIntent(intent: PostsListIntent) {
             when (intent) {
                 is PostsListIntent.ToggleLike -> {
                     if (state().statefulData !is SuccessData<List<Post>>) {
-                        dispatch(Msg.LikeFailed)
+                        dispatch(PostsListMsg.LikeFailed)
                     } else {
                         val currentState = state().statefulData as SuccessData
 
                         dispatch(
-                            Msg.LikeClicked(
+                            PostsListMsg.LikeClicked(
                                 posts = currentState.result.map {
                                     if (it.id == intent.id) {
                                         it.copy(isLiked = !it.isLiked)
@@ -81,7 +60,7 @@ internal class PostsListStoreFactory(
                 is PostsListIntent.LoadNextPosts -> {
                     scope.launch {
                         if (!canLoadMorePosts()) {
-                            dispatch(Msg.AllPostsLoaded)
+                            dispatch(PostsListMsg.AllPostsLoaded)
                             return@launch
                         }
 
@@ -91,7 +70,7 @@ internal class PostsListStoreFactory(
                         when (val newPosts = repository.loadNextPosts(state().currentPage)) {
                             null -> {
                                 dispatch(
-                                    Msg.PostsLoadError(
+                                    PostsListMsg.PostsLoadError(
                                         ErrorData(
                                             resourceProvider.getStringResource(
                                                 R.string.loading_posts_error
@@ -103,7 +82,7 @@ internal class PostsListStoreFactory(
 
                             else -> {
                                 dispatch(
-                                    Msg.NextPostsLoaded(
+                                    PostsListMsg.NextPostsLoaded(
                                         newPosts
                                     )
                                 )
@@ -115,20 +94,20 @@ internal class PostsListStoreFactory(
         }
 
         private fun canLoadMorePosts(): Boolean {
-            return state().statefulData.canLoadMore(POSTS_PER_PAGE)
+            return state().statefulData.canLoadMore(AppSettings.POSTS_PER_PAGE)
         }
     }
 
-    private object ReducerImpl : Reducer<PostsListState, Msg> {
-        override fun PostsListState.reduce(msg: Msg): PostsListState = when (msg) {
-            is Msg.LikeClicked -> copy(
+    private object ReducerImpl : Reducer<PostsListState, PostsListMsg> {
+        override fun PostsListState.reduce(msg: PostsListMsg): PostsListState = when (msg) {
+            is PostsListMsg.LikeClicked -> copy(
                 statefulData = SuccessData(msg.posts),
                 currentPosts = msg.posts
             )
-            is Msg.LikeFailed -> this
-            is Msg.PostsLoadError -> copy(statefulData = msg.statefulData)
-            is Msg.AllPostsLoaded -> this
-            is Msg.NextPostsLoaded -> copy(
+            is PostsListMsg.LikeFailed -> this
+            is PostsListMsg.PostsLoadError -> copy(statefulData = msg.statefulData)
+            is PostsListMsg.AllPostsLoaded -> this
+            is PostsListMsg.NextPostsLoaded -> copy(
                 statefulData = SuccessData(msg.posts),
                 currentPage = currentPage + 1,
                 currentPosts = msg.posts
