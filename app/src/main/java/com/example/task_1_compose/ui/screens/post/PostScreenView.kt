@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -120,7 +121,6 @@ fun PostBodyDescriptionContent(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.End
     ) {
         Text(
             text = post.body,
@@ -132,7 +132,12 @@ fun PostBodyDescriptionContent(
             fontSize = dimensionResource(R.dimen.text_standard).value.sp
         )
 
-        LikeButton(status = post.isLiked, onClicked = onLikeClicked)
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            LikeButton(status = post.isLiked, onClicked = onLikeClicked)
+        }
     }
 }
 
