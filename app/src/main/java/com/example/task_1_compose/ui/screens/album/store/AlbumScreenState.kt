@@ -6,6 +6,6 @@ import com.example.domain.statefuldata.StatefulData
 
 data class AlbumScreenState(
     val statefulData: StatefulData<List<Photo>> = LoadingData(),
-    val currentPage: Int = 1,
+    val currentPage: Int = 0,
     val currentPhotos: List<Photo> = emptyList()
 )

@@ -7,16 +7,15 @@ import com.example.domain.resources.AppSettings.ALBUMS_PER_PAGE
 import kotlinx.coroutines.delay
 
 class AlbumsRepository {
-    private val albums = albumsList
     private var allPhotosLoaded = false
 
     suspend fun loadNextAlbums(currentPage: Int): List<Album>? {
         delay(1000L)
         return try {
-            if (currentPage * ALBUMS_PER_PAGE > albums.size) {
-                albums
+            if (currentPage * ALBUMS_PER_PAGE > albumsList.size) {
+                albumsList
             } else {
-                albums.subList(0, currentPage * ALBUMS_PER_PAGE)
+                albumsList.subList(0, currentPage * ALBUMS_PER_PAGE)
             }
         } catch (e: Exception) {
             null
@@ -25,7 +24,7 @@ class AlbumsRepository {
 
     suspend fun loadNextAlbumPhotos(albumId: Int, currentPage: Int): List<Photo>? {
         delay(1000L)
-        val currentAlbum = albums.firstOrNull { it.id == albumId } ?: return null
+        val currentAlbum = albumsList.firstOrNull { it.id == albumId } ?: return null
         try {
             val startIndex = currentPage * ALBUMS_PER_PAGE
             val endIndex = (startIndex + ALBUMS_PER_PAGE).coerceAtMost(currentAlbum.photos.size)

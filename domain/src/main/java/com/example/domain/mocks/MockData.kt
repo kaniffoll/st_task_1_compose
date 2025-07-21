@@ -2,10 +2,12 @@ package com.example.domain.mocks
 
 import androidx.compose.runtime.mutableStateListOf
 import com.example.domain.R
+import com.example.domain.data.Address
 import com.example.domain.data.Album
 import com.example.domain.data.Comment
 import com.example.domain.data.Photo
 import com.example.domain.data.Post
+import com.example.domain.data.User
 
 val postsList = mutableStateListOf(
     Post(id = 0, userId = 0, title = "Title", body = "body"),
@@ -228,7 +230,7 @@ val albumsList: List<Album> = listOf(
             Photo("User 2", R.drawable.img_18),
             Photo("User 2", R.drawable.img_19),
             Photo("User 2", R.drawable.img_20),
-            Photo("User 2", R.drawable.img_21)
+            Photo("User 4", R.drawable.img_21)
         )
     ),
     Album(
@@ -247,5 +249,52 @@ val albumsList: List<Album> = listOf(
             Photo("User 7", R.drawable.img_9),
             Photo("User 9", R.drawable.img_10),
         )
+    )
+)
+
+val address = Address(street = "...", suite = "...", city = "...")
+const val phone = "8 800 555 35 35"
+
+val usersList: List<User> = listOf(
+    User(
+        id = 0,
+        name = "User 1",
+        username = "@username_1",
+        comments = mutableListOf(),
+        address = address,
+        phone = phone
+    ),
+    User(
+        id = 1,
+        name = "User 2",
+        username = "@username_2",
+        comments = mutableListOf(
+            Comment("User 1", "Interesting post, thanks for sharing!"),
+            Comment("User 2", "I have a similar experience with this"),
+            Comment("User 3", "Could you elaborate on the second point?"),
+            Comment("User 4", "This solved my problem, much appreciated"),
+            Comment("User 5", "Thanks everyone for the feedback!")
+        ),
+        address = address,
+        phone = phone
+    ),
+    User(
+        id = 2,
+        name = "User 3",
+        username = "@username_3",
+        comments = mutableListOf(
+            Comment("User 1", "Interesting post, thanks for sharing!"),
+            Comment("User 2", "I have a similar experience with this"),
+        ),
+        address = address,
+        phone = phone
+    ),
+    User(
+        id = 3,
+        name = "User 5",
+        username = "@username_4",
+        comments = mutableListOf(),
+        address = address,
+        phone = phone
     )
 )

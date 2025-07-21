@@ -1,43 +1,35 @@
 package com.example.domain.repositories
 
-import com.example.domain.api.UserApi
 import com.example.domain.data.Comment
 import com.example.domain.data.User
-import com.example.domain.db.daos.UserDao
+import com.example.domain.mocks.usersList
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
-import com.example.domain.utilities.NetworkConnectivityObserver
-import javax.inject.Inject
+import kotlinx.coroutines.delay
 
-class UsersRepository @Inject constructor(
-    private val api: UserApi,
-    private val dao: UserDao,
-    private val networkConnectivityObserver: NetworkConnectivityObserver,
-) {
+class UsersRepository {
+    private var allCommentsLoaded = false
     suspend fun loadUsers(): List<User>? {
-        if (!networkConnectivityObserver.isNetworkAvailable()) {
-            return dao.getAllUsers()
-        }
-
-        try {
-            val response = api.getUsers()
-            dao.upsertAll(response)
-            return response
+        delay(1000L)
+        return try {
+            usersList
         } catch (e: Exception) {
-            return null
+            null
         }
     }
 
     suspend fun loadUserCommentsById(id: Int, currentPage: Int): List<Comment>? {
-        if (!networkConnectivityObserver.isNetworkAvailable()) {
-            return emptyList()
-        }
-
+        delay(1000L)
+        val currentUser = usersList.firstOrNull { it.id == id } ?: return null
         try {
-            val response =
-                api.getComments(id, currentPage * COMMENTS_PER_PAGE, COMMENTS_PER_PAGE)
-            val currentUser = dao.getUserById(id)
-            dao.update(currentUser.copy(comments = response.toMutableList()))
-            return response
+            val startIndex = currentPage * COMMENTS_PER_PAGE
+            val endIndex =
+                (startIndex + COMMENTS_PER_PAGE).coerceAtMost(currentUser.comments.size)
+
+            if (startIndex >= currentUser.comments.size) {
+                allCommentsLoaded = true
+                return emptyList()
+            }
+            return currentUser.comments.subList(startIndex, endIndex)
         } catch (e: Exception) {
             return null
         }

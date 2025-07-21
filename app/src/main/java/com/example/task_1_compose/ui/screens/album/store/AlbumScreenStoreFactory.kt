@@ -10,11 +10,11 @@ import com.example.domain.repositories.AlbumsRepository
 import com.example.domain.resources.AppSettings.PHOTOS_PER_PAGE
 import com.example.domain.resources.StringResources.ALBUM_SCREEN_STORE_NAME
 import com.example.domain.statefuldata.ErrorData
+import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
 import com.example.domain.utilities.ResourceProvider
 import kotlinx.coroutines.launch
 
-//TODO: нужно дописать редьюсер
 internal class AlbumScreenStoreFactory(
     private val storeFactory: StoreFactory,
     context: Context,
@@ -79,8 +79,14 @@ internal class AlbumScreenStoreFactory(
     private object ReducerImpl : Reducer<AlbumScreenState, AlbumScreenMsg> {
         override fun AlbumScreenState.reduce(msg: AlbumScreenMsg): AlbumScreenState = when(msg) {
             AlbumScreenMsg.AllPhotosLoaded -> this
-            is AlbumScreenMsg.NextPhotosLoaded -> TODO()
-            is AlbumScreenMsg.PhotosLoadError -> TODO()
+            is AlbumScreenMsg.NextPhotosLoaded -> copy(
+                statefulData = SuccessData(msg.photos),
+                currentPage = currentPage + 1,
+                currentPhotos = msg.photos
+            )
+            is AlbumScreenMsg.PhotosLoadError -> copy(
+                statefulData = msg.statefulData
+            )
         }
     }
 }

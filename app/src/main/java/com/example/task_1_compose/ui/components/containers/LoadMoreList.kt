@@ -8,23 +8,24 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import com.example.domain.resources.TestTags.LOAD_MORE_LIST_TEST_TAG
-import com.example.task_1_compose.R
-import com.example.task_1_compose.ui.components.general.LoadingIndicator
-import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import com.example.domain.statefuldata.SuccessData
+import com.example.task_1_compose.R
+import com.example.task_1_compose.ui.components.general.LoadingIndicator
+import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @Composable
@@ -39,18 +40,16 @@ fun <T> LoadMoreList(
 
     val lazyListState = rememberLazyListState()
 
-    val isAtBottom by remember {
-        derivedStateOf {
+    LaunchedEffect(Unit) {
+        snapshotFlow {
             lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == lazyListState.layoutInfo.totalItemsCount - 1
-        }
-    }
-
-    LaunchedEffect(isAtBottom) {
-        if (isAtBottom && !isPaginationFinished() && !isPaginationInProgress) {
-            isPaginationInProgress = true
-            scope.launch {
-                onLoadMore()
-                isPaginationInProgress = false
+        }.distinctUntilChanged().collect { isAtBottom ->
+            if (isAtBottom && !isPaginationFinished() && !isPaginationInProgress) {
+                isPaginationInProgress = true
+                scope.launch {
+                    onLoadMore()
+                    isPaginationInProgress = false
+                }
             }
         }
     }
@@ -66,16 +65,18 @@ fun <T> LoadMoreList(
                     LoadingIndicator()
                 }
             }
+
             is ErrorData -> {
                 item {
                     ErrorButton { onLoadMore() }
                 }
             }
+
             is SuccessData -> {
                 items(data.result.size, itemContent = itemContent)
                 if (isPaginationInProgress) {
                     item {
-                       LoadingIndicator()
+                        LoadingIndicator()
                     }
                 }
             }

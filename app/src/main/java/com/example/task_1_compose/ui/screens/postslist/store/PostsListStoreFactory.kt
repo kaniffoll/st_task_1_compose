@@ -64,9 +64,6 @@ internal class PostsListStoreFactory(
                             return@launch
                         }
 
-                        //TODO: по какой-то причине при первой загрузке LoadNextPosts вызывается дважды
-                        //это не ломает загрузку, но так не должно работать
-
                         when (val newPosts = repository.loadNextPosts(state().currentPage)) {
                             null -> {
                                 dispatch(

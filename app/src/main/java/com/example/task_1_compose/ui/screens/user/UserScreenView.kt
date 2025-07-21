@@ -17,20 +17,25 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewModelScope
+import com.arkivanov.mvikotlin.extensions.coroutines.states
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.User
+import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
+import com.example.domain.statefuldata.canLoadMore
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.containers.CommentsSection
 import com.example.task_1_compose.ui.components.views.Avatar
+import com.example.task_1_compose.ui.screens.user.store.UserScreenIntent
+import com.example.task_1_compose.ui.screens.user.store.UserScreenStoreFactory
 import com.example.task_1_compose.utilities.getRandomColorByUsername
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -40,14 +45,16 @@ fun UserScreen(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
 ) {
-    val viewModel =
-        hiltViewModel<UserScreenViewModel, UserScreenViewModel.UserScreenViewModelFactory> { factory ->
-            factory.create(user)
-        }
+    //TODO: очевидно костыльное решение, необходимо тут для работы с моками с реальным апи будет ненужно
+    val mockUser = user.copy(comments = mutableListOf())
 
-    val currentUser by viewModel.user.collectAsState()
+    val storeFactory = UserScreenStoreFactory(DefaultStoreFactory(), mockUser, LocalContext.current)
 
-    val comments by viewModel.comments.collectAsState()
+    val store = remember { storeFactory.create() }
+
+    val state = store.states.collectAsState(initial = store.state)
+
+    val scope = rememberCoroutineScope()
 
     LazyColumn(
         verticalArrangement = Arrangement
@@ -55,19 +62,19 @@ fun UserScreen(
     ) {
         item {
             UserHeader(
-                currentUser,
+                state.value.currentUser,
                 sharedTransitionScope,
                 animatedContentScope
             )
         }
         item {
             CommentsSection(
-                comments = comments,
+                comments = state.value.statefulData,
                 modifier = Modifier.fillParentMaxSize(),
-                canLoadMore = { viewModel.canLoadMoreComments() },
-                scope = viewModel.viewModelScope
+                canLoadMore = { state.value.statefulData.canLoadMore(COMMENTS_PER_PAGE) },
+                scope = scope
             ) {
-                viewModel.loadComments()
+                store.accept(UserScreenIntent.LoadComments)
             }
         }
     }
