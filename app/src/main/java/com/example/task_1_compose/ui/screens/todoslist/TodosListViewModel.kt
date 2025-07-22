@@ -59,9 +59,9 @@ class TodosListViewModel @Inject constructor(
     }
 
     private suspend fun loadTodos() {
-        when (val newPosts = repository.loadTodos()) {
+        when (val newTodos = repository.loadTodos()) {
             null -> _todos.value = ErrorData(Errors.LOADING_TODOS)
-            else -> _todos.value = SuccessData(newPosts)
+            else -> _todos.value = SuccessData(newTodos)
         }
     }
 
