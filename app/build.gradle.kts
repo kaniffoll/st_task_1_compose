@@ -75,6 +75,8 @@ dependencies {
     implementation(libs.mvikotlin)
     implementation(libs.mvikotlin.main)
     implementation(libs.mvikotlin.extensions.coroutines)
+    implementation(libs.decompose)
+    implementation(libs.decompose.extensions.compose)
     ksp(libs.hilt.android.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(project(":testmocks"))

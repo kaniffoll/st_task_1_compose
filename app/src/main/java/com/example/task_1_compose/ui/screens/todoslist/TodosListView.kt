@@ -29,8 +29,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewModelScope
+import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.example.domain.resources.TestTags.TODO_CARD_TEST_TAG
 import com.example.domain.resources.TestTags.TODO_LAZY_COLUMN_TEST_TAG
 import com.example.domain.statefuldata.ErrorData
@@ -42,13 +41,15 @@ import com.example.task_1_compose.ui.components.containers.RemoveFocusContainer
 import com.example.task_1_compose.ui.components.general.LoadingIndicator
 import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
 import com.example.task_1_compose.ui.dialogs.DateAndTimePickerDialog
+import com.example.task_1_compose.ui.screens.todoslist.component.TodosComponent
+import com.example.task_1_compose.ui.screens.todoslist.store.TodosListIntent
 import kotlinx.coroutines.launch
 
 @Composable
-fun TodosList() {
-    val viewModel: TodosListViewModel = hiltViewModel()
+fun TodosList(component: TodosComponent) {
+    val store = component.store
 
-    val todos by viewModel.todos.collectAsState()
+    val state = store.states.collectAsState(initial = store.state)
 
     val scope = rememberCoroutineScope()
 
@@ -70,7 +71,7 @@ fun TodosList() {
                     dimensionResource(R.dimen.padding_medium_2)
                 )
         ) {
-            when (todos) {
+            when (state.value.statefulData) {
                 is LoadingData -> {
                     item {
                         LoadingIndicator()
@@ -79,25 +80,25 @@ fun TodosList() {
 
                 is ErrorData -> {
                     item {
-                        ErrorButton { viewModel.retryAction() }
+                        ErrorButton { store.accept(TodosListIntent.RetryLastAction) }
                     }
                 }
 
                 is SuccessData -> {
-                    val currentTodos = viewModel.currentTodos()
+                    val currentTodos = state.value.currentTodos
                     items(currentTodos.reversed(), key = { it.id }) { todo ->
                         TodosCard(
                             todo,
                             onTextChangeById = { id, text ->
-                                viewModel.updateText(id, text)
+                                store.accept(TodosListIntent.UpdateTodoText(id, text))
                             },
                             onTodoTimePickerClicked = { text ->
                                 lastAddedTitle = text
                                 showDialog = true
                             },
-                            scope = viewModel.viewModelScope,
+                            scope = scope,
                             modifier = Modifier.testTag(TODO_CARD_TEST_TAG)
-                        ) { viewModel.removeTodoByIndex(todo.id) }
+                        ) { store.accept(TodosListIntent.RemoveTodoByIndex(todo.id)) }
                     }
                 }
             }
@@ -108,7 +109,7 @@ fun TodosList() {
 
         TodosFab {
             scope.launch {
-                viewModel.addTodo()
+                store.accept(TodosListIntent.AddTodo)
                 lazyListState.animateScrollToItem(0)
             }
         }
@@ -119,7 +120,13 @@ fun TodosList() {
                 onDismiss = { showDialog = false },
                 onConfirm = { triggerTime ->
                     showDialog = false
-                    viewModel.createWorkRequest(context, triggerTime, lastAddedTitle)
+                    store.accept(
+                        TodosListIntent.CreateWorkRequest(
+                            context,
+                            triggerTime,
+                            lastAddedTitle
+                        )
+                    )
                 }
             )
         }

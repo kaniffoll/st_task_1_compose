@@ -18,7 +18,9 @@ import com.example.domain.utilities.ResourceProvider
 import kotlinx.coroutines.launch
 
 internal class UserScreenStoreFactory(
-    private val storeFactory: StoreFactory, private val user: User, context: Context
+    private val storeFactory: StoreFactory,
+    private val user: User,
+    context: Context
 ) {
     private val resourceProvider = ResourceProvider(context)
     private val repository = UsersRepository()

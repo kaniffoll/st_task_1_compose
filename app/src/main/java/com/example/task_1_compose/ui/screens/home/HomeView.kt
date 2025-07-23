@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.task_1_compose.MainComponent
 import com.example.task_1_compose.R
 import com.example.task_1_compose.navigation.EmptyBottomBars
 import com.example.task_1_compose.navigation.ImagePagerRoute
@@ -17,7 +18,7 @@ import com.example.task_1_compose.ui.components.appbars.TopBar
 import com.example.task_1_compose.ui.screens.home.components.BottomNavigationBar
 
 @Composable
-fun HomePage() {
+fun HomePage(mainComponent: MainComponent) {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination.toString()
 
@@ -31,7 +32,7 @@ fun HomePage() {
             TopBar(navController)
         },
         bottomBar = {
-            if (EmptyBottomBars.none{currentRoute.contains(it)}) {
+            if (EmptyBottomBars.none { currentRoute.contains(it) }) {
                 BottomNavigationBar(navController)
                 HorizontalDivider(
                     color = Color.Black,
@@ -42,6 +43,7 @@ fun HomePage() {
     ) { innerPadding ->
         Navigation(
             navController = navController,
+            mainComponent = mainComponent,
             modifier = Modifier.padding(innerPadding)
         )
     }

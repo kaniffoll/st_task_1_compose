@@ -1,95 +1,55 @@
 package com.example.domain.repositories
 
-import com.example.domain.api.TodoApi
-import com.example.domain.utilities.NetworkConnectivityObserver
 import com.example.domain.data.Todo
-import com.example.domain.db.daos.TodoDao
-import com.example.domain.api.RequestKeys.TITLE_KEY
-import com.example.domain.api.RequestKeys.COMPLETED_KEY
-import javax.inject.Inject
+import com.example.domain.utilities.d
+import kotlinx.coroutines.delay
 
-class TodosRepository @Inject constructor(
-    private val api: TodoApi,
-    private val dao: TodoDao,
-    private val networkConnectivityObserver: NetworkConnectivityObserver,
-) {
+@Suppress("unused")
+class TodosRepository {
     private val todos = mutableListOf<Todo>()
     private var newId = 0
 
     suspend fun loadTodos(): List<Todo>? {
-        val localTodos = dao.getAllTodos()
-        if (networkConnectivityObserver.isNetworkAvailable()) {
-            try {
-                val response = api.getTodos()
-                val localMap = localTodos.associateBy { it.id }
-                val remoteMap = response.associateBy { it.id }
-                val merged = (remoteMap + localMap).values.toList()
-                todos.clear()
-                todos.addAll(merged.filter { !it.completed })
-                dao.upsertAll(todos)
-            } catch (e: Exception) {
-                return null
-            }
-        } else {
-            todos.clear()
-            todos.addAll(localTodos)
+        "CALL".d("AAA")
+        delay(1000L)
+        return try {
+            todos
+        } catch (e: Exception) {
+            null
         }
-        return todos
     }
 
     suspend fun finishTodo(id: Int): Boolean? {
-        if (networkConnectivityObserver.isNetworkAvailable()) {
-            try {
-                val fieldsToUpdate = mapOf(
-                    COMPLETED_KEY to true
-                )
-                api.completeTodo(id = id, fieldsToUpdate = fieldsToUpdate)
-                dao.finishTodo(id)
-                todos.removeIf { it.id == id }
-            } catch (e: Exception) {
-                return null
-            }
-        } else {
-            dao.finishTodo(id)
+        delay(100L)
+        try {
             todos.removeIf { it.id == id }
+        } catch (e: Exception) {
+            return null
         }
         return true
     }
 
-    suspend fun createTodo(todo: Todo): Todo? {
-        newId = (dao.getLastAddedId() ?: 0) + 1
-        if (networkConnectivityObserver.isNetworkAvailable()) {
-            try {
-                val response = api.createTodo(todo)
-                val newTodo = response.copy(id = newId)
-                dao.createTodo(newTodo)
-                return newTodo
-            } catch (e: Exception) {
-                return null
-            }
-        } else {
-            val newTodo = todo.copy(id = newId)
-            dao.createTodo(newTodo)
-            return newTodo
+    suspend fun createTodo(): Todo? {
+        delay(100L)
+        return try {
+            val todo = Todo(newId++, "")
+            todos.add(todo)
+            todo
+        } catch (e: Exception) {
+            null
         }
     }
 
     suspend fun updateTodo(id: Int, localText: String): String? {
-        if (networkConnectivityObserver.isNetworkAvailable()) {
-            try {
-                val fieldsToUpdate = mapOf(
-                    TITLE_KEY to localText
-                )
-                api.updateTodo(id = id, fieldsToUpdate = fieldsToUpdate)
-                dao.updateTodoText(id = id, localText = localText)
-                todos.map { if (it.id == id) it.title = localText }
-            } catch (e: Exception) {
-                return null
+        delay(100L)
+        try {
+            todos.map {
+                if (it.id == id) it.title = localText
             }
-        } else {
-            dao.updateTodoText(id = id, localText = localText)
-            todos.map { if (it.id == id) it.title = localText }
+            return localText
+        } catch (e: Exception) {
+            return null
         }
-        return localText
     }
 }
+

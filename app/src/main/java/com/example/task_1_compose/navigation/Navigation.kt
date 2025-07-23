@@ -14,6 +14,7 @@ import com.example.domain.data.Album
 import com.example.domain.data.Post
 import com.example.domain.data.User
 import com.example.domain.resources.AppUrls.DEEPLINK_DOMAIN
+import com.example.task_1_compose.MainComponent
 import com.example.task_1_compose.ui.screens.album.AlbumScreen
 import com.example.task_1_compose.ui.screens.albumslist.AlbumsList
 import com.example.task_1_compose.ui.screens.imagepager.ImagePager
@@ -29,6 +30,7 @@ import kotlin.reflect.typeOf
 @Composable
 fun Navigation(
     navController: NavHostController,
+    mainComponent: MainComponent,
     modifier: Modifier
 ) {
     SharedTransitionLayout {
@@ -42,7 +44,7 @@ fun Navigation(
             }
 
             composable<PostListRoute> {
-                PostsList(navController = navController)
+                PostsList(navController = navController, mainComponent.postsListComponent)
             }
 
             composable<PostScreenRoute>(
@@ -92,12 +94,13 @@ fun Navigation(
             }
 
             composable<TodosListRoute> {
-                TodosList()
+                TodosList(mainComponent.todosComponent)
             }
 
             composable<UsersListRoute> {
                 UsersList(
                     navController,
+                    mainComponent.usersListComponent,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable
                 )
