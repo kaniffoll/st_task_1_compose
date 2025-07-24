@@ -1,5 +1,42 @@
 package com.example.task_1_compose.ui.screens.userslist.store
 
+import android.content.Context
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.Store
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.example.domain.data.User
+import com.example.domain.statefuldata.LoadingData
+import com.example.domain.statefuldata.StatefulData
 
 interface UsersListStore : Store<UsersListIntent, UsersListState, Nothing>
+
+sealed interface UsersListIntent {
+    data object LoadUsers : UsersListIntent
+}
+
+sealed interface UsersListMsg {
+    data class UsersLoaded(val users: List<User>) : UsersListMsg
+    data class UsersLoadError(val statefulData: StatefulData<List<User>>) : UsersListMsg
+}
+
+data class UsersListState(
+    val statefulData: StatefulData<List<User>> = LoadingData(),
+    val currentUsers: List<User> = emptyList()
+)
+
+interface UsersListComponent {
+    val store: UsersListStore
+}
+
+class DefaultUsersListComponent(
+    componentContext: ComponentContext,
+    appContext: Context
+) : UsersListComponent, ComponentContext by componentContext {
+    override val store = instanceKeeper.getStore {
+        UsersListStoreFactory(
+            DefaultStoreFactory(),
+            appContext
+        ).create()
+    }
+}

@@ -32,16 +32,11 @@ import androidx.compose.ui.unit.sp
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.example.domain.resources.TestTags.TODO_CARD_TEST_TAG
 import com.example.domain.resources.TestTags.TODO_LAZY_COLUMN_TEST_TAG
-import com.example.domain.statefuldata.ErrorData
-import com.example.domain.statefuldata.LoadingData
-import com.example.domain.statefuldata.SuccessData
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.cards.TodosCard
 import com.example.task_1_compose.ui.components.containers.RemoveFocusContainer
-import com.example.task_1_compose.ui.components.general.LoadingIndicator
-import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
 import com.example.task_1_compose.ui.dialogs.DateAndTimePickerDialog
-import com.example.task_1_compose.ui.screens.todoslist.component.TodosComponent
+import com.example.task_1_compose.ui.screens.todoslist.store.TodosComponent
 import com.example.task_1_compose.ui.screens.todoslist.store.TodosListIntent
 import kotlinx.coroutines.launch
 
@@ -59,6 +54,11 @@ fun TodosList(component: TodosComponent) {
 
     var lastAddedTitle by remember { mutableStateOf("") }
 
+    //TODO:
+//    LaunchedEffect(Unit) {
+//        store.accept(TodosListIntent.LoadTodos)
+//    }
+
     RemoveFocusContainer {
         LazyColumn(
             Modifier
@@ -71,37 +71,53 @@ fun TodosList(component: TodosComponent) {
                     dimensionResource(R.dimen.padding_medium_2)
                 )
         ) {
-            when (state.value.statefulData) {
-                is LoadingData -> {
-                    item {
-                        LoadingIndicator()
-                    }
-                }
 
-                is ErrorData -> {
-                    item {
-                        ErrorButton { store.accept(TodosListIntent.RetryLastAction) }
-                    }
-                }
-
-                is SuccessData -> {
-                    val currentTodos = state.value.currentTodos
-                    items(currentTodos.reversed(), key = { it.id }) { todo ->
-                        TodosCard(
-                            todo,
-                            onTextChangeById = { id, text ->
-                                store.accept(TodosListIntent.UpdateTodoText(id, text))
-                            },
-                            onTodoTimePickerClicked = { text ->
-                                lastAddedTitle = text
-                                showDialog = true
-                            },
-                            scope = scope,
-                            modifier = Modifier.testTag(TODO_CARD_TEST_TAG)
-                        ) { store.accept(TodosListIntent.RemoveTodoByIndex(todo.id)) }
-                    }
-                }
+            val currentTodos = state.value.currentTodos
+            items(currentTodos.reversed(), key = { it.id }) { todo ->
+                TodosCard(
+                    todo,
+                    onTextChangeById = { id, text ->
+                        store.accept(TodosListIntent.UpdateTodoText(id, text))
+                    },
+                    onTodoTimePickerClicked = { text ->
+                        lastAddedTitle = text
+                        showDialog = true
+                    },
+                    scope = scope,
+                    modifier = Modifier.testTag(TODO_CARD_TEST_TAG)
+                ) { store.accept(TodosListIntent.RemoveTodoByIndex(todo.id)) }
             }
+//            when (state.value.statefulData) {
+//                is LoadingData -> {
+//                    item {
+//                        LoadingIndicator()
+//                    }
+//                }
+//
+//                is ErrorData -> {
+//                    item {
+//                        ErrorButton { store.accept(TodosListIntent.RetryLastAction) }
+//                    }
+//                }
+//
+//                is SuccessData -> {
+//                    val currentTodos = state.value.currentTodos
+//                    items(currentTodos.reversed(), key = { it.id }) { todo ->
+//                        TodosCard(
+//                            todo,
+//                            onTextChangeById = { id, text ->
+//                                store.accept(TodosListIntent.UpdateTodoText(id, text))
+//                            },
+//                            onTodoTimePickerClicked = { text ->
+//                                lastAddedTitle = text
+//                                showDialog = true
+//                            },
+//                            scope = scope,
+//                            modifier = Modifier.testTag(TODO_CARD_TEST_TAG)
+//                        ) { store.accept(TodosListIntent.RemoveTodoByIndex(todo.id)) }
+//                    }
+//                }
+//            }
             item {
                 Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_large)))
             }

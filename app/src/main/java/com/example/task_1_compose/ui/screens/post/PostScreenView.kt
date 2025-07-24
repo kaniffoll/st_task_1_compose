@@ -12,43 +12,52 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.arkivanov.mvikotlin.extensions.coroutines.states
-import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.Comment
 import com.example.domain.data.Post
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
 import com.example.domain.statefuldata.canLoadMore
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.containers.CommentsSection
+import com.example.task_1_compose.ui.components.general.LoadingIndicator
 import com.example.task_1_compose.ui.components.general.UserTile
 import com.example.task_1_compose.ui.components.views.buttons.LikeButton
+import com.example.task_1_compose.ui.screens.post.store.PostScreenComponent
 import com.example.task_1_compose.ui.screens.post.store.PostScreenIntent
-import com.example.task_1_compose.ui.screens.post.store.PostScreenStoreFactory
+import com.example.task_1_compose.ui.screens.post.store.PostScreenStore
+import kotlinx.coroutines.delay
 
 @Composable
 fun PostScreen(
     post: Post,
+    component: PostScreenComponent
 ) {
-    //TODO: очевидно костыльное решение, необходимо тут для работы с моками с реальным апи будет ненужно
-    val mockPost = post.copy(comments = mutableListOf())
-
-    val storeFactory = PostScreenStoreFactory(DefaultStoreFactory(), LocalContext.current, mockPost)
-
-    val store = remember { storeFactory.create() }
+    val store = component.store
 
     val state = store.states.collectAsState(initial = store.state)
 
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        store.accept(PostScreenIntent.InitializePostScreen(post.copy(comments = mutableListOf())))
+    }
+
+    LaunchedEffect(state.value.post?.id) {
+        //TODO: возможно можно сделать как-то лучше
+        delay(100L)
+        state.value.post?.let {
+            store.accept(PostScreenIntent.LoadNextComments)
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -68,20 +77,28 @@ fun PostScreen(
         verticalArrangement = Arrangement
             .spacedBy(dimensionResource(R.dimen.padding_small))
     ) {
-        item {
-            PostBody(state.value.post) {
-                store.accept(PostScreenIntent.ToggleLike)
-            }
-        }
+        val currentPost = state.value.post
 
-        item {
-            CommentsSection(
-                comments = state.value.statefulData,
-                modifier = Modifier.fillParentMaxSize(),
-                canLoadMore = { state.value.statefulData.canLoadMore(COMMENTS_PER_PAGE) },
-                scope = scope
-            ) {
-                store.accept(PostScreenIntent.LoadNextComments)
+        if (currentPost == null) {
+            item {
+                LoadingIndicator()
+            }
+        } else {
+            item {
+                PostBody(currentPost) {
+                    store.accept(PostScreenIntent.ToggleLike)
+                }
+            }
+
+            item {
+                CommentsSection(
+                    comments = state.value.statefulData,
+                    modifier = Modifier.fillParentMaxSize(),
+                    canLoadMore = { state.value.statefulData.canLoadMore(COMMENTS_PER_PAGE) },
+                    scope = scope
+                ) {
+                    store.accept(PostScreenIntent.LoadNextComments)
+                }
             }
         }
     }
@@ -149,6 +166,11 @@ fun PostBodyDescriptionContent(
     }
 }
 
+object FakePostScreenComponent : PostScreenComponent {
+    override val store: PostScreenStore
+        get() = TODO()
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PostScreenPreview() {
@@ -161,6 +183,7 @@ fun PostScreenPreview() {
             comments = mutableListOf(
                 Comment("", "")
             )
-        )
+        ),
+        FakePostScreenComponent
     )
 }

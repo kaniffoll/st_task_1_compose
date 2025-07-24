@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +23,7 @@ import com.example.task_1_compose.navigation.UserScreenRoute
 import com.example.task_1_compose.ui.components.cards.UserCard
 import com.example.task_1_compose.ui.components.general.LoadingIndicator
 import com.example.task_1_compose.ui.components.views.buttons.ErrorButton
-import com.example.task_1_compose.ui.screens.userslist.component.UsersListComponent
+import com.example.task_1_compose.ui.screens.userslist.store.UsersListComponent
 import com.example.task_1_compose.ui.screens.userslist.store.UsersListIntent
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -36,6 +37,10 @@ fun UsersList(
     val store = component.store
 
     val state = store.states.collectAsState(initial = store.state)
+
+    LaunchedEffect(Unit) {
+        store.accept(UsersListIntent.LoadUsers)
+    }
 
     LazyColumn(
         modifier = Modifier

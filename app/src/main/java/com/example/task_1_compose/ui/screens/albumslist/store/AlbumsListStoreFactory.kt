@@ -8,7 +8,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.example.domain.R
 import com.example.domain.repositories.AlbumsRepository
 import com.example.domain.resources.AppSettings.ALBUMS_PER_PAGE
-import com.example.domain.resources.StringResources.ALBUMS_LIST_STORE_NAME
+import com.example.domain.resources.MviStoreNames.ALBUMS_LIST_STORE_NAME
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
@@ -17,9 +17,8 @@ import kotlinx.coroutines.launch
 
 internal class AlbumsListStoreFactory(
     private val storeFactory: StoreFactory,
-    context: Context
+    private val context: Context
 ) {
-    private val resourceProvider = ResourceProvider(context = context)
     private val repository = AlbumsRepository()
 
     fun create(): AlbumsListStore = object : AlbumsListStore,
@@ -44,7 +43,7 @@ internal class AlbumsListStoreFactory(
                         when (val newAlbums = repository.loadNextAlbums(state().currentPage)) {
                             null -> dispatch(
                                 AlbumsListMsg.AlbumsLoadError(
-                                    ErrorData(resourceProvider.getStringResource(R.string.loading_albums_error))
+                                    ErrorData(ResourceProvider.getStringResource(R.string.loading_albums_error, context))
                                 )
                             )
                             else -> {

@@ -54,11 +54,15 @@ fun Navigation(
             ) {
                 val args = it.toRoute<PostScreenRoute>()
                 PostScreen(
-                    post = args.post
+                    post = args.post,
+                    component = mainComponent.postScreenComponent
                 )
             }
             composable<AlbumsListRoute> {
-                AlbumsList(navController)
+                AlbumsList(
+                    component = mainComponent.albumsListComponent,
+                    navController = navController
+                )
             }
 
             composable<AlbumScreenRoute>(
@@ -71,6 +75,7 @@ fun Navigation(
                 val args = it.toRoute<AlbumScreenRoute>()
                 AlbumScreen(
                     navController,
+                    component = mainComponent.albumScreenComponent,
                     albumId = args.id,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable
@@ -114,6 +119,7 @@ fun Navigation(
                 val args = it.toRoute<UserScreenRoute>()
                 UserScreen(
                     user = args.user,
+                    component = mainComponent.userScreenComponent,
                     sharedTransitionScope = this@SharedTransitionLayout,
                     animatedContentScope = this@composable
                 )

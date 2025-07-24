@@ -8,25 +8,29 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.example.domain.R
 import com.example.domain.repositories.AlbumsRepository
 import com.example.domain.resources.AppSettings.PHOTOS_PER_PAGE
-import com.example.domain.resources.StringResources.ALBUM_SCREEN_STORE_NAME
+import com.example.domain.resources.MviStoreNames.ALBUM_SCREEN_STORE_NAME
 import com.example.domain.statefuldata.ErrorData
+import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.SuccessData
 import com.example.domain.statefuldata.canLoadMore
 import com.example.domain.utilities.ResourceProvider
+import com.example.task_1_compose.ui.screens.album.store.AlbumScreenMsg.AlbumInitialized
+import com.example.task_1_compose.ui.screens.album.store.AlbumScreenMsg.AllPhotosLoaded
+import com.example.task_1_compose.ui.screens.album.store.AlbumScreenMsg.NextPhotosLoaded
+import com.example.task_1_compose.ui.screens.album.store.AlbumScreenMsg.PhotosLoadError
 import kotlinx.coroutines.launch
 
 internal class AlbumScreenStoreFactory(
     private val storeFactory: StoreFactory,
-    context: Context,
-    private val albumId: Int
+    private val context: Context,
+    private val albumId: Int?
 ) {
-    private val resourceProvider = ResourceProvider(context)
     private val repository = AlbumsRepository()
 
     fun create(): AlbumScreenStore = object : AlbumScreenStore,
         Store<AlbumScreenIntent, AlbumScreenState, Nothing> by storeFactory.create(
             name = ALBUM_SCREEN_STORE_NAME,
-            initialState = AlbumScreenState(),
+            initialState = AlbumScreenState(currentAlbumId = albumId),
             reducer = ReducerImpl,
             executorFactory = { ExecutorImpl() }
         ) {}
@@ -38,20 +42,35 @@ internal class AlbumScreenStoreFactory(
                 is AlbumScreenIntent.LoadNextPhotos -> {
                     scope.launch {
                         if (!canLoadMorePhotos()) {
-                            dispatch(AlbumScreenMsg.AllPhotosLoaded)
+                            dispatch(AllPhotosLoaded)
+                            return@launch
+                        }
+
+                        val currentAlbumId = state().currentAlbumId ?: run {
+                            dispatch(
+                                PhotosLoadError(
+                                    ErrorData(
+                                        ResourceProvider.getStringResource(
+                                            R.string.loading_photos_error,
+                                            context = context
+                                        )
+                                    )
+                                )
+                            )
                             return@launch
                         }
 
                         when (
                             val newPhotos = repository
-                                .loadNextAlbumPhotos(albumId, state().currentPage)
+                                .loadNextAlbumPhotos(currentAlbumId, state().currentPage)
                         ) {
                             null -> {
                                 dispatch(
-                                    AlbumScreenMsg.PhotosLoadError(
+                                    PhotosLoadError(
                                         ErrorData(
-                                            resourceProvider.getStringResource(
-                                                R.string.loading_photos_error
+                                            ResourceProvider.getStringResource(
+                                                R.string.loading_photos_error,
+                                                context = context
                                             )
                                         )
                                     )
@@ -60,13 +79,17 @@ internal class AlbumScreenStoreFactory(
 
                             else -> {
                                 dispatch(
-                                    AlbumScreenMsg.NextPhotosLoaded(
+                                    NextPhotosLoaded(
                                         state().currentPhotos + newPhotos
                                     )
                                 )
                             }
                         }
                     }
+                }
+
+                is AlbumScreenIntent.InitializeAlbumScreen -> {
+                    dispatch(AlbumInitialized(intent.albumId))
                 }
             }
         }
@@ -77,15 +100,23 @@ internal class AlbumScreenStoreFactory(
     }
 
     private object ReducerImpl : Reducer<AlbumScreenState, AlbumScreenMsg> {
-        override fun AlbumScreenState.reduce(msg: AlbumScreenMsg): AlbumScreenState = when(msg) {
-            AlbumScreenMsg.AllPhotosLoaded -> this
-            is AlbumScreenMsg.NextPhotosLoaded -> copy(
+        override fun AlbumScreenState.reduce(msg: AlbumScreenMsg): AlbumScreenState = when (msg) {
+            AllPhotosLoaded -> this
+            is NextPhotosLoaded -> copy(
                 statefulData = SuccessData(msg.photos),
                 currentPage = currentPage + 1,
                 currentPhotos = msg.photos
             )
-            is AlbumScreenMsg.PhotosLoadError -> copy(
+
+            is PhotosLoadError -> copy(
                 statefulData = msg.statefulData
+            )
+
+            is AlbumInitialized -> copy(
+                statefulData = LoadingData(),
+                currentPage = 0,
+                currentPhotos = emptyList(),
+                currentAlbumId = msg.albumId
             )
         }
     }

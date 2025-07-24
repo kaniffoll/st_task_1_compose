@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,60 +24,76 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.sp
 import com.arkivanov.mvikotlin.extensions.coroutines.states
-import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.User
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
 import com.example.domain.statefuldata.canLoadMore
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.containers.CommentsSection
+import com.example.task_1_compose.ui.components.general.LoadingIndicator
 import com.example.task_1_compose.ui.components.views.Avatar
+import com.example.task_1_compose.ui.screens.user.store.UserScreenComponent
 import com.example.task_1_compose.ui.screens.user.store.UserScreenIntent
-import com.example.task_1_compose.ui.screens.user.store.UserScreenStoreFactory
 import com.example.task_1_compose.utilities.getRandomColorByUsername
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun UserScreen(
     user: User,
+    component: UserScreenComponent,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
 ) {
-    //TODO: очевидно костыльное решение, необходимо тут для работы с моками с реальным апи будет ненужно
-    val mockUser = user.copy(comments = mutableListOf())
-
-    val storeFactory = UserScreenStoreFactory(DefaultStoreFactory(), mockUser, LocalContext.current)
-
-    val store = remember { storeFactory.create() }
+    val store = component.store
 
     val state = store.states.collectAsState(initial = store.state)
 
     val scope = rememberCoroutineScope()
 
+    LaunchedEffect(Unit) {
+        store.accept(UserScreenIntent.InitializeUserScreen(user.copy(comments = mutableListOf())))
+    }
+
+    LaunchedEffect(state.value.currentUser?.id) {
+        //TODO: возможно можно сделать как-то лучше
+        delay(100L)
+        state.value.currentUser?.let {
+            store.accept(UserScreenIntent.LoadComments)
+        }
+    }
+
     LazyColumn(
         verticalArrangement = Arrangement
             .spacedBy(dimensionResource(R.dimen.padding_small))
     ) {
-        item {
-            UserHeader(
-                state.value.currentUser,
-                sharedTransitionScope,
-                animatedContentScope
-            )
-        }
-        item {
-            CommentsSection(
-                comments = state.value.statefulData,
-                modifier = Modifier.fillParentMaxSize(),
-                canLoadMore = { state.value.statefulData.canLoadMore(COMMENTS_PER_PAGE) },
-                scope = scope
-            ) {
-                store.accept(UserScreenIntent.LoadComments)
+        val currentUser = state.value.currentUser
+        if (currentUser == null) {
+            item {
+                LoadingIndicator()
+            }
+        } else {
+            item {
+                UserHeader(
+                    currentUser,
+                    sharedTransitionScope,
+                    animatedContentScope
+                )
+            }
+            item {
+                CommentsSection(
+                    comments = state.value.statefulData,
+                    modifier = Modifier.fillParentMaxSize(),
+                    canLoadMore = { state.value.statefulData.canLoadMore(COMMENTS_PER_PAGE) },
+                    scope = scope
+                ) {
+                    store.accept(UserScreenIntent.LoadComments)
+                }
             }
         }
+
     }
 }
 

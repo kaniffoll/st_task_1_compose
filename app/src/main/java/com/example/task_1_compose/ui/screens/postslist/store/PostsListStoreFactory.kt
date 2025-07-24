@@ -9,7 +9,7 @@ import com.example.domain.R
 import com.example.domain.data.Post
 import com.example.domain.repositories.PostsRepository
 import com.example.domain.resources.AppSettings
-import com.example.domain.resources.StringResources.POSTS_LIST_STORE_NAME
+import com.example.domain.resources.MviStoreNames.POSTS_LIST_STORE_NAME
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.SuccessData
@@ -19,9 +19,8 @@ import kotlinx.coroutines.launch
 
 internal class PostsListStoreFactory(
     private val storeFactory: StoreFactory,
-    context: Context
+    private val context: Context
 ) {
-    private val resourceProvider = ResourceProvider(context)
     private val repository = PostsRepository()
 
     fun create(): PostsListStore = object : PostsListStore,
@@ -69,8 +68,9 @@ internal class PostsListStoreFactory(
                                 dispatch(
                                     PostsListMsg.PostsLoadError(
                                         ErrorData(
-                                            resourceProvider.getStringResource(
-                                                R.string.loading_posts_error
+                                            ResourceProvider.getStringResource(
+                                                R.string.loading_posts_error,
+                                                context
                                             )
                                         )
                                     )
@@ -101,6 +101,7 @@ internal class PostsListStoreFactory(
                 statefulData = SuccessData(msg.posts),
                 currentPosts = msg.posts
             )
+
             is PostsListMsg.LikeFailed -> this
             is PostsListMsg.PostsLoadError -> copy(statefulData = msg.statefulData)
             is PostsListMsg.AllPostsLoaded -> this

@@ -2,13 +2,12 @@ package com.example.task_1_compose.ui.screens.todoslist.store
 
 import android.content.Context
 import com.arkivanov.mvikotlin.core.store.Reducer
-import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.example.domain.interactors.WorkManagerInteractor
 import com.example.domain.repositories.TodosRepository
-import com.example.domain.resources.StringResources.TODOS_LIST_STORE_NAME
+import com.example.domain.resources.MviStoreNames.TODOS_LIST_STORE_NAME
 import com.example.domain.resources.StringResources.UNKNOWN_ERROR
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.SuccessData
@@ -27,13 +26,12 @@ internal class TodosListStoreFactory(
         Store<TodosListIntent, TodosListState, Nothing> by storeFactory.create(
             name = TODOS_LIST_STORE_NAME,
             initialState = TodosListState(),
-            bootstrapper = SimpleBootstrapper(TodosListAction.LoadInitTodos),
             reducer = ReducerImpl,
             executorFactory = { ExecutorImpl() }
         ) {}
 
     private inner class ExecutorImpl :
-        CoroutineExecutor<TodosListIntent, TodosListAction, TodosListState, TodosListMsg, Nothing>() {
+        CoroutineExecutor<TodosListIntent, Nothing, TodosListState, TodosListMsg, Nothing>() {
         override fun executeIntent(intent: TodosListIntent) {
             when (intent) {
                 is TodosListIntent.AddTodo -> addTodo()
@@ -47,12 +45,6 @@ internal class TodosListStoreFactory(
                 is TodosListIntent.RemoveTodoByIndex -> removeTodoByIndex(intent.id)
                 is TodosListIntent.RetryLastAction -> retryLastAction()
                 is TodosListIntent.UpdateTodoText -> updateTodoText(intent.id, intent.text)
-            }
-        }
-
-        override fun executeAction(action: TodosListAction) {
-            when (action) {
-                is TodosListAction.LoadInitTodos -> loadTodos()
             }
         }
 
@@ -125,9 +117,6 @@ internal class TodosListStoreFactory(
                 when (val newTodo = repository.createTodo()) {
                     null -> dispatch(TodosListMsg.ErrorMsg(ErrorData(TodosListErrors.ADD_TODO)))
                     else -> {
-                        if (state().currentTodos.any { it.id == newTodo.id}){
-                            return@launch
-                        }
                         dispatch(TodosListMsg.TodoAdded(state().currentTodos + newTodo))
                     }
                 }
@@ -138,7 +127,9 @@ internal class TodosListStoreFactory(
             scope.launch {
                 when (val newTodos = repository.loadTodos()) {
                     null -> dispatch(TodosListMsg.ErrorMsg(ErrorData(TodosListErrors.LOADING_TODOS)))
-                    else -> dispatch(TodosListMsg.TodosLoaded(newTodos))
+                    else -> {
+                        dispatch(TodosListMsg.TodosLoaded(newTodos))
+                    }
                 }
             }
         }
@@ -149,6 +140,7 @@ internal class TodosListStoreFactory(
             is TodosListMsg.ErrorMsg -> copy(statefulData = msg.statefulData)
 
             is TodosListMsg.TodoAdded -> {
+
                 copy(
                     statefulData = SuccessData(msg.todos),
                     currentTodos = msg.todos
