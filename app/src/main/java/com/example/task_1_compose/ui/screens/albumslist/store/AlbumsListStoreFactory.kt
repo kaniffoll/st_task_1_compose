@@ -1,6 +1,5 @@
 package com.example.task_1_compose.ui.screens.albumslist.store
 
-import android.content.Context
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -16,8 +15,7 @@ import com.example.domain.utilities.ResourceProvider
 import kotlinx.coroutines.launch
 
 internal class AlbumsListStoreFactory(
-    private val storeFactory: StoreFactory,
-    private val context: Context
+    private val storeFactory: StoreFactory
 ) {
     private val repository = AlbumsRepository()
 
@@ -43,7 +41,7 @@ internal class AlbumsListStoreFactory(
                         when (val newAlbums = repository.loadNextAlbums(state().currentPage)) {
                             null -> dispatch(
                                 AlbumsListMsg.AlbumsLoadError(
-                                    ErrorData(ResourceProvider.getStringResource(R.string.loading_albums_error, context))
+                                    ErrorData(ResourceProvider.getStringResource(R.string.loading_albums_error))
                                 )
                             )
                             else -> {
@@ -62,7 +60,7 @@ internal class AlbumsListStoreFactory(
 
     private object ReducerImpl : Reducer<AlbumsListState, AlbumsListMsg> {
         override fun AlbumsListState.reduce(msg: AlbumsListMsg): AlbumsListState = when (msg) {
-            is AlbumsListMsg.AlbumsLoadError -> copy(albums = msg.statefulData)
+            is AlbumsListMsg.AlbumsLoadError -> copy(albums = msg.errorDetails)
             is AlbumsListMsg.AllAlbumsLoaded -> this
             is AlbumsListMsg.NextAlbumsLoaded -> copy(
                 albums = SuccessData(

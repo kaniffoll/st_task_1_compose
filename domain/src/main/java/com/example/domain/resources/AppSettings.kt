@@ -8,7 +8,6 @@ object AppSettings {
     const val COLLAPSED_COMMENTS_DISPLAY_COUNT = 2
     const val REQUEST_NOTIFICATION_CODE = 1
     const val NOTIFICATION_REQUEST_ID = 1
-    const val DATA_BASE_VERSION = 1
     const val SPLASH_SCREEN_ANIMATION_STEP_DURATION = 400L
     const val LOADING_ITEM_FOR_SCREEN_DELAY = 100L
 }

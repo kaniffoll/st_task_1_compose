@@ -1,6 +1,5 @@
 package com.example.task_1_compose
 
-import android.content.Context
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.example.domain.resources.ComponentKeyNames.ALBUMS_SCREEN_COMPONENT_KEY_NAME
@@ -20,26 +19,25 @@ import com.example.task_1_compose.ui.screens.userslist.store.DefaultUsersListCom
 
 class MainComponent(
     componentContext: ComponentContext,
-    appContext: Context,
 ) : ComponentContext by componentContext {
 
     val todosComponent = DefaultTodosComponent(childContext(key = TODOS_COMPONENT_KEY_NAME))
 
     val usersListComponent =
-        DefaultUsersListComponent(childContext(key = USERS_LIST_COMPONENT_KEY_NAME), appContext)
+        DefaultUsersListComponent(childContext(key = USERS_LIST_COMPONENT_KEY_NAME))
 
     val postsListComponent =
-        DefaultPostsListComponent(childContext(key = POSTS_LIST_COMPONENT_KEY_NAME), appContext)
+        DefaultPostsListComponent(childContext(key = POSTS_LIST_COMPONENT_KEY_NAME))
 
     val userScreenComponent =
-        DefaultUserScreenComponent(childContext(key = USER_SCREEN_COMPONENT_KEY_NAME), appContext)
+        DefaultUserScreenComponent(childContext(key = USER_SCREEN_COMPONENT_KEY_NAME))
 
     val albumsListComponent =
-        DefaultAlbumsListComponent(childContext(key = ALBUMS_SCREEN_COMPONENT_KEY_NAME), appContext)
+        DefaultAlbumsListComponent(childContext(key = ALBUMS_SCREEN_COMPONENT_KEY_NAME))
 
     val postScreenComponent =
-        DefaultPostScreenComponent(childContext(key = POST_SCREEN_COMPONENT_KEY_NAME), appContext)
+        DefaultPostScreenComponent(childContext(key = POST_SCREEN_COMPONENT_KEY_NAME))
 
     val albumScreenComponent =
-        DefaultAlbumScreenComponent(childContext(key = ALBUM_SCREEN_COMPONENT_KEY_NAME), appContext)
+        DefaultAlbumScreenComponent(childContext(key = ALBUM_SCREEN_COMPONENT_KEY_NAME))
 }

@@ -2,7 +2,7 @@ package com.example.domain.statefuldata
 
 fun <T: List<*>> StatefulData<T>.canLoadMore(itemsPerPage: Int): Boolean {
     if (this is SuccessData) {
-        return this.result.size % itemsPerPage == 0 && result.size != 0
+        return this.result.size % itemsPerPage == 0 && result.isNotEmpty()
     }
     return true
 }

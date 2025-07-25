@@ -1,11 +1,11 @@
 package com.example.task_1_compose.ui.screens.userslist.store
 
-import android.content.Context
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.User
+import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 
@@ -17,7 +17,7 @@ sealed interface UsersListIntent {
 
 sealed interface UsersListMsg {
     data class UsersLoaded(val users: List<User>) : UsersListMsg
-    data class UsersLoadError(val statefulData: StatefulData<List<User>>) : UsersListMsg
+    data class UsersLoadError(val errorDetails: ErrorData<List<User>>) : UsersListMsg
 }
 
 data class UsersListState(
@@ -30,12 +30,10 @@ interface UsersListComponent {
 
 class DefaultUsersListComponent(
     componentContext: ComponentContext,
-    appContext: Context
 ) : UsersListComponent, ComponentContext by componentContext {
     override val store = instanceKeeper.getStore {
         UsersListStoreFactory(
-            DefaultStoreFactory(),
-            appContext
+            DefaultStoreFactory()
         ).create()
     }
 }

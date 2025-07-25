@@ -6,11 +6,11 @@ import android.app.NotificationManager
 import com.example.domain.resources.StringResources.NOTIFICATION_CHANEL_DESCRIPTION
 import com.example.domain.resources.StringResources.NOTIFICATION_CHANEL_NAME
 import com.example.domain.resources.StringResources.REMINDER_CHANEL_ID
-import dagger.hilt.android.HiltAndroidApp
+import com.example.domain.utilities.ResourceProvider
 
-@HiltAndroidApp
 class Task1Application : Application() {
     override fun onCreate() {
+        ResourceProvider.context = applicationContext
         super.onCreate()
         createNotificationChannel()
     }

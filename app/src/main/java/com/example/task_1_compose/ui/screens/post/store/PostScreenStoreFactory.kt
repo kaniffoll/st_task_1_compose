@@ -1,6 +1,5 @@
 package com.example.task_1_compose.ui.screens.post.store
 
-import android.content.Context
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -24,7 +23,6 @@ import kotlinx.coroutines.launch
 
 internal class PostScreenStoreFactory(
     private val storeFactory: StoreFactory,
-    private val context: Context,
     private val post: Post?
 ) {
     private val repository = PostsRepository()
@@ -67,10 +65,7 @@ internal class PostScreenStoreFactory(
                     dispatch(
                         CommentsLoadError(
                             ErrorData(
-                                ResourceProvider.getStringResource(
-                                    R.string.loading_comments_error,
-                                    context
-                                )
+                                ResourceProvider.getStringResource(R.string.loading_comments_error)
                             )
                         )
                     )
@@ -85,10 +80,7 @@ internal class PostScreenStoreFactory(
                         dispatch(
                             CommentsLoadError(
                                 ErrorData(
-                                    ResourceProvider.getStringResource(
-                                        R.string.loading_comments_error,
-                                        context
-                                    )
+                                    ResourceProvider.getStringResource(R.string.loading_comments_error)
                                 )
                             )
                         )
@@ -115,7 +107,7 @@ internal class PostScreenStoreFactory(
     private object ReducerImpl : Reducer<PostScreenState, PostScreenMsg> {
         override fun PostScreenState.reduce(msg: PostScreenMsg): PostScreenState = when (msg) {
             is AllCommentsLoaded -> this
-            is CommentsLoadError -> copy(comments = msg.statefulData)
+            is CommentsLoadError -> copy(comments = msg.errorDetails)
             is LikeClicked -> copy(post = msg.post)
             is NextCommentsLoaded -> copy(
                 post = msg.post,

@@ -22,4 +22,3 @@ dependencyResolutionManagement {
 rootProject.name = "task_1_compose"
 include(":app")
 include(":domain")
-include(":testmocks")

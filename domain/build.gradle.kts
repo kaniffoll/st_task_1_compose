@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
 }
 
 android {
@@ -43,25 +41,14 @@ android {
 
 dependencies {
 
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter)
     implementation(libs.androidx.activity.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.logging.interceptor)
-    implementation(libs.hilt.android)
-    implementation(libs.room.ktx)
-    implementation(libs.room.runtime)
     implementation(libs.androidx.work)
     implementation(libs.mvikotlin)
     implementation(libs.mvikotlin.main)
-    ksp(libs.room.compiler)
-    ksp(libs.hilt.android.compiler)
-    testImplementation(project(":testmocks"))
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

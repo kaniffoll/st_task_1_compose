@@ -1,6 +1,5 @@
 package com.example.task_1_compose.ui.screens.user.store
 
-import android.content.Context
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -19,8 +18,7 @@ import kotlinx.coroutines.launch
 
 internal class UserScreenStoreFactory(
     private val storeFactory: StoreFactory,
-    private val user: User?,
-    private val context: Context
+    private val user: User?
 ) {
     private val repository = UsersRepository()
 
@@ -57,10 +55,7 @@ internal class UserScreenStoreFactory(
                     dispatch(
                         UserScreenMsg.CommentsLoadError(
                             ErrorData(
-                                ResourceProvider.getStringResource(
-                                    R.string.loading_comments_error,
-                                    context
-                                )
+                                ResourceProvider.getStringResource(R.string.loading_comments_error)
                             )
                         )
                     )
@@ -73,10 +68,7 @@ internal class UserScreenStoreFactory(
                         dispatch(
                             UserScreenMsg.CommentsLoadError(
                                 ErrorData(
-                                    ResourceProvider.getStringResource(
-                                        R.string.loading_comments_error,
-                                        context
-                                    )
+                                    ResourceProvider.getStringResource(R.string.loading_comments_error)
                                 )
                             )
                         )
@@ -103,12 +95,13 @@ internal class UserScreenStoreFactory(
     private object ReducerImpl : Reducer<UserScreenState, UserScreenMsg> {
         override fun UserScreenState.reduce(msg: UserScreenMsg): UserScreenState = when (msg) {
             is UserScreenMsg.AllCommentsLoaded -> this
-            is UserScreenMsg.CommentsLoadError -> copy(comments = msg.statefulData)
+            is UserScreenMsg.CommentsLoadError -> copy(comments = msg.errorDetails)
             is UserScreenMsg.NextCommentsLoaded -> copy(
                 comments = SuccessData(msg.user.comments),
                 currentUser = msg.user,
                 currentPage = currentPage + 1
             )
+
             is UserScreenMsg.UserInitialized -> copy(
                 comments = LoadingData(),
                 currentUser = msg.user,

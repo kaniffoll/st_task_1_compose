@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
 }
 
 android {
@@ -64,12 +62,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.zoomable)
-    implementation(libs.coil)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter)
-    implementation(libs.logging.interceptor)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
     implementation(libs.androidx.ui.test.junit4.android)
     implementation(libs.androidx.work)
     implementation(libs.mvikotlin)
@@ -77,10 +69,7 @@ dependencies {
     implementation(libs.mvikotlin.extensions.coroutines)
     implementation(libs.decompose)
     implementation(libs.decompose.extensions.compose)
-    ksp(libs.hilt.android.compiler)
     testImplementation(libs.junit)
-    androidTestImplementation(project(":testmocks"))
-    androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

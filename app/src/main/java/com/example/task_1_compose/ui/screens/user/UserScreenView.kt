@@ -59,7 +59,6 @@ fun UserScreen(
     }
 
     LaunchedEffect(state.value.currentUser?.id) {
-        //TODO: возможно можно сделать как-то лучше
         delay(LOADING_ITEM_FOR_SCREEN_DELAY)
         state.value.currentUser?.let {
             store.accept(UserScreenIntent.LoadComments)

@@ -1,6 +1,5 @@
 package com.example.task_1_compose.ui.screens.album.store
 
-import android.content.Context
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -22,7 +21,6 @@ import kotlinx.coroutines.launch
 
 internal class AlbumScreenStoreFactory(
     private val storeFactory: StoreFactory,
-    private val context: Context,
     private val albumId: Int?
 ) {
     private val repository = AlbumsRepository()
@@ -50,10 +48,7 @@ internal class AlbumScreenStoreFactory(
                             dispatch(
                                 PhotosLoadError(
                                     ErrorData(
-                                        ResourceProvider.getStringResource(
-                                            R.string.loading_photos_error,
-                                            context = context
-                                        )
+                                        ResourceProvider.getStringResource(R.string.loading_photos_error)
                                     )
                                 )
                             )
@@ -68,10 +63,7 @@ internal class AlbumScreenStoreFactory(
                                 dispatch(
                                     PhotosLoadError(
                                         ErrorData(
-                                            ResourceProvider.getStringResource(
-                                                R.string.loading_photos_error,
-                                                context = context
-                                            )
+                                            ResourceProvider.getStringResource(R.string.loading_photos_error)
                                         )
                                     )
                                 )
@@ -108,7 +100,7 @@ internal class AlbumScreenStoreFactory(
             )
 
             is PhotosLoadError -> copy(
-                photos = msg.statefulData
+                photos = msg.errorDetails
             )
 
             is AlbumInitialized -> copy(

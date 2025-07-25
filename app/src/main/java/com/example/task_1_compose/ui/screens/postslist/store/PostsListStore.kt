@@ -1,11 +1,11 @@
 package com.example.task_1_compose.ui.screens.postslist.store
 
-import android.content.Context
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.Post
+import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.StatefulData
 
 interface PostsListStore : Store<PostsListIntent, PostsListState, Nothing>
@@ -20,7 +20,7 @@ sealed interface PostsListMsg {
     data object LikeFailed : PostsListMsg
     data object AllPostsLoaded : PostsListMsg
     class NextPostsLoaded(val posts: List<Post>) : PostsListMsg
-    class PostsLoadError(val statefulData: StatefulData<List<Post>>) : PostsListMsg
+    class PostsLoadError(val errorDetails: ErrorData<List<Post>>) : PostsListMsg
 }
 
 data class PostsListState(
@@ -33,9 +33,8 @@ interface PostsListComponent {
 }
 
 class DefaultPostsListComponent(
-    componentContext: ComponentContext,
-    appContext: Context
+    componentContext: ComponentContext
 ) : PostsListComponent, ComponentContext by componentContext {
     override val store =
-        instanceKeeper.getStore { PostsListStoreFactory(DefaultStoreFactory(), appContext).create() }
+        instanceKeeper.getStore { PostsListStoreFactory(DefaultStoreFactory()).create() }
 }

@@ -138,7 +138,7 @@ internal class TodosListStoreFactory(
     private object ReducerImpl : Reducer<TodosListState, TodosListMsg> {
         override fun TodosListState.reduce(msg: TodosListMsg): TodosListState = when (msg) {
             is TodosListMsg.ErrorMsg -> {
-                copy(todos = msg.statefulData)
+                copy(todos = msg.errorDetails)
 
             }
 

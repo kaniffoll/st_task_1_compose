@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.Todo
+import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
 import java.time.LocalDateTime
@@ -32,7 +33,7 @@ data class TodosListState(
 )
 
 sealed interface TodosListMsg {
-    data class ErrorMsg(val statefulData: StatefulData<List<Todo>>) : TodosListMsg
+    data class ErrorMsg(val errorDetails: ErrorData<List<Todo>>) : TodosListMsg
     data class TodosLoaded(val todos: List<Todo>) : TodosListMsg
     data class TodoAdded(val todos: List<Todo>) : TodosListMsg
     data class TodoRemoved(val todos: List<Todo>, val id: Int) : TodosListMsg

@@ -1,6 +1,5 @@
 package com.example.task_1_compose.ui.screens.postslist.store
 
-import android.content.Context
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -18,8 +17,7 @@ import com.example.domain.utilities.ResourceProvider
 import kotlinx.coroutines.launch
 
 internal class PostsListStoreFactory(
-    private val storeFactory: StoreFactory,
-    private val context: Context
+    private val storeFactory: StoreFactory
 ) {
     private val repository = PostsRepository()
 
@@ -68,10 +66,7 @@ internal class PostsListStoreFactory(
                                 dispatch(
                                     PostsListMsg.PostsLoadError(
                                         ErrorData(
-                                            ResourceProvider.getStringResource(
-                                                R.string.loading_posts_error,
-                                                context
-                                            )
+                                            ResourceProvider.getStringResource(R.string.loading_posts_error)
                                         )
                                     )
                                 )
@@ -102,7 +97,7 @@ internal class PostsListStoreFactory(
             )
 
             is PostsListMsg.LikeFailed -> this
-            is PostsListMsg.PostsLoadError -> copy(posts = msg.statefulData)
+            is PostsListMsg.PostsLoadError -> copy(posts = msg.errorDetails)
             is PostsListMsg.AllPostsLoaded -> this
             is PostsListMsg.NextPostsLoaded -> copy(
                 posts = SuccessData(msg.posts),

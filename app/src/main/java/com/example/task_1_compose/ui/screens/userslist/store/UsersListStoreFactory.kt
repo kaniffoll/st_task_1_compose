@@ -1,6 +1,5 @@
 package com.example.task_1_compose.ui.screens.userslist.store
 
-import android.content.Context
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -14,8 +13,7 @@ import com.example.domain.utilities.ResourceProvider
 import kotlinx.coroutines.launch
 
 internal class UsersListStoreFactory(
-    private val storeFactory: StoreFactory,
-    private val context: Context
+    private val storeFactory: StoreFactory
 ) {
     private val repository = UsersRepository()
 
@@ -44,10 +42,7 @@ internal class UsersListStoreFactory(
                         dispatch(
                             UsersListMsg.UsersLoadError(
                                 ErrorData(
-                                    ResourceProvider.getStringResource(
-                                        R.string.loading_users_error,
-                                        context = context,
-                                    )
+                                    ResourceProvider.getStringResource(R.string.loading_users_error)
                                 )
                             )
                         )
@@ -67,7 +62,7 @@ internal class UsersListStoreFactory(
 
     private object ReducerImpl : Reducer<UsersListState, UsersListMsg> {
         override fun UsersListState.reduce(msg: UsersListMsg): UsersListState = when (msg) {
-            is UsersListMsg.UsersLoadError -> copy(users = msg.statefulData)
+            is UsersListMsg.UsersLoadError -> copy(users = msg.errorDetails)
             is UsersListMsg.UsersLoaded -> copy(
                 users = SuccessData(msg.users)
             )

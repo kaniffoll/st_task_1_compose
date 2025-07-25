@@ -16,15 +16,13 @@ import com.example.task_1_compose.R
 fun CommentCard(
     comment: Comment,
 ) {
-    val username = comment.name
-    val commentText = comment.body
     OutlinedCustomCard(
         itemsSpacedBy = dimensionResource(R.dimen.padding_small), modifier = Modifier.testTag(
             COMMENT_CARD_TEST_TAG
         )
     ) {
         Text(
-            text = username,
+            text = comment.name,
             fontSize = dimensionResource(R.dimen.text_comment).value.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
@@ -34,7 +32,7 @@ fun CommentCard(
                 )
         )
         Text(
-            text = commentText,
+            text = comment.body,
             fontSize = dimensionResource(R.dimen.text_standard).value.sp,
             modifier = Modifier
                 .padding(
