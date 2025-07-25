@@ -13,7 +13,7 @@ class TodosRepository {
         "CALL".d("AAA")
         delay(1000L)
         return try {
-            todos
+            todos.toList()
         } catch (e: Exception) {
             null
         }

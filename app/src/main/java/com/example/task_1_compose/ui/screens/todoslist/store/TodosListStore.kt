@@ -26,10 +26,9 @@ sealed interface TodosListIntent {
 }
 
 data class TodosListState(
-    val statefulData: StatefulData<List<Todo>> = LoadingData(),
+    val todos: StatefulData<List<Todo>> = LoadingData(),
     var lastRemovedId: Int? = null,
     val lastUpdated: Pair<Int, String>? = null,
-    val currentTodos: List<Todo> = emptyList()
 )
 
 sealed interface TodosListMsg {

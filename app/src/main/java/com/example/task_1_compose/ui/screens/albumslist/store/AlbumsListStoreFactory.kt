@@ -56,20 +56,19 @@ internal class AlbumsListStoreFactory(
         }
 
         private fun canLoadMoreAlbums(): Boolean {
-            return state().statefulData.canLoadMore(ALBUMS_PER_PAGE)
+            return state().albums.canLoadMore(ALBUMS_PER_PAGE)
         }
     }
 
     private object ReducerImpl : Reducer<AlbumsListState, AlbumsListMsg> {
         override fun AlbumsListState.reduce(msg: AlbumsListMsg): AlbumsListState = when (msg) {
-            is AlbumsListMsg.AlbumsLoadError -> copy(statefulData = msg.statefulData)
+            is AlbumsListMsg.AlbumsLoadError -> copy(albums = msg.statefulData)
             is AlbumsListMsg.AllAlbumsLoaded -> this
             is AlbumsListMsg.NextAlbumsLoaded -> copy(
-                statefulData = SuccessData(
+                albums = SuccessData(
                     result = msg.albums
                 ),
-                currentPage = currentPage + 1,
-                currentAlbums = msg.albums
+                currentPage = currentPage + 1
             )
         }
     }

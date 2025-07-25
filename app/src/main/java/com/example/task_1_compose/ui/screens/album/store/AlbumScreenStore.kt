@@ -24,9 +24,8 @@ sealed interface AlbumScreenMsg {
 }
 
 data class AlbumScreenState(
-    val statefulData: StatefulData<List<Photo>> = LoadingData(),
+    val photos: StatefulData<List<Photo>> = LoadingData(),
     val currentPage: Int = 0,
-    val currentPhotos: List<Photo> = emptyList(),
     val currentAlbumId: Int?
 )
 

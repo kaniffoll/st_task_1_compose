@@ -62,7 +62,7 @@ internal class TodosListStoreFactory(
         }
 
         fun retryLastAction() {
-            when (state().statefulData.errorName()) {
+            when (state().todos.errorName()) {
                 TodosListErrors.LOADING_TODOS -> loadTodos()
                 TodosListErrors.ADD_TODO -> addTodo()
                 TodosListErrors.REMOVE_TODO -> state().lastRemovedId?.let { removeTodoByIndex(it) }
@@ -85,7 +85,7 @@ internal class TodosListStoreFactory(
                     null -> dispatch(TodosListMsg.ErrorMsg(ErrorData(TodosListErrors.UPDATE_TODO)))
                     else -> dispatch(
                         TodosListMsg.TodoUpdated(
-                            todos = state().currentTodos.map { todo ->
+                            todos = state().todos.unwrap(emptyList()).map { todo ->
                                 if (todo.id == id) todo.copy(title = newText) else todo
                             },
                             id = id,
@@ -102,7 +102,7 @@ internal class TodosListStoreFactory(
                     null -> dispatch(TodosListMsg.ErrorMsg(ErrorData(TodosListErrors.REMOVE_TODO)))
                     else -> dispatch(
                         TodosListMsg.TodoRemoved(
-                            todos = state().currentTodos.toMutableList().apply {
+                            todos = state().todos.unwrap(emptyList()).toMutableList().apply {
                                 removeIf { it.id == id }
                             },
                             id = id
@@ -117,7 +117,7 @@ internal class TodosListStoreFactory(
                 when (val newTodo = repository.createTodo()) {
                     null -> dispatch(TodosListMsg.ErrorMsg(ErrorData(TodosListErrors.ADD_TODO)))
                     else -> {
-                        dispatch(TodosListMsg.TodoAdded(state().currentTodos + newTodo))
+                        dispatch(TodosListMsg.TodoAdded(state().todos.unwrap(listOf()) + newTodo))
                     }
                 }
             }
@@ -137,32 +137,36 @@ internal class TodosListStoreFactory(
 
     private object ReducerImpl : Reducer<TodosListState, TodosListMsg> {
         override fun TodosListState.reduce(msg: TodosListMsg): TodosListState = when (msg) {
-            is TodosListMsg.ErrorMsg -> copy(statefulData = msg.statefulData)
+            is TodosListMsg.ErrorMsg -> {
+                copy(todos = msg.statefulData)
+
+            }
 
             is TodosListMsg.TodoAdded -> {
-
                 copy(
-                    statefulData = SuccessData(msg.todos),
-                    currentTodos = msg.todos
+                    todos = SuccessData(msg.todos)
                 )
             }
 
-            is TodosListMsg.TodoRemoved -> copy(
-                statefulData = SuccessData(msg.todos),
-                currentTodos = msg.todos,
-                lastRemovedId = msg.id
-            )
+            is TodosListMsg.TodoRemoved -> {
+                copy(
+                    todos = SuccessData(msg.todos),
+                    lastRemovedId = msg.id
+                )
+            }
 
-            is TodosListMsg.TodoUpdated -> copy(
-                statefulData = SuccessData(msg.todos),
-                currentTodos = msg.todos,
-                lastUpdated = msg.id to msg.text
-            )
+            is TodosListMsg.TodoUpdated -> {
+                copy(
+                    todos = SuccessData(msg.todos),
+                    lastUpdated = msg.id to msg.text
+                )
+            }
 
-            is TodosListMsg.TodosLoaded -> copy(
-                statefulData = SuccessData(msg.todos),
-                currentTodos = msg.todos
-            )
+            is TodosListMsg.TodosLoaded -> {
+                copy(
+                    todos = SuccessData(msg.todos)
+                )
+            }
         }
     }
 }

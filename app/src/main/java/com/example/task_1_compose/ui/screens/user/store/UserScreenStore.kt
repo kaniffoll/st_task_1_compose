@@ -25,7 +25,7 @@ sealed interface UserScreenMsg {
 }
 
 data class UserScreenState(
-    val statefulData: StatefulData<List<Comment>> = LoadingData(),
+    val comments: StatefulData<List<Comment>> = LoadingData(),
     val currentUser: User?,
     val currentPage: Int = 0
 )

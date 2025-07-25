@@ -21,8 +21,7 @@ sealed interface UsersListMsg {
 }
 
 data class UsersListState(
-    val statefulData: StatefulData<List<User>> = LoadingData(),
-    val currentUsers: List<User> = emptyList()
+    val users: StatefulData<List<User>> = LoadingData()
 )
 
 interface UsersListComponent {

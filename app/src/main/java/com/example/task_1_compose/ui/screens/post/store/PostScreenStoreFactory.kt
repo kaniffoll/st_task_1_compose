@@ -108,24 +108,24 @@ internal class PostScreenStoreFactory(
         }
 
         private fun canLoadMoreComments(): Boolean {
-            return state().statefulData.canLoadMore(COMMENTS_PER_PAGE)
+            return state().comments.canLoadMore(COMMENTS_PER_PAGE)
         }
     }
 
     private object ReducerImpl : Reducer<PostScreenState, PostScreenMsg> {
         override fun PostScreenState.reduce(msg: PostScreenMsg): PostScreenState = when (msg) {
             is AllCommentsLoaded -> this
-            is CommentsLoadError -> copy(statefulData = msg.statefulData)
+            is CommentsLoadError -> copy(comments = msg.statefulData)
             is LikeClicked -> copy(post = msg.post)
             is NextCommentsLoaded -> copy(
                 post = msg.post,
-                statefulData = SuccessData(result = msg.post.comments),
+                comments = SuccessData(result = msg.post.comments),
                 currentPage = currentPage + 1
             )
 
             is PostInitialized -> copy(
                 post = msg.post,
-                statefulData = LoadingData(),
+                comments = LoadingData(),
                 currentPage = 0
             )
         }

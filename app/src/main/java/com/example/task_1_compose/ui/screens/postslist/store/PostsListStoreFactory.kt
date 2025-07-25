@@ -37,10 +37,10 @@ internal class PostsListStoreFactory(
         override fun executeIntent(intent: PostsListIntent) {
             when (intent) {
                 is PostsListIntent.ToggleLike -> {
-                    if (state().statefulData !is SuccessData<List<Post>>) {
+                    if (state().posts !is SuccessData<List<Post>>) {
                         dispatch(PostsListMsg.LikeFailed)
                     } else {
-                        val currentState = state().statefulData as SuccessData
+                        val currentState = state().posts as SuccessData
 
                         dispatch(
                             PostsListMsg.LikeClicked(
@@ -91,24 +91,22 @@ internal class PostsListStoreFactory(
         }
 
         private fun canLoadMorePosts(): Boolean {
-            return state().statefulData.canLoadMore(AppSettings.POSTS_PER_PAGE)
+            return state().posts.canLoadMore(AppSettings.POSTS_PER_PAGE)
         }
     }
 
     private object ReducerImpl : Reducer<PostsListState, PostsListMsg> {
         override fun PostsListState.reduce(msg: PostsListMsg): PostsListState = when (msg) {
             is PostsListMsg.LikeClicked -> copy(
-                statefulData = SuccessData(msg.posts),
-                currentPosts = msg.posts
+                posts = SuccessData(msg.posts)
             )
 
             is PostsListMsg.LikeFailed -> this
-            is PostsListMsg.PostsLoadError -> copy(statefulData = msg.statefulData)
+            is PostsListMsg.PostsLoadError -> copy(posts = msg.statefulData)
             is PostsListMsg.AllPostsLoaded -> this
             is PostsListMsg.NextPostsLoaded -> copy(
-                statefulData = SuccessData(msg.posts),
-                currentPage = currentPage + 1,
-                currentPosts = msg.posts
+                posts = SuccessData(msg.posts),
+                currentPage = currentPage + 1
             )
         }
     }

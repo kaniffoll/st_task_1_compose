@@ -96,21 +96,21 @@ internal class UserScreenStoreFactory(
         }
 
         private fun canLoadMoreComments(): Boolean {
-            return state().statefulData.canLoadMore(COMMENTS_PER_PAGE)
+            return state().comments.canLoadMore(COMMENTS_PER_PAGE)
         }
     }
 
     private object ReducerImpl : Reducer<UserScreenState, UserScreenMsg> {
         override fun UserScreenState.reduce(msg: UserScreenMsg): UserScreenState = when (msg) {
             is UserScreenMsg.AllCommentsLoaded -> this
-            is UserScreenMsg.CommentsLoadError -> copy(statefulData = msg.statefulData)
+            is UserScreenMsg.CommentsLoadError -> copy(comments = msg.statefulData)
             is UserScreenMsg.NextCommentsLoaded -> copy(
-                statefulData = SuccessData(msg.user.comments),
+                comments = SuccessData(msg.user.comments),
                 currentUser = msg.user,
                 currentPage = currentPage + 1
             )
             is UserScreenMsg.UserInitialized -> copy(
-                statefulData = LoadingData(),
+                comments = LoadingData(),
                 currentUser = msg.user,
                 currentPage = 0
             )

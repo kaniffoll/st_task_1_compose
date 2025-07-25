@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.example.domain.data.User
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
+import com.example.domain.resources.AppSettings.LOADING_ITEM_FOR_SCREEN_DELAY
 import com.example.domain.statefuldata.canLoadMore
 import com.example.task_1_compose.R
 import com.example.task_1_compose.ui.components.containers.CommentsSection
@@ -59,7 +60,7 @@ fun UserScreen(
 
     LaunchedEffect(state.value.currentUser?.id) {
         //TODO: возможно можно сделать как-то лучше
-        delay(100L)
+        delay(LOADING_ITEM_FOR_SCREEN_DELAY)
         state.value.currentUser?.let {
             store.accept(UserScreenIntent.LoadComments)
         }
@@ -84,9 +85,9 @@ fun UserScreen(
             }
             item {
                 CommentsSection(
-                    comments = state.value.statefulData,
+                    comments = state.value.comments,
                     modifier = Modifier.fillParentMaxSize(),
-                    canLoadMore = { state.value.statefulData.canLoadMore(COMMENTS_PER_PAGE) },
+                    canLoadMore = { state.value.comments.canLoadMore(COMMENTS_PER_PAGE) },
                     scope = scope
                 ) {
                     store.accept(UserScreenIntent.LoadComments)

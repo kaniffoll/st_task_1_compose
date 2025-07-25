@@ -26,12 +26,11 @@ fun AlbumsList(
 
     LoadMoreList(
         onLoadMore = { store.accept(AlbumsListIntent.LoadNextAlbums) },
-        isPaginationFinished = { !state.value.statefulData.canLoadMore(ALBUMS_PER_PAGE) },
+        isPaginationFinished = { !state.value.albums.canLoadMore(ALBUMS_PER_PAGE) },
         scope = scope,
-        data = state.value.statefulData
-    ) { index ->
-        val currentAlbums = state.value.currentAlbums
-        val album = currentAlbums[index]
+        data = state.value.albums
+    ) { index, list ->
+        val album = list[index]
 
         AlbumCard(
             album = album

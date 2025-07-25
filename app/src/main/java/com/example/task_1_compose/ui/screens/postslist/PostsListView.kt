@@ -33,12 +33,11 @@ fun PostsList(
 
     LoadMoreList(
         onLoadMore = { store.accept(PostsListIntent.LoadNextPosts) },
-        isPaginationFinished = { !state.statefulData.canLoadMore(POSTS_PER_PAGE) },
+        isPaginationFinished = { !state.posts.canLoadMore(POSTS_PER_PAGE) },
         scope = scope,
-        data = state.statefulData,
-    ) { index ->
-        val currentPosts = state.currentPosts
-        val post = currentPosts[index]
+        data = state.posts,
+    ) { index, list ->
+        val post = list[index]
 
         PostCard(
             post = post,

@@ -28,7 +28,7 @@ sealed interface PostScreenMsg {
 
 data class PostScreenState(
     val post: Post?,
-    val statefulData: StatefulData<List<Comment>> = LoadingData(),
+    val comments: StatefulData<List<Comment>> = LoadingData(),
     val currentPage: Int = 0
 )
 

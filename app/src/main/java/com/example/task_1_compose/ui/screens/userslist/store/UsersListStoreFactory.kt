@@ -67,10 +67,9 @@ internal class UsersListStoreFactory(
 
     private object ReducerImpl : Reducer<UsersListState, UsersListMsg> {
         override fun UsersListState.reduce(msg: UsersListMsg): UsersListState = when (msg) {
-            is UsersListMsg.UsersLoadError -> copy(statefulData = msg.statefulData)
+            is UsersListMsg.UsersLoadError -> copy(users = msg.statefulData)
             is UsersListMsg.UsersLoaded -> copy(
-                statefulData = SuccessData(msg.users),
-                currentUsers = msg.users
+                users = SuccessData(msg.users)
             )
         }
     }

@@ -34,7 +34,7 @@ fun <T> LoadMoreList(
     onLoadMore: suspend () -> Unit,
     isPaginationFinished: () -> Boolean,
     scope: CoroutineScope,
-    itemContent: @Composable LazyItemScope.(index: Int) -> Unit
+    itemContent: @Composable LazyItemScope.(index: Int, list: List<T>) -> Unit
 ) {
     var isPaginationInProgress by remember { mutableStateOf(false) }
 
@@ -73,7 +73,7 @@ fun <T> LoadMoreList(
             }
 
             is SuccessData -> {
-                items(data.result.size, itemContent = itemContent)
+                items(data.result.size, itemContent = { index -> itemContent(index, data.result) })
                 if (isPaginationInProgress) {
                     item {
                         LoadingIndicator()

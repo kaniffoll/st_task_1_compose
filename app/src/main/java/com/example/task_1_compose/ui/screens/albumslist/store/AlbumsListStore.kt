@@ -22,9 +22,8 @@ sealed interface AlbumsListMsg {
 }
 
 data class AlbumsListState(
-    val statefulData: StatefulData<List<Album>> = LoadingData(),
-    val currentPage: Int = 1,
-    val currentAlbums: List<Album> = emptyList()
+    val albums: StatefulData<List<Album>> = LoadingData(),
+    val currentPage: Int = 1
 )
 
 interface AlbumsListComponent {

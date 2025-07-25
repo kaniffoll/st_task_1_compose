@@ -46,7 +46,7 @@ fun UsersList(
         modifier = Modifier
             .background(color = Color.White)
     ) {
-        when (state.value.statefulData) {
+        when (state.value.users) {
             is LoadingData -> {
                 item {
                     LoadingIndicator()
@@ -62,7 +62,7 @@ fun UsersList(
             }
 
             is SuccessData -> {
-                val currentUsers = state.value.currentUsers
+                val currentUsers = state.value.users.unwrap(emptyList())
                 items(currentUsers) {
                     UserCard(
                         user = it,

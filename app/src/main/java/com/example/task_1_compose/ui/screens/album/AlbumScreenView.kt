@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.example.domain.data.Album
+import com.example.domain.resources.AppSettings.LOADING_ITEM_FOR_SCREEN_DELAY
 import com.example.domain.resources.AppSettings.PHOTOS_PER_PAGE
 import com.example.domain.statefuldata.canLoadMore
 import com.example.task_1_compose.navigation.ImagePagerRoute
@@ -41,19 +42,17 @@ fun AlbumScreen(
 
     LoadMoreList(
         onLoadMore = {
-            //TODO:
-            delay(100L)
+            delay(LOADING_ITEM_FOR_SCREEN_DELAY)
             store.accept(AlbumScreenIntent.LoadNextPhotos)
         },
-        isPaginationFinished = { !state.value.statefulData.canLoadMore(PHOTOS_PER_PAGE) },
+        isPaginationFinished = { !state.value.photos.canLoadMore(PHOTOS_PER_PAGE) },
         scope = scope,
-        data = state.value.statefulData
-    ) { index ->
-        val currentPhotos = state.value.currentPhotos
+        data = state.value.photos
+    ) { index, list ->
         PhotoCard(
             modifier = Modifier,
             id = index,
-            photo = currentPhotos[index],
+            photo = list[index],
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = animatedContentScope
         ) {
@@ -62,7 +61,7 @@ fun AlbumScreen(
                     album = Album(
                         id = albumId,
                         title = "",
-                        photos = currentPhotos.toMutableList(),
+                        photos = list.toMutableList(),
                     ), initialImage = index
                 )
             )

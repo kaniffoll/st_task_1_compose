@@ -24,9 +24,8 @@ sealed interface PostsListMsg {
 }
 
 data class PostsListState(
-    val statefulData: StatefulData<List<Post>>,
-    val currentPage: Int = 1,
-    val currentPosts: List<Post> = emptyList()
+    val posts: StatefulData<List<Post>>,
+    val currentPage: Int = 1
 )
 
 interface PostsListComponent {

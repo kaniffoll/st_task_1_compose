@@ -80,7 +80,7 @@ internal class AlbumScreenStoreFactory(
                             else -> {
                                 dispatch(
                                     NextPhotosLoaded(
-                                        state().currentPhotos + newPhotos
+                                        state().photos.unwrap(emptyList()) + newPhotos
                                     )
                                 )
                             }
@@ -95,7 +95,7 @@ internal class AlbumScreenStoreFactory(
         }
 
         private fun canLoadMorePhotos(): Boolean {
-            return state().statefulData.canLoadMore(PHOTOS_PER_PAGE)
+            return state().photos.canLoadMore(PHOTOS_PER_PAGE)
         }
     }
 
@@ -103,19 +103,17 @@ internal class AlbumScreenStoreFactory(
         override fun AlbumScreenState.reduce(msg: AlbumScreenMsg): AlbumScreenState = when (msg) {
             AllPhotosLoaded -> this
             is NextPhotosLoaded -> copy(
-                statefulData = SuccessData(msg.photos),
-                currentPage = currentPage + 1,
-                currentPhotos = msg.photos
+                photos = SuccessData(msg.photos),
+                currentPage = currentPage + 1
             )
 
             is PhotosLoadError -> copy(
-                statefulData = msg.statefulData
+                photos = msg.statefulData
             )
 
             is AlbumInitialized -> copy(
-                statefulData = LoadingData(),
+                photos = LoadingData(),
                 currentPage = 0,
-                currentPhotos = emptyList(),
                 currentAlbumId = msg.albumId
             )
         }
