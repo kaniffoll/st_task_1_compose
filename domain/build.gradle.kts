@@ -49,6 +49,8 @@ dependencies {
     implementation(libs.androidx.work)
     implementation(libs.mvikotlin)
     implementation(libs.mvikotlin.main)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

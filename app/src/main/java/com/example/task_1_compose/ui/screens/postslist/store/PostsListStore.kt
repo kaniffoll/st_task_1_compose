@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.Post
+import com.example.domain.repositories.PostsRepository
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.StatefulData
 
@@ -33,8 +34,14 @@ interface PostsListComponent {
 }
 
 class DefaultPostsListComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    repository: PostsRepository
 ) : PostsListComponent, ComponentContext by componentContext {
     override val store =
-        instanceKeeper.getStore { PostsListStoreFactory(DefaultStoreFactory()).create() }
+        instanceKeeper.getStore {
+            PostsListStoreFactory(
+                repository,
+                DefaultStoreFactory()
+            ).create()
+        }
 }

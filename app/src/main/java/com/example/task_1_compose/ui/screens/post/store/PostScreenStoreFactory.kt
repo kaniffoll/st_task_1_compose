@@ -22,10 +22,11 @@ import com.example.task_1_compose.ui.screens.post.store.PostScreenMsg.PostInitia
 import kotlinx.coroutines.launch
 
 internal class PostScreenStoreFactory(
+    private val repository: PostsRepository,
     private val storeFactory: StoreFactory,
     private val post: Post?
 ) {
-    private val repository = PostsRepository()
+
 
     fun create(): PostScreenStore = object : PostScreenStore,
         Store<PostScreenIntent, PostScreenState, Nothing> by storeFactory.create(

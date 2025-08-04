@@ -15,9 +15,10 @@ import com.example.domain.utilities.ResourceProvider
 import kotlinx.coroutines.launch
 
 internal class AlbumsListStoreFactory(
+    private val repository: AlbumsRepository,
     private val storeFactory: StoreFactory
 ) {
-    private val repository = AlbumsRepository()
+
 
     fun create(): AlbumsListStore = object : AlbumsListStore,
         Store<AlbumsListIntent, AlbumsListState, Nothing> by storeFactory.create(

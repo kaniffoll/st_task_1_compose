@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.Comment
 import com.example.domain.data.User
+import com.example.domain.repositories.UsersRepository
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
@@ -34,7 +35,13 @@ interface UserScreenComponent {
     val store: UserScreenStore
 }
 
-class DefaultUserScreenComponent(componentContext: ComponentContext) :
+class DefaultUserScreenComponent(componentContext: ComponentContext, repository: UsersRepository) :
     UserScreenComponent, ComponentContext by componentContext {
-    override val store: UserScreenStore = instanceKeeper.getStore {  UserScreenStoreFactory(DefaultStoreFactory(), null).create() }
+    override val store: UserScreenStore = instanceKeeper.getStore {
+        UserScreenStoreFactory(
+            repository,
+            DefaultStoreFactory(),
+            null
+        ).create()
+    }
 }

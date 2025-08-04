@@ -18,6 +18,7 @@ uiTestJunit4Android = "1.8.3"
 work-version = "2.10.2"
 mvikotlin = "4.3.0"
 decompose = "3.3.0"
+koin-version = "4.0.3"
 
 
 [libraries]
@@ -48,6 +49,8 @@ mvikotlin-main = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", v
 mvikotlin-extensions-coroutines = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mvikotlin" }
 decompose = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose" }
 decompose-extensions-compose = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = "decompose" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin-version" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin-version" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

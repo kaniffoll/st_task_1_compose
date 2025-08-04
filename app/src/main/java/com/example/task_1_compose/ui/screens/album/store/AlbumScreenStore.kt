@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.Photo
+import com.example.domain.repositories.AlbumsRepository
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
@@ -34,11 +35,13 @@ interface AlbumScreenComponent {
 }
 
 class DefaultAlbumScreenComponent(
-    val componentContext: ComponentContext
+    val componentContext: ComponentContext,
+    repository: AlbumsRepository
 ) :
     AlbumScreenComponent, ComponentContext by componentContext {
     override val store: AlbumScreenStore = instanceKeeper.getStore {
         AlbumScreenStoreFactory(
+            repository,
             DefaultStoreFactory(),
             null
         ).create()

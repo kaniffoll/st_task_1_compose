@@ -17,9 +17,9 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 internal class TodosListStoreFactory(
+    private val repository: TodosRepository,
     private val storeFactory: StoreFactory
 ) {
-    private val repository = TodosRepository()
     private val workManagerInteractor = WorkManagerInteractor()
 
     fun create(): TodosListStore = object : TodosListStore,

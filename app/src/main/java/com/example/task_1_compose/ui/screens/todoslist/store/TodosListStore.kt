@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.Todo
+import com.example.domain.repositories.TodosRepository
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
@@ -48,10 +49,16 @@ enum class TodosListErrors {
 }
 
 class DefaultTodosComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    repository: TodosRepository
 ) : TodosComponent, ComponentContext by componentContext {
     override val store =
-        instanceKeeper.getStore { TodosListStoreFactory(DefaultStoreFactory()).create() }
+        instanceKeeper.getStore {
+            TodosListStoreFactory(
+                repository,
+                DefaultStoreFactory()
+            ).create()
+        }
 }
 
 interface TodosComponent {

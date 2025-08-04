@@ -17,10 +17,9 @@ import com.example.domain.utilities.ResourceProvider
 import kotlinx.coroutines.launch
 
 internal class PostsListStoreFactory(
+    private val repository: PostsRepository,
     private val storeFactory: StoreFactory
 ) {
-    private val repository = PostsRepository()
-
     fun create(): PostsListStore = object : PostsListStore,
         Store<PostsListIntent, PostsListState, Nothing> by storeFactory.create(
             name = POSTS_LIST_STORE_NAME,

@@ -20,10 +20,11 @@ import com.example.task_1_compose.ui.screens.album.store.AlbumScreenMsg.PhotosLo
 import kotlinx.coroutines.launch
 
 internal class AlbumScreenStoreFactory(
+    private val repository:AlbumsRepository,
     private val storeFactory: StoreFactory,
     private val albumId: Int?
 ) {
-    private val repository = AlbumsRepository()
+
 
     fun create(): AlbumScreenStore = object : AlbumScreenStore,
         Store<AlbumScreenIntent, AlbumScreenState, Nothing> by storeFactory.create(

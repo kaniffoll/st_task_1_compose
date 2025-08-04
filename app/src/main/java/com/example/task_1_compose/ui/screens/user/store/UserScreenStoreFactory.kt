@@ -17,10 +17,11 @@ import com.example.domain.utilities.ResourceProvider
 import kotlinx.coroutines.launch
 
 internal class UserScreenStoreFactory(
+    private val repository: UsersRepository,
     private val storeFactory: StoreFactory,
     private val user: User?
 ) {
-    private val repository = UsersRepository()
+
 
     fun create(): UserScreenStore = object : UserScreenStore,
         Store<UserScreenIntent, UserScreenState, Nothing> by storeFactory.create(

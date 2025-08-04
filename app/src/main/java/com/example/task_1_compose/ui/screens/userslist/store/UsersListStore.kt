@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.User
+import com.example.domain.repositories.UsersRepository
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
@@ -30,9 +31,11 @@ interface UsersListComponent {
 
 class DefaultUsersListComponent(
     componentContext: ComponentContext,
+    repository: UsersRepository
 ) : UsersListComponent, ComponentContext by componentContext {
     override val store = instanceKeeper.getStore {
         UsersListStoreFactory(
+            repository,
             DefaultStoreFactory()
         ).create()
     }

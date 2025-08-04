@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.domain.data.Comment
 import com.example.domain.data.Post
+import com.example.domain.repositories.PostsRepository
 import com.example.domain.statefuldata.ErrorData
 import com.example.domain.statefuldata.LoadingData
 import com.example.domain.statefuldata.StatefulData
@@ -36,11 +37,15 @@ interface PostScreenComponent {
     val store: PostScreenStore
 }
 
-class DefaultPostScreenComponent(val componentContext: ComponentContext) :
+class DefaultPostScreenComponent(
+    val componentContext: ComponentContext,
+    repository: PostsRepository
+) :
     PostScreenComponent,
     ComponentContext by componentContext {
     override val store = instanceKeeper.getStore {
         PostScreenStoreFactory(
+            repository,
             DefaultStoreFactory(),
             null
         ).create()
