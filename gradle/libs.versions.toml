@@ -19,6 +19,8 @@ work-version = "2.10.2"
 mvikotlin = "4.3.0"
 decompose = "3.3.0"
 koin-version = "4.0.3"
+ktor-version = "3.2.3"
+logback-version = "1.5.18"
 
 
 [libraries]
@@ -51,6 +53,13 @@ decompose = { group = "com.arkivanov.decompose", name = "decompose", version.ref
 decompose-extensions-compose = { group = "com.arkivanov.decompose", name = "extensions-compose", version.ref = "decompose" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin-version" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin-version" }
+ktor-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor-version" }
+ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor-version" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor-version" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor-version" }
+ktor-client-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor-version" }
+logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback-version" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -59,4 +68,5 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+
 

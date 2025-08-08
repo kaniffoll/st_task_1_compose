@@ -20,6 +20,6 @@ val repositoryModule = module {
     }
 
     factory<AlbumsRepository> {
-        AlbumsRepository()
+        AlbumsRepository(get())
     }
 }

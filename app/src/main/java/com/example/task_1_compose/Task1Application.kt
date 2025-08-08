@@ -3,6 +3,7 @@ package com.example.task_1_compose
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import com.example.domain.di.apiModule
 import com.example.domain.di.repositoryModule
 import com.example.domain.resources.StringResources.NOTIFICATION_CHANEL_DESCRIPTION
 import com.example.domain.resources.StringResources.NOTIFICATION_CHANEL_NAME
@@ -20,7 +21,7 @@ class Task1Application : Application() {
 
         startKoin {
             androidContext(this@Task1Application)
-            modules(componentModule, repositoryModule)
+            modules(componentModule, repositoryModule, apiModule)
         }
     }
 

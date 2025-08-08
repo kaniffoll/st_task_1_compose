@@ -1,12 +1,13 @@
 package com.example.domain.repositories
 
+import com.example.domain.api.AlbumApi
 import com.example.domain.data.Album
 import com.example.domain.data.Photo
 import com.example.domain.mocks.albumsList
 import com.example.domain.resources.AppSettings.ALBUMS_PER_PAGE
 import kotlinx.coroutines.delay
 
-class AlbumsRepository {
+class AlbumsRepository(api: AlbumApi) {
     private var allPhotosLoaded = false
 
     suspend fun loadNextAlbums(currentPage: Int): List<Album>? {
