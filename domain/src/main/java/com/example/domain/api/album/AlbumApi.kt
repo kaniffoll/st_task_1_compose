@@ -1,4 +1,4 @@
-package com.example.domain.api
+package com.example.domain.api.album
 
 import com.example.domain.data.Album
 import com.example.domain.data.Photo

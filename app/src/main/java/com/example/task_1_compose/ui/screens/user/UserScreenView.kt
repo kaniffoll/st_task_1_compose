@@ -55,7 +55,7 @@ fun UserScreen(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        store.accept(UserScreenIntent.InitializeUserScreen(user.copy(comments = mutableListOf())))
+        store.accept(UserScreenIntent.InitializeUserScreen(user))
     }
 
     LaunchedEffect(state.value.currentUser?.id) {

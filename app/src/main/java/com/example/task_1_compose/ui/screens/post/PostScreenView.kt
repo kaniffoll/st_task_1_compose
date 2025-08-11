@@ -49,7 +49,7 @@ fun PostScreen(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        store.accept(PostScreenIntent.InitializePostScreen(post.copy(comments = mutableListOf())))
+        store.accept(PostScreenIntent.InitializePostScreen(post))
     }
 
     LaunchedEffect(state.value.post?.id) {

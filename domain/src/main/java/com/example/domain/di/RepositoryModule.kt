@@ -8,15 +8,15 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     factory<TodosRepository> {
-        TodosRepository()
+        TodosRepository(get())
     }
 
     factory<PostsRepository> {
-        PostsRepository()
+        PostsRepository(get())
     }
 
     factory<UsersRepository> {
-        UsersRepository()
+        UsersRepository(get())
     }
 
     factory<AlbumsRepository> {

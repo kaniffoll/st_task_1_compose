@@ -1,42 +1,44 @@
 package com.example.domain.repositories
 
-import com.example.domain.api.AlbumApi
+import com.example.domain.api.album.AlbumApi
 import com.example.domain.data.Album
 import com.example.domain.data.Photo
-import com.example.domain.mocks.albumsList
 import com.example.domain.resources.AppSettings.ALBUMS_PER_PAGE
-import kotlinx.coroutines.delay
+import com.example.domain.resources.AppSettings.PHOTOS_PER_PAGE
+import com.example.domain.utilities.getRandomPainterRes
 
-class AlbumsRepository(api: AlbumApi) {
-    private var allPhotosLoaded = false
+class AlbumsRepository(private val api: AlbumApi) {
+    private val albums = mutableListOf<Album>()
 
     suspend fun loadNextAlbums(currentPage: Int): List<Album>? {
-        delay(1000L)
-        return try {
-            if (currentPage * ALBUMS_PER_PAGE > albumsList.size) {
-                albumsList
-            } else {
-                albumsList.subList(0, currentPage * ALBUMS_PER_PAGE)
-            }
-        } catch (e: Exception) {
-            null
-        }
+        val response = api
+            .getAlbums(
+                start = currentPage * ALBUMS_PER_PAGE,
+                limit = ALBUMS_PER_PAGE
+            ) ?: return null
+        albums.addAll(response)
+        return albums
     }
 
     suspend fun loadNextAlbumPhotos(albumId: Int, currentPage: Int): List<Photo>? {
-        delay(1000L)
-        val currentAlbum = albumsList.firstOrNull { it.id == albumId } ?: return null
-        try {
-            val startIndex = currentPage * ALBUMS_PER_PAGE
-            val endIndex = (startIndex + ALBUMS_PER_PAGE).coerceAtMost(currentAlbum.photos.size)
+        val response = api
+            .getPhotos(
+                albumId,
+                start = currentPage * PHOTOS_PER_PAGE,
+                limit = PHOTOS_PER_PAGE
+            ) ?: return null
+        return generatePhotoResourcesForAlbum(
+            Album(
+                albumId,
+                title = "",
+                photos = response.toMutableList()
+            )
+        )
+    }
 
-            if (startIndex >= currentAlbum.photos.size) {
-                allPhotosLoaded = true
-                return emptyList()
-            }
-            return currentAlbum.photos.subList(startIndex, endIndex)
-        } catch (e: Exception) {
-            return null
-        }
+    private fun generatePhotoResourcesForAlbum(album: Album): MutableList<Photo> {
+        val photos = album.photos
+        photos.forEach { it.photo = getRandomPainterRes() }
+        return photos
     }
 }

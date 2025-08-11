@@ -1,42 +1,26 @@
 package com.example.domain.repositories
 
+import androidx.compose.runtime.mutableStateListOf
+import com.example.domain.api.post.PostApi
 import com.example.domain.data.Comment
 import com.example.domain.data.Post
-import com.example.domain.mocks.postsList
 import com.example.domain.resources.AppSettings.COMMENTS_PER_PAGE
 import com.example.domain.resources.AppSettings.POSTS_PER_PAGE
-import kotlinx.coroutines.delay
 
-class PostsRepository {
-    private var allCommentsLoaded = false
+class PostsRepository(private val api: PostApi) {
+    private var posts = mutableStateListOf<Post>()
 
     suspend fun loadNextPosts(currentPage: Int): List<Post>? {
-        delay(1000L)
-        return try {
-            if (currentPage * POSTS_PER_PAGE > postsList.size) {
-                postsList
-            } else {
-                postsList.subList(0, currentPage * POSTS_PER_PAGE)
-            }
-        } catch (e: Exception) {
-            null
-        }
+        val response = api.getPosts(
+                start = currentPage * POSTS_PER_PAGE, limit = POSTS_PER_PAGE
+            ) ?: return null
+        posts.addAll(response)
+        return posts
     }
 
     suspend fun loadPostCommentsById(id: Int, currentPage: Int): List<Comment>? {
-        delay(1000L)
-        val currentPost = postsList.firstOrNull { it.id == id } ?: return null
-        try {
-            val startIndex = currentPage * COMMENTS_PER_PAGE
-            val endIndex = (startIndex + COMMENTS_PER_PAGE).coerceAtMost(currentPost.comments.size)
-
-            if (startIndex >= currentPost.comments.size) {
-                allCommentsLoaded = true
-                return emptyList()
-            }
-            return currentPost.comments.subList(startIndex, endIndex)
-        } catch (e: Exception) {
-            return null
-        }
+        return api.getComments(
+            postId = id, start = currentPage * COMMENTS_PER_PAGE, limit = COMMENTS_PER_PAGE
+        )
     }
 }
