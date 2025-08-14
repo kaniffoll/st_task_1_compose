@@ -1,6 +1,6 @@
 [versions]
 agp = "8.10.1"
-kotlin = "2.2.0"
+kotlin = "2.0.20"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -21,6 +21,7 @@ decompose = "3.3.0"
 koin-version = "4.0.3"
 ktor-version = "3.2.3"
 slf4j-android-version = "1.7.36"
+realm-kotlin-version = "2.3.0"
 
 
 [libraries]
@@ -59,6 +60,7 @@ ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor-version" }
 ktor-client-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor-version" }
 slf4j-android = { group = "org.slf4j", name = "slf4j-android", version.ref = "slf4j-android-version" }
+realm-library-base = { group = "io.realm.kotlin", name = "library-base", version.ref = "realm-kotlin-version" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -67,5 +69,6 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+realm-kotlin = { id = "io.realm.kotlin", version.ref = "realm-kotlin-version" }
 
 
