@@ -57,7 +57,6 @@ dependencies {
     implementation(libs.ktor.client.logging)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.negotiation)
-    implementation(libs.slf4j.android)
     implementation(libs.realm.library.base)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)

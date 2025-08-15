@@ -9,7 +9,7 @@ import com.example.domain.utilities.toUserRealm
 import io.realm.kotlin.Realm
 import io.realm.kotlin.UpdatePolicy
 
-suspend fun Realm.saveUsers(users: List<User>) = this.write {
+internal suspend fun Realm.saveUsers(users: List<User>) = this.write {
     users.forEach {
         copyToRealm(
             instance = it.toUserRealm(),
@@ -18,20 +18,19 @@ suspend fun Realm.saveUsers(users: List<User>) = this.write {
     }
 }
 
-fun Realm.loadUsers() = this.query(UserRealm::class).find().map { it ->
+internal fun Realm.loadUsers() = this.query(UserRealm::class).find().map { it ->
     it.toUser()
 }
 
-fun Realm.getUserById(id: Int) = this.query(UserRealm::class, "id == $0", id)
-    .first()
-    .find()?.toUser()
-
-suspend fun Realm.saveUserComments(id: Int, comments: List<Comment>) = this.write {
-    val user = this.query(UserRealm::class, "id == $0", id)
+internal suspend fun Realm.saveUserComments(id: Int, comments: List<Comment>) = write {
+    val user = query(UserRealm::class, "id == $0", id)
         .first()
         .find() ?: return@write
-    val newComments = comments.filter { newComment ->
-        user.comments.none { it.body == newComment.body && it.name == newComment.name }
+    val newCommentRealms = comments.map { comment ->
+        comment.toCommentRealm()
     }
-    user.comments.addAll(newComments.map { it.toCommentRealm() })
+    val toAdd = newCommentRealms.filter { newComment ->
+        user.comments.none { it.name == newComment.name && it.body == newComment.body }
+    }
+    user.comments.addAll(toAdd)
 }

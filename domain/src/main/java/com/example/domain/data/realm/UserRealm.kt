@@ -10,7 +10,7 @@ class UserRealm : RealmObject {
     var id: Int = 0
     var name: String = ""
     var username: String = ""
-    var comments: RealmList<CommentRealm> = realmListOf()
     var address: AddressRealm? = AddressRealm()
+    var comments: RealmList<CommentRealm> = realmListOf()
     var phone: String = ""
 }

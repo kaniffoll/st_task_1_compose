@@ -25,7 +25,6 @@ internal class AlbumScreenStoreFactory(
     private val albumId: Int?
 ) {
 
-
     fun create(): AlbumScreenStore = object : AlbumScreenStore,
         Store<AlbumScreenIntent, AlbumScreenState, Nothing> by storeFactory.create(
             name = ALBUM_SCREEN_STORE_NAME,
@@ -82,6 +81,7 @@ internal class AlbumScreenStoreFactory(
                 }
 
                 is AlbumScreenIntent.InitializeAlbumScreen -> {
+                    repository.clearLocalAlbums()
                     dispatch(AlbumInitialized(intent.albumId))
                 }
             }
