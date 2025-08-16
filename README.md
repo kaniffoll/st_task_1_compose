@@ -10,6 +10,8 @@ Compose версия. Приложение разработанное во вр�
 ⚡ **Примечание:**  
 Существует отдельная ветка  [`mvi-architercture`](https://github.com/kaniffoll/st_task_1_compose/tree/mvi-architecture), где используются другие технологии
 
+Есть отдельный репозиторий с XML layout дизайном [`st_task_1_views`](https://github.com/kaniffoll/st_task_1_views)
+
 ## Stack
 - Kotlin
 - Jetpack Compose
